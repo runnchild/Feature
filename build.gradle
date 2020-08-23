@@ -2,22 +2,19 @@
 buildscript {
     apply from: "https://gitee.com/qiurongc/codes/s3wgd76acpzm8bx5fo49u32/raw?blob_name=config.gradle"
     repositories {
-        maven {
-            url uri("${rootProject.rootDir.parent}/repo/")
-        }
+        mavenLocal()
         google()
         jcenter()
     }
     dependencies {
         classpath classpaths
+        classpath bintrayPlugin
     }
 }
 
 allprojects {
     repositories {
-        maven {
-            url uri("${rootProject.rootDir.parent}/repo/")
-        }
+        mavenLocal()
         maven { url 'https://jitpack.io' }
         google()
         jcenter()
