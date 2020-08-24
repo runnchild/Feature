@@ -1,18 +1,14 @@
 package com.rongc.habit.viewmodel
 
+import android.os.Looper
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.rongc.habit.SingleLiveData
 import com.rongc.habit.model.BaseModel
 import com.rongc.habit.network.MainScope
 import com.rongc.habit.network.ServicesException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
 import java.net.ConnectException
 
@@ -84,7 +80,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
         showDialog: Boolean = true,
         showToast: Boolean = true
     ) {
-        mainScope.launch {
+        viewModelScope.launch {
             try {
                 dialogVisible(showDialog)
                 withContext(Dispatchers.IO) {
@@ -123,5 +119,32 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     fun finish() {
         finish.value = true
+    }
+
+    fun ViewModel.launch(block: suspend (coroutineScope: CoroutineScope) -> Unit,
+                         fail: (t: Throwable) -> Unit = { }) =
+        viewModelScope.safeLaunch(block, fail)
+
+    /**
+     * Desc: 统一catch viewModelScope
+     * <p>
+     * author: linjiaqiang
+     * Date: 2019/11/8
+     */
+    fun CoroutineScope.safeLaunch(block: suspend (coroutineScope: CoroutineScope) -> Unit,
+                                  fail: (t: Throwable) -> Unit = { }): Job {
+        val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+            val isMainThread = Looper.getMainLooper().thread == Thread.currentThread()
+//            VvLog.e("safeLaunch", "exception in thread:  ${Thread.currentThread().name}")
+            exception.printStackTrace()
+//            if (isMainThread && toastNetWorkError) {
+//                checkToastNetWorkError(exception)
+//            }
+//            if (isMainThread && toastResponseError) {
+//                checkToastResponseError(exception)
+//            }
+            fail(exception)
+        }
+        return launch(exceptionHandler) { block(this) }
     }
 }
