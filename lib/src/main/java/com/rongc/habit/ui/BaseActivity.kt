@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.rongc.habit.model.BaseModel
 import com.rongc.habit.viewmodel.BaseViewModel
 
@@ -95,5 +97,15 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     override fun navigateUp() {
         finish()
+    }
+
+    override fun initObserver() {
+    }
+
+    fun <T : BaseViewModel<*>> obtainSubViewModel(viewModel: Class<T>): T {
+        return ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[viewModel].apply {
+            lifecycle.addObserver(this)
+            mainScope.onCreate()
+        }
     }
 }

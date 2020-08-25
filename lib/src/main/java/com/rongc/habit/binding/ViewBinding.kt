@@ -1,15 +1,14 @@
 package com.rongc.habit.binding
 
-import android.R
-import android.graphics.Color
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.util.StateSet
 import android.view.View
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.ClickUtils
-import com.rongc.habit.utils.Compat.getRoundDrawable
 
 /**
  * View点击事件，默认不传递参数。如果需要传递参数可定义方法
@@ -42,7 +41,11 @@ fun View.onClick(call: (View) -> Unit, debounce: Boolean = false) {
 
 @BindingAdapter("bgColor", "bgPressedColor", "bgDisableColor", requireAll = false)
 fun View.bgState(bgColor: Int, bgPressedColor: Int = bgColor, bgDisableColor: Int = bgColor) {
-    bgDrawableState(ColorDrawable(bgColor), ColorDrawable(bgPressedColor), ColorDrawable(bgDisableColor))
+    bgDrawableState(
+        ColorDrawable(bgColor),
+        ColorDrawable(bgPressedColor),
+        ColorDrawable(bgDisableColor)
+    )
 }
 
 @BindingAdapter("bgDrawable", "bgPressedDrawable", "bgDisableDrawable", requireAll = false)
@@ -53,10 +56,36 @@ fun View.bgDrawableState(
 ) {
 //    getRoundDrawable()
     StateListDrawable().run {
-        addState(intArrayOf(R.attr.state_pressed), pressedDrawable)
-        addState(intArrayOf(-R.attr.state_enabled), disableDrawable)
+        addState(intArrayOf(android.R.attr.state_pressed), pressedDrawable)
+        addState(intArrayOf(-android.R.attr.state_enabled), disableDrawable)
         addState(StateSet.WILD_CARD, drawable)
         background = this
     }
+}
 
+/** 对TextView设置不同状态时其文字颜色。  */
+fun createColorStateList(
+    normal: Int,
+    disable: Int = normal,
+    pressed: Int = normal,
+    focused: Int = normal
+): ColorStateList? {
+    val colors = intArrayOf(pressed, focused, normal, focused, disable, normal)
+    val states = arrayOfNulls<IntArray>(6)
+    states[0] = intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
+    states[1] = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_focused)
+    states[2] = intArrayOf(android.R.attr.state_enabled)
+    states[3] = intArrayOf(android.R.attr.state_focused)
+    states[4] = intArrayOf(android.R.attr.state_window_focused)
+    states[5] = intArrayOf()
+    return ColorStateList(states, colors)
+}
+
+@BindingAdapter("disableColor", "pressedColor", "focusedColor", requireAll = false)
+fun TextView.colorState(
+    disable: Int = currentTextColor,
+    pressed: Int = currentTextColor,
+    focused: Int = currentTextColor
+) {
+    setTextColor(createColorStateList(currentTextColor, disable, pressed, focused))
 }

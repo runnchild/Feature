@@ -60,4 +60,5 @@ interface IUI<M: BaseViewModel<out BaseModel>> : ViewModelStoreOwner {
     }
 
     fun getUiDelegate(action: (M) -> Unit): UiDelegate<M>
+    fun initObserver()
 }

@@ -1,6 +1,5 @@
 package com.rongc.habit.viewmodel
 
-import android.os.Looper
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.lifecycle.*
@@ -8,7 +7,10 @@ import com.rongc.habit.SingleLiveData
 import com.rongc.habit.model.BaseModel
 import com.rongc.habit.network.MainScope
 import com.rongc.habit.network.ServicesException
-import kotlinx.coroutines.*
+import com.rongc.habit.utils.Compat.toast
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.lang.reflect.ParameterizedType
 import java.net.ConnectException
 
@@ -42,7 +44,6 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
-        mainScope.onCreate()
         val modelCls = (this::class.java.genericSuperclass as ParameterizedType)
             .actualTypeArguments.lastOrNull() as? Class<*>
         @Suppress("UNCHECKED_CAST")
@@ -75,29 +76,30 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
      *
      */
     fun launch(
-        scope: suspend () -> Unit,
-        failed: ((Exception) -> Unit)? = null,
+        scope: suspend (coroutineScope: CoroutineScope) -> Unit,
+        failed: ((Throwable) -> Unit)? = null,
         showDialog: Boolean = true,
         showToast: Boolean = true
     ) {
-        viewModelScope.launch {
-            try {
-                dialogVisible(showDialog)
-                withContext(Dispatchers.IO) {
-                    scope()
-                }
-                dialogVisible(false)
-            } catch (e: Exception) {
-                dialogVisible(false)
-                failed?.invoke(e)
-                if (showToast) {
-                    if (e is ServicesException && !e.message.isNullOrEmpty()) {
-                        showToast(e.message!!)
-                    } else if (e is ConnectException) {
-                        showToast("网络连接失败")
-                    }
+        val exceptionHandler = CoroutineExceptionHandler { _, e ->
+            dialogVisible(false)
+//            val isMainThread = Looper.getMainLooper().thread == Thread.currentThread()
+            e.printStackTrace()
+            if (showToast) {
+                if (e is ServicesException && !e.message.isNullOrEmpty()) {
+                    showToast(e.message!!)
+                } else if (e is ConnectException) {
+                    showToast("网络连接失败")
+                } else {
+                    "服务器错误".toast()
                 }
             }
+            failed?.invoke(e)
+        }
+        viewModelScope.launch(exceptionHandler) {
+            dialogVisible(showDialog)
+            scope(this)
+            dialogVisible(false)
         }
     }
 
@@ -119,32 +121,5 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     fun finish() {
         finish.value = true
-    }
-
-    fun ViewModel.launch(block: suspend (coroutineScope: CoroutineScope) -> Unit,
-                         fail: (t: Throwable) -> Unit = { }) =
-        viewModelScope.safeLaunch(block, fail)
-
-    /**
-     * Desc: 统一catch viewModelScope
-     * <p>
-     * author: linjiaqiang
-     * Date: 2019/11/8
-     */
-    fun CoroutineScope.safeLaunch(block: suspend (coroutineScope: CoroutineScope) -> Unit,
-                                  fail: (t: Throwable) -> Unit = { }): Job {
-        val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-            val isMainThread = Looper.getMainLooper().thread == Thread.currentThread()
-//            VvLog.e("safeLaunch", "exception in thread:  ${Thread.currentThread().name}")
-            exception.printStackTrace()
-//            if (isMainThread && toastNetWorkError) {
-//                checkToastNetWorkError(exception)
-//            }
-//            if (isMainThread && toastResponseError) {
-//                checkToastResponseError(exception)
-//            }
-            fail(exception)
-        }
-        return launch(exceptionHandler) { block(this) }
     }
 }

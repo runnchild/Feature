@@ -37,6 +37,8 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun init(owner: LifecycleOwner, root: View) {
+        api.viewModel().mainScope.onCreate()
+        api.initObserver()
         api.initView(root)
         api.initData()
         api.getLifecycle().addObserver(api.viewModel())
