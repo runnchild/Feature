@@ -189,4 +189,16 @@ object Compat {
     fun View?.removeFromParent() {
         (this?.parent as? ViewGroup)?.removeView(this)
     }
+
+    @JvmStatic
+    @BindingAdapter("visible")
+    fun View.visible(visible: Boolean) {
+        visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("orInvisible")
+    fun View.orInvisible(visible: Boolean) {
+        visibility = if (visible) View.VISIBLE else View.INVISIBLE
+    }
 }

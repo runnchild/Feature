@@ -23,6 +23,6 @@
             android:text="backGround"
             app:bgColor="@{@color/gray_999}"
             app:bgPressedColor="@{@color/gray_333}"
-            app:onClick="@{viewModel.viewsClick}" />
+            android:onClick="@{viewModel.viewsClick}" />
     </LinearLayout>
 </layout>

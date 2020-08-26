@@ -18,7 +18,7 @@ import com.blankj.utilcode.util.ClickUtils
  *     }
  * </code>
  */
-@BindingAdapter("onClick", "debounce", requireAll = false)
+@BindingAdapter("android:onClick", "debounce", requireAll = false)
 fun View.onClick(call: () -> Unit, debounce: Boolean = false) {
     onClick({ _: View -> call() }, debounce)
 }
@@ -27,7 +27,7 @@ fun View.onClick(call: () -> Unit, debounce: Boolean = false) {
  * View点击时间，传递View本身
  * @param debounce 是否去抖动
  */
-@BindingAdapter("onClick", "debounce", requireAll = false)
+@BindingAdapter("android:onClick", "debounce", requireAll = false)
 fun View.onClick(call: (View) -> Unit, debounce: Boolean = false) {
     if (debounce) {
         ClickUtils.applySingleDebouncing(this, call)
@@ -36,7 +36,6 @@ fun View.onClick(call: (View) -> Unit, debounce: Boolean = false) {
             call(it)
         }
     }
-    ClickUtils.applyPressedBgDark(this)
 }
 
 @BindingAdapter("bgColor", "bgPressedColor", "bgDisableColor", requireAll = false)
@@ -68,24 +67,27 @@ fun createColorStateList(
     normal: Int,
     disable: Int = normal,
     pressed: Int = normal,
-    focused: Int = normal
+    focused: Int = normal,
+    checked: Int = normal
 ): ColorStateList? {
-    val colors = intArrayOf(pressed, focused, normal, focused, disable, normal)
-    val states = arrayOfNulls<IntArray>(6)
+    val colors = intArrayOf(pressed, focused, normal, focused, disable, normal, checked)
+    val states = arrayOfNulls<IntArray>(7)
     states[0] = intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
     states[1] = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_focused)
     states[2] = intArrayOf(android.R.attr.state_enabled)
     states[3] = intArrayOf(android.R.attr.state_focused)
     states[4] = intArrayOf(android.R.attr.state_window_focused)
-    states[5] = intArrayOf()
+    states[5] = intArrayOf(android.R.attr.state_checked)
+    states[6] = intArrayOf()
     return ColorStateList(states, colors)
 }
 
-@BindingAdapter("disableColor", "pressedColor", "focusedColor", requireAll = false)
+@BindingAdapter("disableColor", "pressedColor", "focusedColor", "checkedColor", requireAll = false)
 fun TextView.colorState(
     disable: Int = currentTextColor,
     pressed: Int = currentTextColor,
-    focused: Int = currentTextColor
+    focused: Int = currentTextColor,
+    checkedColor: Int = currentTextColor
 ) {
-    setTextColor(createColorStateList(currentTextColor, disable, pressed, focused))
+    setTextColor(createColorStateList(currentTextColor, disable, pressed, focused, checkedColor))
 }

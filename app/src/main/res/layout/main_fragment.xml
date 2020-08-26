@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onClick="@{viewModel.click(121)}" />
+            android:onClick="@{viewModel.click(121)}" />
 
         <Button
             android:layout_width="wrap_content"
@@ -35,13 +35,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onClick="@{viewModel.openListPage}" />
+            android:onClick="@{viewModel.openListPage}" />
 
         <Button
             android:id="@+id/btn_viewBinding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="viewBindingAdapter"
-            app:onClick="@{viewModel.viewsClick}" />
+            android:onClick="@{viewModel.viewsClick}" />
     </LinearLayout>
 </layout>
