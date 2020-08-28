@@ -2,11 +2,13 @@ package com.rongc.habit.viewmodel
 
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.rongc.habit.SingleLiveData
 import com.rongc.habit.model.BaseModel
 import com.rongc.habit.network.MainScope
 import com.rongc.habit.network.ServicesException
+import com.rongc.habit.utils.Compat.loge
 import com.rongc.habit.utils.Compat.toast
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -22,9 +24,10 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     open lateinit var model: M
 
+    val title = ObservableField<String>()
+
     var mainScope = MainScope()
     val dialogVisible = SingleLiveData<Boolean>()
-    val toastVisible = SingleLiveData<String>()
     val finish = SingleLiveData<Boolean>()
 
     val finishClick = {
@@ -86,13 +89,15 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 //            val isMainThread = Looper.getMainLooper().thread == Thread.currentThread()
             e.printStackTrace()
             if (showToast) {
-                if (e is ServicesException && !e.message.isNullOrEmpty()) {
-                    showToast(e.message!!)
+                val error = if (e is ServicesException && !e.message.isNullOrEmpty()) {
+                    e.message!!
                 } else if (e is ConnectException) {
-                    showToast("网络连接失败")
+                    "网络连接失败"
                 } else {
-                    "服务器错误".toast()
+                    "服务器错误"
                 }
+                error.loge()
+                error.toast()
             }
             failed?.invoke(e)
         }
@@ -113,10 +118,6 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     fun dismissDialog() {
         dialogVisible(false)
-    }
-
-    private fun showToast(toast: String) {
-        toastVisible.value = toast
     }
 
     fun finish() {

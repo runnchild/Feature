@@ -55,9 +55,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             }
         })
 
-        viewModel.toastVisible.observe(owner, Observer {
-            Toast.makeText(api.getContext(), it, Toast.LENGTH_SHORT).show()
-        })
         viewModel.finish.observe(owner, Observer {
             navigateUp()
         })

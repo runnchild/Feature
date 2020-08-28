@@ -1,6 +1,8 @@
 package com.rongc.habit
 
 import android.app.Application
+import android.view.Gravity
+import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.facebook.drawee.backends.pipeline.Fresco
 
@@ -12,5 +14,6 @@ object Init {
     fun init(app: Application) {
         Utils.init(app)
         Fresco.initialize(app)
+        ToastUtils.setGravity(Gravity.CENTER, 0, 0)
     }
 }
