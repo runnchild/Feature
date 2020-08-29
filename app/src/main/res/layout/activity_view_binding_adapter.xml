@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.habit.viewmodel.EmptyViewModel" />
+            type="com.rongc.feature.viewmodel.EmptyViewModel" />
     </data>
 
     <LinearLayout

@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.habit.viewmodel.BaseRefreshViewModel" />
+            type="com.rongc.feature.viewmodel.BaseRefreshViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
