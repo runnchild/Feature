@@ -67,4 +67,6 @@ interface IUI<M : BaseViewModel<out BaseModel>> : ViewModelStoreOwner {
      * 初始化状态栏和导航栏信息
      */
     fun getBarConfig(): BarConfig.() -> Unit = { statusColor = -1 }
+
+    fun refreshConfig()
 }

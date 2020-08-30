@@ -84,4 +84,8 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
      */
     override fun navigateUp() {
     }
+
+    override fun refreshConfig() {
+        delegate.refreshConfig(requireActivity())
+    }
 }

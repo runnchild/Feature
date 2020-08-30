@@ -141,4 +141,8 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             BarUtils.transparentStatusBar(activity)
         }
     }
+
+    fun refreshConfig(activity: Activity) {
+        initStatusBar(activity)
+    }
 }

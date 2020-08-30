@@ -108,4 +108,8 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
             mainScope.onCreate()
         }
     }
+
+    override fun refreshConfig() {
+        delegate.refreshConfig(this)
+    }
 }
