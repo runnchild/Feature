@@ -9,15 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Feature">
-        <activity android:name=".ui.ViewBindingAdapterActivity"></activity>
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.ViewBindingAdapterActivity" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.rongc.feature.app.ui.MainRefreshActivity" />
+        <activity
+            android:name="com.rongc.feature.app.ui.MainRefreshActivity"
+            android:label="RefreshList" />
     </application>
 
 </manifest>

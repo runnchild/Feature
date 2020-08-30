@@ -5,9 +5,10 @@ import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelStoreOwner
 import com.rongc.feature.model.BaseModel
+import com.rongc.feature.ui.toolbar.BarConfig
 import com.rongc.feature.viewmodel.BaseViewModel
 
-interface IUI<M: BaseViewModel<out BaseModel>> : ViewModelStoreOwner {
+interface IUI<M : BaseViewModel<out BaseModel>> : ViewModelStoreOwner {
     /**
      * 页面View设置好后调用, 优先{@link #initData()}
      */
@@ -61,4 +62,9 @@ interface IUI<M: BaseViewModel<out BaseModel>> : ViewModelStoreOwner {
 
     fun getUiDelegate(action: (M) -> Unit): UiDelegate<M>
     fun initObserver()
+
+    /**
+     * 初始化状态栏和导航栏信息
+     */
+    fun getBarConfig(): BarConfig.() -> Unit = { statusColor = -1 }
 }

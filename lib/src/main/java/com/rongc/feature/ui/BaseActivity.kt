@@ -38,6 +38,7 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         setContentView(view)
 
         delegate.init(this, view)
+        viewModel.toolbarModel?.title?.set(title)
 
         refreshDelegate?.run {
             init(viewModel, this@BaseActivity, view)

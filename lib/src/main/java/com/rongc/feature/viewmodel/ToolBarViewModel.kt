@@ -1,0 +1,40 @@
+package com.rongc.feature.viewmodel
+
+import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.toDrawable
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
+import androidx.databinding.ObservableFloat
+import com.rongc.feature.R
+import com.rongc.feature.SingleLiveData
+import com.rongc.feature.ui.toolbar.BarConfig
+import com.rongc.feature.utils.Compat.color
+import com.rongc.feature.utils.Compat.dp
+import com.rongc.feature.utils.Compat.drawable
+
+class ToolBarViewModel {
+
+    fun setConfig(barConfig: BarConfig) {
+        if (barConfig.toolBarDividerColor != -2) {
+            dividerColor.set(barConfig.toolBarDividerColor.toDrawable())
+        }
+        backVisible.set(barConfig.toolbarBackVisible)
+        backIcon.set(barConfig.toolbarBackDrawable)
+        background.value = barConfig.toolBarBackground.toDrawable()
+    }
+
+    val title = ObservableField<CharSequence>()
+    val titleVisible = ObservableBoolean(true)
+
+    val backVisible = ObservableBoolean(true)
+    val dividerColor = ObservableField<Drawable>(R.color.divider_color.color().toDrawable())
+    val dividerSize = ObservableFloat(0.5f.dp())
+    val backIcon = ObservableField<Drawable>(R.mipmap.common_icon_back.drawable())
+    val background = SingleLiveData<Drawable>()
+
+    val backLiveData = SingleLiveData<Boolean>()
+
+    val backClick = {
+        backLiveData.value = true
+    }
+}

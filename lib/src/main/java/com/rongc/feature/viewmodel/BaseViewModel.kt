@@ -2,7 +2,6 @@ package com.rongc.feature.viewmodel
 
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.model.BaseModel
@@ -24,15 +23,11 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     open lateinit var model: M
 
-    val title = ObservableField<String>()
+    var toolbarModel: ToolBarViewModel? = null
 
     var mainScope = MainScope()
     val dialogVisible = SingleLiveData<Boolean>()
     val finish = SingleLiveData<Boolean>()
-
-    val finishClick = {
-        finish()
-    }
 
     /**
      * 页面控件的点击监听
@@ -48,9 +43,9 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
         val modelCls = (this::class.java.genericSuperclass as ParameterizedType)
-            .actualTypeArguments.lastOrNull() as? Class<*>
+            .actualTypeArguments.lastOrNull() as Class<*>
         @Suppress("UNCHECKED_CAST")
-        model = modelCls?.newInstance() as M
+        model = modelCls.newInstance() as M
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -86,7 +81,6 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     ) {
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             dialogVisible(false)
-//            val isMainThread = Looper.getMainLooper().thread == Thread.currentThread()
             e.printStackTrace()
             if (showToast) {
                 val error = if (e is ServicesException && !e.message.isNullOrEmpty()) {

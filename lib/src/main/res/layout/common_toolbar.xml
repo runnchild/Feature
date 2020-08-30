@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.feature.viewmodel.ToolBarViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/common_toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{viewModel.background}"
+        tools:background="@color/white"
+        tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{viewModel.backClick}"
+            android:paddingStart="@dimen/dp15"
+            android:paddingTop="@dimen/dp14"
+            android:paddingEnd="@dimen/dp15"
+            android:paddingBottom="@dimen/dp14"
+            android:scaleType="centerInside"
+            android:src="@{viewModel.backIcon}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{viewModel.backVisible}"
+            tools:src="@mipmap/common_icon_back"
+            tools:tint="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@{viewModel.title}"
+            android:textColor="@color/gray_353535"
+            android:textSize="@dimen/sp17"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_back"
+            app:visible="@{viewModel.titleVisible}"
+            tools:text="标题" />
+
+        <LinearLayout
+            android:id="@+id/menu_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@{viewModel.dividerColor}"
+            app:layout_constraintTop_toBottomOf="@id/iv_back" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
