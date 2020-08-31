@@ -1,4 +1,4 @@
-package com.rongc.feature.app.viewmodel
+package com.rongc.feature.app.ui.viewmodel
 
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.refresh.BaseRecyclerItemBinder

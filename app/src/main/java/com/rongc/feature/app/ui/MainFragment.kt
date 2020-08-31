@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.rongc.feature.app.R
 import com.rongc.feature.app.databinding.MainFragmentBinding
-import com.rongc.feature.app.viewmodel.MainFragmentViewModel
+import com.rongc.feature.app.ui.viewmodel.MainFragmentViewModel
 import com.rongc.feature.ui.BaseBindingFragment
 
 class MainFragment : BaseBindingFragment<MainFragmentBinding, MainFragmentViewModel>() {
@@ -18,6 +18,7 @@ class MainFragment : BaseBindingFragment<MainFragmentBinding, MainFragmentViewMo
     override fun viewClick(view: View) {
         when (view.id) {
             R.id.btn_viewBinding -> startActivity(Intent(view.context, ViewBindingAdapterActivity::class.java))
+            R.id.btn_viewPager2-> startActivity(Intent(view.context, ViewPager2Activity::class.java))
         }
     }
 }

@@ -2,7 +2,7 @@ package com.rongc.feature.app.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.rongc.feature.app.viewmodel.MainRefreshViewModel
+import com.rongc.feature.app.ui.viewmodel.MainRefreshViewModel
 import com.rongc.feature.databinding.BaseRefreshLayoutBinding
 import com.rongc.feature.ui.BaseBindingActivity
 import com.rongc.feature.ui.IRefreshDelegate

@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Feature">
+        <activity android:name=".ui.ViewPager2Activity"></activity>
         <activity android:name=".ui.ViewBindingAdapterActivity" />
         <activity
             android:name=".ui.MainActivity"
@@ -20,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rongc.feature.app.ui.MainRefreshActivity"
+            android:name=".ui.MainRefreshActivity"
             android:label="RefreshList" />
     </application>
 

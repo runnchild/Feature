@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.viewmodel.BaseViewModel
@@ -102,10 +103,9 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
     override fun initObserver() {
     }
 
-    fun <T : BaseViewModel<*>> obtainSubViewModel(viewModel: Class<T>): T {
+    fun <T : ViewModel> obtainSubViewModel(viewModel: Class<T>): T {
         return ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[viewModel].apply {
-            lifecycle.addObserver(this)
-            mainScope.onCreate()
+            delegate.initObserver(this@BaseActivity, this as M)
         }
     }
 

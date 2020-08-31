@@ -2,7 +2,7 @@ package com.rongc.feature.app.ui
 
 import android.view.View
 import com.rongc.feature.app.R
-import com.rongc.feature.app.viewmodel.MainViewModel
+import com.rongc.feature.app.ui.viewmodel.MainViewModel
 import com.rongc.feature.ui.BaseActivity
 import com.rongc.feature.ui.toolbar.BarConfig
 

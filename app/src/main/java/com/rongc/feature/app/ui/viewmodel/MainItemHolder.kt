@@ -1,4 +1,4 @@
-package com.rongc.feature.app.viewmodel
+package com.rongc.feature.app.ui.viewmodel
 
 import android.graphics.Color
 import android.view.Gravity

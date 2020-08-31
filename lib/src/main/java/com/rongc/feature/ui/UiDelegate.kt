@@ -78,17 +78,17 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun init(owner: LifecycleOwner, root: View) {
-        api.viewModel().mainScope.onCreate()
+        initObserver(owner, api.viewModel())
+
         api.initObserver()
         api.initView(root)
         initToolBar(owner, root)
         api.initData()
-        api.getLifecycle().addObserver(api.viewModel())
-
-        initObserver(owner, api.viewModel())
     }
 
     open fun initObserver(owner: LifecycleOwner, viewModel: M) {
+        viewModel.mainScope.onCreate()
+        api.getLifecycle().addObserver(viewModel)
         viewModel.dialogVisible.observe(owner, Observer {
             if (it) {
                 showDialog()

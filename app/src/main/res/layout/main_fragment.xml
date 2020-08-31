@@ -43,5 +43,11 @@
             android:layout_height="wrap_content"
             android:text="viewBindingAdapter"
             android:onClick="@{viewModel.viewsClick}" />
+        <Button
+            android:id="@+id/btn_viewPager2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="viewPager2"
+            android:onClick="@{viewModel.viewsClick}" />
     </LinearLayout>
 </layout>

@@ -1,4 +1,4 @@
-package com.rongc.feature.app.viewmodel
+package com.rongc.feature.app.ui.viewmodel
 
 import android.view.View
 import com.blankj.utilcode.util.ToastUtils
