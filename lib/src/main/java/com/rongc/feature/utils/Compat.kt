@@ -8,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.databinding.BindingAdapter
@@ -200,5 +201,11 @@ object Compat {
     @BindingAdapter("orInvisible")
     fun View.orInvisible(visible: Boolean) {
         visibility = if (visible) View.VISIBLE else View.INVISIBLE
+    }
+
+    fun <T : View> View.find(id: Int) = findViewById<T>(id)
+
+    fun TextView.drawableSide(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom)
     }
 }
