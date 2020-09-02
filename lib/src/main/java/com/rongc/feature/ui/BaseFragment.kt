@@ -40,6 +40,7 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
                 init(viewModel, this@BaseFragment, mView)
             }
 
+            delegate.initToolBar(this, mView)
             delegate.init(this, mView)
 
             mView

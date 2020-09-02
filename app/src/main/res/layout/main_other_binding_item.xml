@@ -9,7 +9,7 @@
 
         <variable
             name="binder"
-            type="com.rongc.feature.app.viewmodel.MainOtherItemHolder" />
+            type="com.rongc.feature.app.ui.viewmodel.MainOtherItemHolder" />
     </data>
 
     <FrameLayout

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.feature.app.viewmodel.MainFragmentViewModel" />
+            type="com.rongc.feature.app.ui.viewmodel.MainFragmentViewModel" />
     </data>
 
     <LinearLayout

@@ -1,11 +1,15 @@
 package com.rongc.feature.ui.toolbar
 
+import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.rongc.feature.R
 import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.drawable
 
 class BarConfig {
+
+    val menuItems = arrayListOf<TextView.() -> Unit>()
+//    val imageMenuItems = arrayListOf<ImageView.() -> Unit>()
 
     var isStatusTransparent = false
 
@@ -39,4 +43,11 @@ class BarConfig {
             field = value
         }
 
+    fun menu(item: TextView.() -> Unit) {
+        menuItems.add(item)
+    }
+
+//    fun imageMenu(item: ImageView.() -> Unit) {
+//        imageMenuItems.add(item)
+//    }
 }

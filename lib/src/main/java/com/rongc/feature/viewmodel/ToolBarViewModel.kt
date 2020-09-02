@@ -1,6 +1,7 @@
 package com.rongc.feature.viewmodel
 
 import android.graphics.drawable.Drawable
+import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -14,10 +15,16 @@ import com.rongc.feature.utils.Compat.drawable
 
 class ToolBarViewModel {
 
+    val menuItems = arrayListOf<TextView.() -> Unit>()
+    val imageMenuItems = arrayListOf<TextView.() -> Unit>()
+
     fun setConfig(barConfig: BarConfig) {
         if (barConfig.toolBarDividerColor != -2) {
             dividerColor.set(barConfig.toolBarDividerColor.toDrawable())
         }
+        menuItems.clear()
+        menuItems.addAll(barConfig.menuItems)
+        barConfig.menuItems.clear()
         backVisible.set(barConfig.toolbarBackVisible)
         backIcon.set(barConfig.toolbarBackDrawable)
         background.value = barConfig.toolBarBackground.toDrawable()

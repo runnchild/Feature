@@ -25,8 +25,10 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        delegate = getUiDelegate {
-            viewModel = it
+        if (!::delegate.isInitialized) {
+            delegate = getUiDelegate {
+                viewModel = it
+            }
         }
         val view = when {
             getContentViewRes() > 0 -> {
@@ -38,7 +40,10 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         }
         setContentView(view)
 
-        delegate.init(this, view)
+        if (savedInstanceState == null) {
+            delegate.initToolBar(this, view)
+            delegate.init(this, view)
+        }
         viewModel.toolbarModel?.title?.set(title)
 
         refreshDelegate?.run {
