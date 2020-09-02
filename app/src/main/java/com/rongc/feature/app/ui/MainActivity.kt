@@ -20,6 +20,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun getBarConfig(): BarConfig.() -> Unit {
         return {
             statusColor = -1
+            toolbarBackVisible = false
         }
     }
 }

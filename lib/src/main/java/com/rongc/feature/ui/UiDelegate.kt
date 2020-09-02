@@ -25,8 +25,8 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
 
     private val dialog by lazy {
         AlertDialog.Builder(api.getContext()!!)
-            .setView(ProgressBar(api.getContext()))
-            .create()
+                .setView(ProgressBar(api.getContext()))
+                .create()
     }
 
     init {
@@ -37,7 +37,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     @Suppress("UNCHECKED_CAST")
     fun provideViewModel(owner: ViewModelStoreOwner): M {
         val modelClass = (owner.javaClass.genericSuperclass as ParameterizedType)
-            .actualTypeArguments.last() as Class<M>
+                .actualTypeArguments.last() as Class<M>
         return ViewModelProvider(owner, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(clz: Class<T>): T {
                 return api.generateViewModel(modelClass) as T
@@ -45,8 +45,8 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         }).get(modelClass)
     }
 
-    private fun initToolBar(owner: LifecycleOwner, view: View) {
-        barConfig.apply(api.getBarConfig())
+    fun initToolBar(owner: LifecycleOwner, view: View) {
+        barConfig.apply { statusColor = -1 }.apply(api.getBarConfig())
 
         initStatusBar(view.activity()!!)
 
@@ -58,7 +58,8 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         }
 
         BarUtils.addMarginTopEqualStatusBarHeight(
-            view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0) ?: return
+                view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)
+                        ?: return
         )
     }
 
@@ -82,7 +83,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
 
         api.initObserver()
         api.initView(root)
-        initToolBar(owner, root)
         api.initData()
     }
 

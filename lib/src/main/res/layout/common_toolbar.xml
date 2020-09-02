@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.rongc.feature.viewmodel.ToolBarViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/common_toolbar_layout"
         android:layout_width="match_parent"
@@ -31,9 +24,22 @@
             android:src="@{viewModel.backIcon}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{viewModel.backVisible}"
+            app:orInvisible="@{viewModel.backVisible}"
             tools:src="@mipmap/common_icon_back"
             tools:tint="@color/black" />
+
+        <LinearLayout
+            android:id="@+id/menu_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/tv_title"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -51,19 +57,17 @@
             app:visible="@{viewModel.titleVisible}"
             tools:text="标题" />
 
-        <LinearLayout
-            android:id="@+id/menu_parent"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@{viewModel.dividerColor}"
             app:layout_constraintTop_toBottomOf="@id/iv_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.feature.viewmodel.ToolBarViewModel" />
+    </data>
 </layout>
