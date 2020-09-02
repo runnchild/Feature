@@ -22,6 +22,7 @@ import java.lang.reflect.ParameterizedType
 open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action: (M) -> Unit) {
 
     private val barConfig by lazy { BarConfig() }
+    var toolBar: PsnToolbar? = null
 
     private val dialog by lazy {
         AlertDialog.Builder(api.getContext()!!)
@@ -51,6 +52,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         initStatusBar(view.activity()!!)
 
         findToolBar(view)?.let {
+            toolBar = it
             val toolBarViewModel = ToolBarViewModel()
             api.viewModel().toolbarModel = toolBarViewModel
             toolBarViewModel.setConfig(barConfig)
