@@ -59,10 +59,12 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             it.setViewModel(owner, toolBarViewModel)
         }
 
-        BarUtils.addMarginTopEqualStatusBarHeight(
+        if (!barConfig.isStatusTransparent) {
+            BarUtils.addMarginTopEqualStatusBarHeight(
                 view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)
-                        ?: return
-        )
+                    ?: return
+            )
+        }
     }
 
     private fun findToolBar(view: View): PsnToolbar? {

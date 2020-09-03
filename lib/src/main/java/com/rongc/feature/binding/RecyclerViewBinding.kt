@@ -21,8 +21,8 @@ fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? =
  * 如果没有设置adapter默认会设置BaseBinderAdapter
  * @param binders  binders的大小代表不同布局的数量， 数据内容的类型不可一样
  */
-//@BindingAdapter("itemBinders")
-fun <T> RecyclerView.itemBinders(binders: MutableList<BaseRecyclerItemBinder<T>>) {
+@BindingAdapter("itemBinders")
+fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<T>>) {
     if (binders.isNullOrEmpty()) {
         return
     }
