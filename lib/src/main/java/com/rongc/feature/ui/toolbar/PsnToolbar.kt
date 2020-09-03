@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.rongc.feature.R
 import com.rongc.feature.databinding.CommonToolbarBinding
 import com.rongc.feature.utils.Compat.color
@@ -36,7 +37,7 @@ class PsnToolbar @JvmOverloads constructor(
         binding.executePendingBindings()
 
         viewModel.menuItems.forEach { addItemMenu(it) }
-        viewModel.background.observe(owner, {
+        viewModel.background.observe(owner, Observer{
             val value = (it as? ColorDrawable)?.color ?: 1
             val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             setLightMode(isLightMode)
