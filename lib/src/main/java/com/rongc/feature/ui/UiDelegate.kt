@@ -3,6 +3,7 @@ package com.rongc.feature.ui
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.forEach
@@ -26,8 +27,8 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
 
     private val dialog by lazy {
         AlertDialog.Builder(api.getContext()!!)
-                .setView(ProgressBar(api.getContext()))
-                .create()
+            .setView(ProgressBar(api.getContext()))
+            .create()
     }
 
     init {
@@ -38,7 +39,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     @Suppress("UNCHECKED_CAST")
     fun provideViewModel(owner: ViewModelStoreOwner): M {
         val modelClass = (owner.javaClass.genericSuperclass as ParameterizedType)
-                .actualTypeArguments.last() as Class<M>
+            .actualTypeArguments.last() as Class<M>
         return ViewModelProvider(owner, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(clz: Class<T>): T {
                 return api.generateViewModel(modelClass) as T
@@ -59,11 +60,12 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             it.setViewModel(owner, toolBarViewModel)
         }
 
-        if (!barConfig.isStatusTransparent) {
-            BarUtils.addMarginTopEqualStatusBarHeight(
-                view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)
-                    ?: return
-            )
+        view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
+            if (!barConfig.isStatusTransparent) {
+                BarUtils.addMarginTopEqualStatusBarHeight(it)
+            } else {
+                BarUtils.subtractMarginTopEqualStatusBarHeight(it)
+            }
         }
     }
 
@@ -133,20 +135,25 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun initStatusBar(activity: Activity) {
-        if (barConfig.statusColor != -2) {
-            BarUtils.setStatusBarColor(activity, barConfig.statusColor)
-            BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
-        }
-        if (barConfig.navColor != -2) {
-            BarUtils.setNavBarColor(activity, barConfig.navColor)
-            BarUtils.setNavBarLightMode(activity, barConfig.navLightMode)
-        }
         if (barConfig.isStatusTransparent) {
             BarUtils.transparentStatusBar(activity)
+            hideStatusBarView(activity)
+        } else if (barConfig.statusColor != BarConfig.UNDEFINE) {
+            BarUtils.setStatusBarColor(activity, barConfig.statusColor)
+        }
+        BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
+        if (barConfig.navColor != BarConfig.UNDEFINE) {
+            BarUtils.setNavBarColor(activity, barConfig.navColor)
+            BarUtils.setNavBarLightMode(activity, barConfig.navLightMode)
         }
     }
 
     fun refreshConfig(activity: Activity) {
         initStatusBar(activity)
+    }
+
+    private fun hideStatusBarView(activity: Activity) {
+        val decorView = activity.window.decorView.findViewWithTag<View>("TAG_STATUS_BAR")
+        decorView?.visibility = View.GONE
     }
 }

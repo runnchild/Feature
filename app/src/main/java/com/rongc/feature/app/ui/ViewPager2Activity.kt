@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.app.databinding.ActivityViewPager2Binding
 import com.rongc.feature.app.ui.viewmodel.ViewPagerViewModel
-import com.rongc.feature.binding.itemBinders
+import com.rongc.feature.binding.ViewPager2Binding.itemBinders
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.ui.BaseBindingActivity
 import com.rongc.feature.utils.Compat.toast

@@ -8,6 +8,7 @@ import com.rongc.feature.app.R
 import com.rongc.feature.app.databinding.MainFragmentBinding
 import com.rongc.feature.app.ui.viewmodel.MainFragmentViewModel
 import com.rongc.feature.ui.BaseBindingFragment
+import com.rongc.feature.ui.toolbar.BarConfig
 
 class MainFragment : BaseBindingFragment<MainFragmentBinding, MainFragmentViewModel>() {
 
@@ -19,6 +20,7 @@ class MainFragment : BaseBindingFragment<MainFragmentBinding, MainFragmentViewMo
         when (view.id) {
             R.id.btn_viewBinding -> startActivity(Intent(view.context, ViewBindingAdapterActivity::class.java))
             R.id.btn_viewPager2-> startActivity(Intent(view.context, ViewPager2Activity::class.java))
+            R.id.btn_status_bar-> startActivity(Intent(view.context, StatusBarActivity::class.java))
         }
     }
 }
