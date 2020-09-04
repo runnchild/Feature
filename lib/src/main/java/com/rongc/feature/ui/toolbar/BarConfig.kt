@@ -7,15 +7,30 @@ import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.drawable
 
 class BarConfig {
+    companion object {
+        const val UNDEFINE = -2
+
+        const val TRANSPARENT_WHITE = 1
+        const val TRANSPARENT_BLACK = 2
+    }
+
+    var statusBarState = 0
+        set(value) {
+            if (value >= TRANSPARENT_WHITE) {
+                isStatusTransparent = true
+                isLightMode = value == TRANSPARENT_BLACK
+            }
+            field = value
+        }
 
     val menuItems = arrayListOf<TextView.() -> Unit>()
 //    val imageMenuItems = arrayListOf<ImageView.() -> Unit>()
 
-    var isStatusTransparent = false
+    internal var isStatusTransparent = false
 
     internal var isLightMode = false
 
-    var statusColor = -2
+    var statusColor = UNDEFINE
         set(value) {
             isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value
@@ -37,7 +52,7 @@ class BarConfig {
 
     internal var navLightMode = false
 
-    var navColor = -2
+    var navColor = UNDEFINE
         set(value) {
             navLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value

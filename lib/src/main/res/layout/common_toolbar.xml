@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.feature.viewmodel.ToolBarViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/common_toolbar_layout"
         android:layout_width="match_parent"
@@ -54,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_back"
-            app:visible="@{viewModel.titleVisible}"
+            app:orInvisible="@{viewModel.titleVisible}"
             tools:text="标题" />
 
         <View
@@ -63,11 +70,4 @@
             android:background="@{viewModel.dividerColor}"
             app:layout_constraintTop_toBottomOf="@id/iv_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.rongc.feature.viewmodel.ToolBarViewModel" />
-    </data>
 </layout>

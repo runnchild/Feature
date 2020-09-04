@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Feature">
-        <activity android:name=".ui.ViewPager2Activity"></activity>
+        <activity android:name=".ui.StatusBarActivity" android:label="StatusBar"/>
+        <activity android:name=".ui.ViewPager2Activity" />
         <activity android:name=".ui.ViewBindingAdapterActivity" />
         <activity
             android:name=".ui.MainActivity"

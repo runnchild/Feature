@@ -8,6 +8,7 @@ import android.util.StateSet
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ClickUtils
 
 /**
@@ -90,4 +91,13 @@ fun TextView.colorState(
     checkedColor: Int = currentTextColor
 ) {
     setTextColor(createColorStateList(currentTextColor, disable, pressed, focused, checkedColor))
+}
+
+@BindingAdapter("marginTopStatus")
+fun View.addStatusBarMarginTop(add: Boolean) {
+    if (add) {
+        BarUtils.addMarginTopEqualStatusBarHeight(this)
+    } else {
+        BarUtils.subtractMarginTopEqualStatusBarHeight(this)
+    }
 }
