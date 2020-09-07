@@ -8,8 +8,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
+import com.rongc.feature.widget.ItemDecoration
 import java.lang.reflect.ParameterizedType
-
+@BindingAdapter("adapter")
 fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? = null) {
     // 是否使用DataBinding
 //    val isBinding = getTag(R.id.layout_isBinding) as? Boolean == true
@@ -26,10 +27,7 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
     if (binders.isNullOrEmpty()) {
         return
     }
-    val adapter = adapter as? BaseBinderAdapter
-    if (adapter == null) {
-        setup<Any>()
-    }
+    val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter(null).apply { adapter = this }
     binders.forEach { item ->
         val arguments =
             (item::class.java.genericSuperclass as ParameterizedType).actualTypeArguments
@@ -50,9 +48,11 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
  */
 @BindingAdapter("items")
 fun RecyclerView.items(items: Collection<Any>) {
-    val adapter = adapter as? BaseBinderAdapter
-    if (adapter == null) {
-        setup<Any>()
-    }
-    adapter?.setList(items)
+    val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter(null).apply { adapter = this }
+    adapter.setList(items)
+}
+
+@BindingAdapter("itemDecoration")
+fun RecyclerView.itemDecoration(decorator: ItemDecoration) {
+    addItemDecoration(decorator)
 }
