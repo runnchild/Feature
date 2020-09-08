@@ -42,10 +42,18 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
-        val modelCls = (this::class.java.genericSuperclass as ParameterizedType)
-            .actualTypeArguments.lastOrNull() as Class<*>
+        val modelCls = findModelType(this::class.java)?.actualTypeArguments?.lastOrNull() as Class<*>
+
         @Suppress("UNCHECKED_CAST")
         model = modelCls.newInstance() as M
+    }
+
+    private fun findModelType(clazz: Class<*>?): ParameterizedType? {
+        val type = clazz?.genericSuperclass ?: return null
+        if (type is ParameterizedType) {
+            return type
+        }
+        return findModelType(clazz.superclass as? Class<*>)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -116,5 +124,12 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     fun finish() {
         finish.value = true
+    }
+
+    /**
+     * 点击提供土司响应
+     */
+    fun toast(params: String): () -> Unit = {
+        params.toast()
     }
 }

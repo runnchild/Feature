@@ -19,9 +19,9 @@ import com.blankj.utilcode.util.PhoneUtils
  * @since 2.1.4
  */
 object DeviceUtils {
-    fun getImei(call: (String) -> Unit): String {
+    fun getImei(call: (String) -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return ""
+             ""
         }
         PermissionUtils.permission(PermissionConstants.PHONE)
             .callback(object : PermissionUtils.SimpleCallback {
@@ -33,5 +33,6 @@ object DeviceUtils {
                 override fun onDenied() {
                 }
             })
+
     }
 }
