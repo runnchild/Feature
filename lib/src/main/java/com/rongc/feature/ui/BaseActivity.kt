@@ -3,11 +3,17 @@ package com.rongc.feature.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
+import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.viewmodel.BaseViewModel
+import com.rongc.feature.viewmodel.ToolBarViewModel
 
 /**
  * 所有Activity的基类, 继承者需要提供ViewModel， 默认会反射创建该实例
@@ -42,13 +48,41 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
         if (savedInstanceState == null) {
             delegate.initToolBar(this, view)
+
+            findToolBar(view)?.let {
+//                toolBar = it
+                val toolBarViewModel by viewModels<ToolBarViewModel>()
+                viewModel.toolbarModel = toolBarViewModel
+                toolBarViewModel.setConfig(delegate.barConfig)
+                it.setViewModel(this, toolBarViewModel)
+            }
+
             delegate.init(this, view)
         }
         viewModel.toolbarModel?.title?.set(title)
 
+        viewModel.toolbarModel?.backLiveData?.observe(this, Observer {
+            navigateUp()
+        })
+
         refreshDelegate?.run {
             init(viewModel, this@BaseActivity, view)
         }
+    }
+
+    private fun findToolBar(view: View): PsnToolbar? {
+        if (view is PsnToolbar) {
+            return view
+        }
+        if (view is ViewGroup) {
+            view.forEach {
+                val findView = findToolBar(it)
+                if (findView is PsnToolbar) {
+                    return findView
+                }
+            }
+        }
+        return null
     }
 
 

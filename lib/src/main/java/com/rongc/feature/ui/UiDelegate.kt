@@ -22,8 +22,8 @@ import java.lang.reflect.ParameterizedType
  */
 open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action: (M) -> Unit) {
 
-    private val barConfig by lazy { BarConfig() }
-    var toolBar: PsnToolbar? = null
+    val barConfig by lazy { BarConfig() }
+//    var toolBar: PsnToolbar? = null
 
     private val dialog by lazy {
         AlertDialog.Builder(api.getContext()!!)
@@ -52,14 +52,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
 
         initStatusBar(view.activity()!!)
 
-        findToolBar(view)?.let {
-            toolBar = it
-            val toolBarViewModel = ToolBarViewModel()
-            api.viewModel().toolbarModel = toolBarViewModel
-            toolBarViewModel.setConfig(barConfig)
-            it.setViewModel(owner, toolBarViewModel)
-        }
-
         view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
             if (!barConfig.isStatusTransparent) {
                 BarUtils.addMarginTopEqualStatusBarHeight(it)
@@ -67,21 +59,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
                 BarUtils.subtractMarginTopEqualStatusBarHeight(it)
             }
         }
-    }
-
-    private fun findToolBar(view: View): PsnToolbar? {
-        if (view is PsnToolbar) {
-            return view
-        }
-        if (view is ViewGroup) {
-            view.forEach {
-                val findView = findToolBar(it)
-                if (findView is PsnToolbar) {
-                    return findView
-                }
-            }
-        }
-        return null
     }
 
     fun init(owner: LifecycleOwner, root: View) {
@@ -103,9 +80,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             }
         })
 
-        viewModel.toolbarModel?.backLiveData?.observe(owner, Observer {
-            navigateUp()
-        })
         viewModel.finish.observe(owner, Observer {
             navigateUp()
         })
