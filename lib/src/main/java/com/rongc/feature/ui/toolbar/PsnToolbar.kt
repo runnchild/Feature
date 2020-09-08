@@ -36,8 +36,13 @@ class PsnToolbar @JvmOverloads constructor(
         binding.viewModel = viewModel
         binding.executePendingBindings()
 
-        viewModel.menuItems.forEach { addItemMenu(it) }
-        viewModel.background.observe(owner, Observer{
+        viewModel.menuItems.observe(owner, Observer { items ->
+            binding.menuParent.removeAllViews()
+            items.forEach {
+                addItemMenu(it)
+            }
+        })
+        viewModel.background.observe(owner, Observer {
             val value = (it as? ColorDrawable)?.color ?: 1
             val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             setLightMode(isLightMode)
@@ -52,7 +57,7 @@ class PsnToolbar @JvmOverloads constructor(
         binding.viewModel?.title?.set(title)
     }
 
-    fun setBackImageDrawable(drawable: Drawable) {
+    fun setBackImageDrawable(drawable: Drawable?) {
         binding.viewModel?.backIcon?.set(drawable)
     }
 
@@ -94,4 +99,13 @@ class PsnToolbar @JvmOverloads constructor(
 
         binding.menuParent.addView(menu, LayoutParams(-2, -1))
     }
+
+    var navigationIcon: Drawable? = null
+        get() {
+            return binding.ivBack.drawable
+        }
+        set(value) {
+            setBackImageDrawable(value)
+            field = value
+        }
 }

@@ -6,6 +6,8 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableFloat
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.rongc.feature.R
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.ui.toolbar.BarConfig
@@ -13,17 +15,17 @@ import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.dp
 import com.rongc.feature.utils.Compat.drawable
 
-class ToolBarViewModel {
+class ToolBarViewModel: ViewModel() {
 
-    val menuItems = arrayListOf<TextView.() -> Unit>()
+    val menuItems = MutableLiveData<ArrayList<TextView.() -> Unit>>()
     val imageMenuItems = arrayListOf<TextView.() -> Unit>()
 
     fun setConfig(barConfig: BarConfig) {
         if (barConfig.toolBarDividerColor != -2) {
             dividerColor.set(barConfig.toolBarDividerColor.toDrawable())
         }
-        menuItems.clear()
-        menuItems.addAll(barConfig.menuItems)
+        menuItems.value?.clear()
+        menuItems.value?.addAll(barConfig.menuItems)
         barConfig.menuItems.clear()
         backVisible.set(barConfig.toolbarBackVisible)
         backIcon.set(barConfig.toolbarBackDrawable)
