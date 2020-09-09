@@ -3,6 +3,7 @@ package com.rongc.feature.viewmodel
 import android.graphics.drawable.Drawable
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableFloat
@@ -17,21 +18,23 @@ import com.rongc.feature.utils.Compat.drawable
 
 class ToolBarViewModel: ViewModel() {
 
-    val menuItems = MutableLiveData<ArrayList<TextView.() -> Unit>>()
+    val menuItems = ObservableArrayList<TextView.() -> Unit>()
     val imageMenuItems = arrayListOf<TextView.() -> Unit>()
 
     fun setConfig(barConfig: BarConfig) {
         if (barConfig.toolBarDividerColor != -2) {
             dividerColor.set(barConfig.toolBarDividerColor.toDrawable())
         }
-        menuItems.value?.clear()
-        menuItems.value?.addAll(barConfig.menuItems)
+        menuItems.clear()
+        menuItems.addAll(barConfig.menuItems)
         barConfig.menuItems.clear()
         backVisible.set(barConfig.toolbarBackVisible)
         backIcon.set(barConfig.toolbarBackDrawable)
         background.value = barConfig.toolBarBackground.toDrawable()
+        toolbarVisible.set(barConfig.toolbarVisible)
     }
 
+    val toolbarVisible = ObservableBoolean(true)
     val title = ObservableField<CharSequence>()
     val titleVisible = ObservableBoolean(true)
 

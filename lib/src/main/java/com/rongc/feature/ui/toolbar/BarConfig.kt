@@ -14,6 +14,8 @@ class BarConfig {
         const val TRANSPARENT_BLACK = 2
     }
 
+    var toolbarVisible = true
+    
     var statusBarState = 0
         set(value) {
             if (value >= TRANSPARENT_WHITE) {

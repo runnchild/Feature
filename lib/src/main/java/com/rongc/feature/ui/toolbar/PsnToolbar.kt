@@ -7,11 +7,13 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.rongc.feature.R
@@ -27,8 +29,37 @@ import com.rongc.feature.viewmodel.ToolBarViewModel
  * @update
  */
 class PsnToolbar @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+    companion object {
+        @JvmStatic
+        @BindingAdapter("menus")
+        fun ViewGroup.setMenus(items: ArrayList<TextView.() -> Unit>) {
+            removeAllViews()
+            items.forEach {
+                addItemMenu(it)
+            }
+        }
+
+        private fun ViewGroup.addItemMenu(item: TextView.() -> Unit) {
+            val menu = TextView(context).apply {
+                textSize = 16f
+                setTextColor(R.color.gray_353535.color())
+                gravity = Gravity.CENTER
+                val padding = if (childCount > 0) {
+                    7.idp()
+                } else {
+                    15.idp()
+                }
+                setPadding(7.idp(), 0, padding, 0)
+            }.apply(item)
+
+            addView(
+                menu, childCount - 1,
+                LayoutParams(-2, -1)
+            )
+        }
+    }
 
     val binding = CommonToolbarBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -36,12 +67,6 @@ class PsnToolbar @JvmOverloads constructor(
         binding.viewModel = viewModel
         binding.executePendingBindings()
 
-        viewModel.menuItems.observe(owner, Observer { items ->
-            binding.menuParent.removeAllViews()
-            items.forEach {
-                addItemMenu(it)
-            }
-        })
         viewModel.background.observe(owner, Observer {
             val value = (it as? ColorDrawable)?.color ?: 1
             val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
@@ -72,23 +97,6 @@ class PsnToolbar @JvmOverloads constructor(
     fun setLightMode(isLight: Boolean) {
         binding.ivBack.drawable?.setTint(if (!isLight) Color.WHITE else Color.BLACK)
         setTitleColor(if (!isLight) Color.WHITE else R.color.gray_353535.color())
-    }
-
-    private fun addItemMenu(item: TextView.() -> Unit) {
-        val menu = TextView(context).apply {
-            textSize = 16f
-            setTextColor(R.color.gray_353535.color())
-            gravity = Gravity.CENTER
-            val padding = if (binding.menuParent.childCount > 0) {
-                7.idp()
-            } else {
-                15.idp()
-            }
-            setPadding(7.idp(), 0, padding, 0)
-        }.apply(item)
-
-        binding.menuParent.addView(menu, binding.menuParent.childCount - 1,
-                LayoutParams(-2, -1))
     }
 
     private fun addImageMenu(item: ImageView.() -> Unit) {
