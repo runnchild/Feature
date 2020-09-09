@@ -47,20 +47,17 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         setContentView(view)
 
         if (savedInstanceState == null) {
-            delegate.initToolBar(this, view)
-
             findToolBar(view)?.let {
-//                toolBar = it
                 val toolBarViewModel by viewModels<ToolBarViewModel>()
                 viewModel.toolbarModel = toolBarViewModel
-                toolBarViewModel.setConfig(delegate.barConfig)
                 it.setViewModel(this, toolBarViewModel)
             }
-
             delegate.init(this, view)
         }
-        viewModel.toolbarModel?.title?.set(title)
 
+        refreshConfig()
+
+        viewModel.toolbarModel?.title?.set(title)
         viewModel.toolbarModel?.backLiveData?.observe(this, Observer {
             navigateUp()
         })

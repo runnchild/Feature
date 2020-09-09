@@ -3,18 +3,13 @@ package com.rongc.feature.ui
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.forEach
 import androidx.lifecycle.*
 import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.BarConfig
-import com.rongc.feature.ui.toolbar.PsnToolbar
-import com.rongc.feature.utils.Compat.activity
 import com.rongc.feature.viewmodel.BaseViewModel
-import com.rongc.feature.viewmodel.ToolBarViewModel
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -22,7 +17,7 @@ import java.lang.reflect.ParameterizedType
  */
 open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action: (M) -> Unit) {
 
-    val barConfig by lazy { BarConfig() }
+    private val barConfig by lazy { BarConfig() }
 //    var toolBar: PsnToolbar? = null
 
     private val dialog by lazy {
@@ -45,20 +40,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
                 return api.generateViewModel(modelClass) as T
             }
         }).get(modelClass)
-    }
-
-    fun initToolBar(owner: LifecycleOwner, view: View) {
-        barConfig.apply { statusColor = -1 }.apply(api.getBarConfig())
-
-        initStatusBar(view.activity()!!)
-
-        view.activity()?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
-            if (!barConfig.isStatusTransparent) {
-                BarUtils.addMarginTopEqualStatusBarHeight(it)
-            } else {
-                BarUtils.subtractMarginTopEqualStatusBarHeight(it)
-            }
-        }
     }
 
     fun init(owner: LifecycleOwner, root: View) {
@@ -108,7 +89,9 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         }
     }
 
-    fun initStatusBar(activity: Activity) {
+    fun setupStatusBar(activity: Activity) {
+        barConfig.apply { statusColor = -1 }.apply(api.getBarConfig())
+
         if (barConfig.isStatusTransparent) {
             BarUtils.transparentStatusBar(activity)
             hideStatusBarView(activity)
@@ -120,10 +103,19 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             BarUtils.setNavBarColor(activity, barConfig.navColor)
             BarUtils.setNavBarLightMode(activity, barConfig.navLightMode)
         }
+
+        activity.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
+            if (!barConfig.isStatusTransparent) {
+                BarUtils.addMarginTopEqualStatusBarHeight(it)
+            } else {
+                BarUtils.subtractMarginTopEqualStatusBarHeight(it)
+            }
+        }
     }
 
     fun refreshConfig(activity: Activity) {
-        initStatusBar(activity)
+        setupStatusBar(activity)
+        api.viewModel().toolbarModel?.setConfig(barConfig)
     }
 
     private fun hideStatusBarView(activity: Activity) {
