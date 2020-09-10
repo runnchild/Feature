@@ -42,7 +42,7 @@ class ToolBarViewModel: ViewModel() {
     val dividerColor = ObservableField<Drawable>(R.color.divider_color.color().toDrawable())
     val dividerSize = ObservableFloat(0.5f.dp())
     val backIcon = ObservableField<Drawable>(R.mipmap.common_icon_back.drawable())
-    val background = SingleLiveData<Drawable>()
+    val background = MutableLiveData<Drawable>()
 
     val backLiveData = SingleLiveData<Boolean>()
 

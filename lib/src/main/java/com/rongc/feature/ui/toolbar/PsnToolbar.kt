@@ -71,6 +71,7 @@ class PsnToolbar @JvmOverloads constructor(
             val value = (it as? ColorDrawable)?.color ?: 1
             val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             setLightMode(isLightMode)
+            background = it
         })
     }
 

@@ -81,7 +81,7 @@ object Compat {
         )
     }
 
-    fun Int.toBoolean() = this == 1
+    fun Int?.toBoolean() = this != null && this != 0
     fun Boolean.toInt() = if (this) 1 else 0
 
     fun String?.safeInt(default: Int = 0): Int {

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
@@ -38,7 +38,7 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
                 init(viewModel, this@BaseFragment, mView)
             }
 
-            val toolbarViewModel by activityViewModels<ToolBarViewModel>()
+            val toolbarViewModel by requireActivity().viewModels<ToolBarViewModel>()
             viewModel.toolbarModel = toolbarViewModel
             refreshConfig()
 

@@ -1,7 +1,6 @@
 package com.rongc.feature.app.ui
 
 import android.graphics.Color
-import androidx.core.graphics.drawable.toDrawable
 import com.rongc.feature.app.R
 import com.rongc.feature.ui.BaseActivity
 import com.rongc.feature.ui.toolbar.BarConfig
@@ -37,6 +36,7 @@ class StatusBarActivity : BaseActivity<EmptyViewModel>() {
                 setTextColor(Color.WHITE)
                 setOnClickListener { title.toString().toast() }
             }
+            toolBarBackground = Color.BLUE
         }
     }
 }
