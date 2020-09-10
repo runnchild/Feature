@@ -141,6 +141,7 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     fun <T : ViewModel> obtainSubViewModel(viewModel: Class<T>): T {
         return ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[viewModel].apply {
+            @Suppress("UNCHECKED_CAST")
             delegate.initObserver(this@BaseActivity, this as M)
         }
     }

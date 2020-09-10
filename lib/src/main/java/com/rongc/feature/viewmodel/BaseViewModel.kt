@@ -11,6 +11,7 @@ import com.rongc.feature.utils.Compat.loge
 import com.rongc.feature.utils.Compat.toast
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.reflect.ParameterizedType
 import java.net.ConnectException
@@ -86,7 +87,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
         failed: ((Throwable) -> Unit)? = null,
         showDialog: Boolean = true,
         showToast: Boolean = true
-    ) {
+    ): Job {
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             dialogVisible(false)
             e.printStackTrace()
@@ -103,7 +104,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
             }
             failed?.invoke(e)
         }
-        viewModelScope.launch(exceptionHandler) {
+        return viewModelScope.launch(exceptionHandler) {
             dialogVisible(showDialog)
             scope(this)
             dialogVisible(false)

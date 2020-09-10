@@ -33,9 +33,9 @@ abstract class BaseRecyclerItemBinder<T> : BaseItemBinder<T, BaseViewHolder>() {
         return null
     }
 
-    abstract fun areItemsTheSame(oldItem: T, newItem: T): Boolean
+    open fun areItemsTheSame(oldItem: T, newItem: T): Boolean = false
 
-    abstract fun areContentsTheSame(oldItem: T, newItem: T): Boolean
+    open fun areContentsTheSame(oldItem: T, newItem: T): Boolean = false
 
     /**
      * item内容设置
