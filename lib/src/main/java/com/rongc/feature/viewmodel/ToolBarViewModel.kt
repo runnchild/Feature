@@ -1,5 +1,6 @@
 package com.rongc.feature.viewmodel
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
@@ -29,7 +30,10 @@ class ToolBarViewModel: ViewModel() {
         menuItems.addAll(barConfig.menuItems)
         barConfig.menuItems.clear()
         backVisible.set(barConfig.toolbarBackVisible)
-        backIcon.set(barConfig.toolbarBackDrawable)
+
+        val toolbarBackDrawable = barConfig.toolbarBackDrawable
+        toolbarBackDrawable.setTint(if (!barConfig.isLightMode) Color.WHITE else Color.BLACK)
+        backIcon.set(toolbarBackDrawable)
         background.value = barConfig.toolBarBackground.toDrawable()
         toolbarVisible.set(barConfig.toolbarVisible)
     }

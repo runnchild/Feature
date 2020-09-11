@@ -1,4 +1,4 @@
-package com.rongc.feature.utils
+package com.rongc.feature.bus
 
 import androidx.lifecycle.*
 import java.util.concurrent.ConcurrentHashMap
@@ -15,11 +15,12 @@ object LiveDataBus {
             liveData = StickyLiveData<T>(eventName)
             eventMap[eventName] = liveData
         }
+        @Suppress("UNCHECKED_CAST")
         return liveData as StickyLiveData<T>
     }
 
     //通过一堆的反射，获取livedata当中的mversion字段，来控制黏性数据的分发与否，但是我们认为这种反射不够优雅。
-    class StickyLiveData<T>(private val eventName: String) : LiveData<T>() {
+    class StickyLiveData<T>(private val eventName: String) : MutableLiveData<T>() {
         internal var mStickyData: T? = null
         internal var mVersion = 0
 

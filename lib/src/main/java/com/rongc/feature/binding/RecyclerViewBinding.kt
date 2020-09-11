@@ -27,10 +27,18 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
     if (binders.isNullOrEmpty()) {
         return
     }
+
+    fun findBinderType(clazz: Class<*>?): ParameterizedType? {
+        val type = clazz?.genericSuperclass ?: return null
+        if (type is ParameterizedType) {
+            return type
+        }
+        return findBinderType(clazz.superclass as? Class<*>)
+    }
+
     val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter(null).apply { adapter = this }
     binders.forEach { item ->
-        val arguments =
-            (item::class.java.genericSuperclass as ParameterizedType).actualTypeArguments
+        val arguments = findBinderType(item::class.java)!!.actualTypeArguments
         val actualClz = arguments.lastOrNull() ?: return@forEach
         val method = BaseBinderAdapter::class.java.getDeclaredMethod(
             "addItemBinder",
