@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.util.StateSet
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.BarUtils
@@ -100,4 +101,13 @@ fun View.addStatusBarMarginTop(add: Boolean) {
     } else {
         BarUtils.subtractMarginTopEqualStatusBarHeight(this)
     }
+}
+
+@BindingAdapter("level")
+fun View.level(level: Int) {
+    if (this is ImageView) {
+        drawable ?: background
+    } else {
+        background
+    }.level = level
 }
