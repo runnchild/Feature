@@ -8,7 +8,6 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableFloat
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rongc.feature.R
 import com.rongc.feature.SingleLiveData
@@ -18,6 +17,10 @@ import com.rongc.feature.utils.Compat.dp
 import com.rongc.feature.utils.Compat.drawable
 
 class ToolBarViewModel: ViewModel() {
+
+    val backClick = {
+        backLiveData.value = true
+    }
 
     val menuItems = ObservableArrayList<TextView.() -> Unit>()
     val imageMenuItems = arrayListOf<TextView.() -> Unit>()
@@ -34,7 +37,7 @@ class ToolBarViewModel: ViewModel() {
         val toolbarBackDrawable = barConfig.toolbarBackDrawable
         toolbarBackDrawable.setTint(if (!barConfig.isLightMode) Color.WHITE else Color.BLACK)
         backIcon.set(toolbarBackDrawable)
-        background.value = barConfig.toolBarBackground.toDrawable()
+        background.set(barConfig.toolBarBackground.toDrawable())
         toolbarVisible.set(barConfig.toolbarVisible)
     }
 
@@ -46,11 +49,7 @@ class ToolBarViewModel: ViewModel() {
     val dividerColor = ObservableField<Drawable>(R.color.divider_color.color().toDrawable())
     val dividerSize = ObservableFloat(0.5f.dp())
     val backIcon = ObservableField<Drawable>(R.mipmap.common_icon_back.drawable())
-    val background = MutableLiveData<Drawable>()
+    val background = ObservableField<Drawable>()
 
     val backLiveData = SingleLiveData<Boolean>()
-
-    val backClick = {
-        backLiveData.value = true
-    }
 }
