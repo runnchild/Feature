@@ -8,9 +8,14 @@ import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.generic.RoundingParams
 import com.facebook.drawee.view.SimpleDraweeView
 
-@BindingAdapter("url")
-fun SimpleDraweeView.url(url: String?) {
+@BindingAdapter("url", "placeHolder", "placeScaleType", requireAll = false)
+fun SimpleDraweeView.url(
+    url: String?,
+    placeHolder: Int = 0,
+    placeHolderScale: ScalingUtils.ScaleType? = null
+) {
     setImageURI(if (url == null) url else Uri.parse(url), null)
+    hierarchy.setPlaceholderImage(placeHolder, placeHolderScale ?: ScalingUtils.ScaleType.CENTER)
 }
 
 @BindingAdapter("src")
@@ -46,8 +51,12 @@ fun SimpleDraweeView.scale(scale: String, focusPoint: PointF? = null) {
 
 @BindingAdapter("isCircle", "corner", "tl", "tr", "bl", "br", requireAll = false)
 fun SimpleDraweeView.round(
-    isCircle: Boolean = false, corners: Float = 0f
-    , tl: Float = 0f, tr: Float = 0f, bl: Float = 0f, br: Float = 0f
+    isCircle: Boolean = false,
+    corners: Float = 0f,
+    tl: Float = 0f,
+    tr: Float = 0f,
+    bl: Float = 0f,
+    br: Float = 0f
 ) {
     val roundingParams = hierarchy.roundingParams ?: RoundingParams.fromCornersRadius(corners)
     roundingParams.run {
