@@ -1,7 +1,6 @@
 package com.rongc.feature.binding
 
 import android.graphics.PointF
-import android.net.Uri
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.Utils
 import com.facebook.drawee.drawable.ScalingUtils
@@ -14,8 +13,22 @@ fun SimpleDraweeView.url(
     placeHolder: Int = 0,
     placeHolderScale: ScalingUtils.ScaleType? = null
 ) {
-    setImageURI(if (url == null) url else Uri.parse(url), null)
-    hierarchy.setPlaceholderImage(placeHolder, placeHolderScale ?: ScalingUtils.ScaleType.CENTER)
+    if (placeHolder != 0) {
+        hierarchy.setPlaceholderImage(
+            placeHolder, placeHolderScale ?: ScalingUtils.ScaleType.CENTER
+        )
+    }
+    when {
+        url == null -> {
+            setImageURI(null as String?)
+        }
+        url.startsWith("http") -> {
+            setImageURI(url)
+        }
+        else -> {
+            file(url)
+        }
+    }
 }
 
 @BindingAdapter("src")
@@ -25,7 +38,7 @@ fun SimpleDraweeView.src(src: Int) {
 
 @BindingAdapter("file")
 fun SimpleDraweeView.file(file: String) {
-    url("file://$file")
+    setImageURI("file://$file")
 }
 
 @BindingAdapter("assets")
