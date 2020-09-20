@@ -16,14 +16,21 @@ dependencies {
     implementation "com.scwang.smart:refresh-layout-kernel:$refresh"
     implementation "com.scwang.smart:refresh-header-classics:$refresh"
     implementation "com.scwang.smart:refresh-footer-classics:$refresh"
-    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    api('com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     api 'com.blankj:utilcodex:1.29.0'
     api Deps.Lib.Gson
 
-    api Deps.Lib.retrofit
+    api(Deps.Lib.retrofit) {
+        exclude group: 'com.squareup.okio'
+        exclude group: 'com.squareup.okhttp3'
+    }
+    api "com.squareup.okio:okio:2.8.0"
+    api "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
     api "com.facebook.fresco:fresco:$fresco"
