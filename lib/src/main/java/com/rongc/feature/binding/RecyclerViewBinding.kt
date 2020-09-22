@@ -16,6 +16,7 @@ import java.lang.reflect.ParameterizedType
 object RecyclerViewBinding {
 
     fun RecyclerView.setupEmptyView(): RefreshEmptyViewModel? {
+        adapter ?: setup<Any>()
         val adapter = adapter as BaseQuickAdapter<*, *>
         var emptyViewModel: RefreshEmptyViewModel? = null
         if (!adapter.hasEmptyView()) {
