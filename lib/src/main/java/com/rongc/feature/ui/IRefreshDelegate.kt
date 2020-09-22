@@ -9,11 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.R
+import com.rongc.feature.binding.RecyclerViewBinding.setupEmptyView
 import com.rongc.feature.binding.itemBinders
 import com.rongc.feature.binding.setup
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.viewmodel.BaseRefreshViewModel
 import com.rongc.feature.viewmodel.BaseViewModel
+import com.rongc.feature.viewmodel.EmptyBuilder
+import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 
 /**
  * Activity和Fragment带刷新功能的代理类
@@ -39,6 +42,31 @@ interface IRefreshDelegate {
             recyclerView.itemBinders(it as MutableList<BaseRecyclerItemBinder<Any>>)
         })
         baseRefreshViewModel?.autoRefresh = autoRefresh()
+
+        baseRefreshViewModel?.setupEmptyView?.observe(owner, Observer {
+            recyclerView.setupEmptyView()?.let { emptyViewModel ->
+                viewModel.emptyRefreshViewModel = emptyViewModel
+            }
+            when (it) {
+                RefreshEmptyViewModel.EMPTY_NET_DISCONNECT -> {
+                    baseRefreshViewModel.emptyRefreshViewModel.showNoNet()
+                }
+                RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE -> {
+                    baseRefreshViewModel.emptyRefreshViewModel.showNetUnavailable()
+                }
+                else -> {
+                    val builder = EmptyBuilder().apply(setupEmptyView(it)).apply {
+                        if (refreshClick == null) {
+                            refreshClick = {
+                                baseRefreshViewModel.refresh()
+                            }
+                        }
+                    }
+
+                    baseRefreshViewModel.emptyRefreshViewModel.builder(builder)
+                }
+            }
+        })
     }
 
     /**
@@ -58,4 +86,6 @@ interface IRefreshDelegate {
      * 是否进入页面自动刷新
      */
     fun autoRefresh() = true
+
+    fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit = {}
 }

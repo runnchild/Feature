@@ -3,6 +3,7 @@ package com.rongc.feature.utils
 import android.app.Activity
 import android.content.ContextWrapper
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
@@ -160,7 +161,11 @@ object Compat {
     )
     @JvmStatic
     fun View.setRoundBg(color: Int, l: Float = 0f, t: Float = 0f, r: Float = 0f, b: Float = 0f) {
-        setBgDrawable(getRoundDrawable(color, l, t, r, b))
+        var bgColor = color
+        if (bgColor == 0 && background is ColorDrawable) {
+            bgColor = (background as ColorDrawable).color
+        }
+        setBgDrawable(getRoundDrawable(bgColor, l, t, r, b))
     }
 
     fun getRoundDrawable(

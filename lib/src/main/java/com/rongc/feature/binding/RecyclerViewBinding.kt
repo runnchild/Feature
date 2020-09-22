@@ -8,8 +8,26 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
+import com.rongc.feature.viewmodel.RefreshEmptyViewModel
+import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.ItemDecoration
 import java.lang.reflect.ParameterizedType
+
+object RecyclerViewBinding {
+
+    fun RecyclerView.setupEmptyView(): RefreshEmptyViewModel? {
+        val adapter = adapter as BaseQuickAdapter<*, *>
+        var emptyViewModel: RefreshEmptyViewModel? = null
+        if (!adapter.hasEmptyView()) {
+            emptyViewModel = RefreshEmptyViewModel()
+            adapter.setEmptyView(EmptyView(context).apply {
+                setViewModel(emptyViewModel)
+            })
+        }
+        return emptyViewModel
+    }
+}
+
 @BindingAdapter("adapter")
 fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? = null) {
     // 是否使用DataBinding
