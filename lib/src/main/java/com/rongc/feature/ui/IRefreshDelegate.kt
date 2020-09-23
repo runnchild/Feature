@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.R
-import com.rongc.feature.binding.RecyclerViewBinding.setupEmptyView
 import com.rongc.feature.binding.itemBinders
 import com.rongc.feature.binding.setup
+import com.rongc.feature.binding.setupEmptyView
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.viewmodel.BaseRefreshViewModel
 import com.rongc.feature.viewmodel.BaseViewModel
@@ -43,16 +43,16 @@ interface IRefreshDelegate {
         })
         baseRefreshViewModel?.autoRefresh = autoRefresh()
 
+        val emptyViewModel = recyclerView.setupEmptyView()?.apply {
+            baseRefreshViewModel?.emptyRefreshViewModel = this
+        }
         baseRefreshViewModel?.setupEmptyView?.observe(owner, Observer {
-            recyclerView.setupEmptyView()?.let { emptyViewModel ->
-                viewModel.emptyRefreshViewModel = emptyViewModel
-            }
             when (it) {
                 RefreshEmptyViewModel.EMPTY_NET_DISCONNECT -> {
-                    baseRefreshViewModel.emptyRefreshViewModel.showNoNet()
+                    emptyViewModel?.showNoNet()
                 }
                 RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE -> {
-                    baseRefreshViewModel.emptyRefreshViewModel.showNetUnavailable()
+                    emptyViewModel?.showNetUnavailable()
                 }
                 else -> {
                     val builder = EmptyBuilder().apply(setupEmptyView(it)).apply {
@@ -63,7 +63,7 @@ interface IRefreshDelegate {
                         }
                     }
 
-                    baseRefreshViewModel.emptyRefreshViewModel.builder(builder)
+                    emptyViewModel?.builder(builder)
                 }
             }
         })

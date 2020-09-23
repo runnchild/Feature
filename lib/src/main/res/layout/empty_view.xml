@@ -28,7 +28,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:text="@{viewModel.tip}"
             app:visible="@{!viewModel.tip.empty}"
-            android:textColor="@color/gray_353535"
+            android:textColor="@{viewModel.tipColor}"
             android:textSize="@dimen/sp17"
             tools:text="网络未连接" />
 

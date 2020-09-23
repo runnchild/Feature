@@ -1,9 +1,12 @@
 package com.rongc.feature.viewmodel
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import com.rongc.feature.R
+import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.drawable
 
 class RefreshEmptyViewModel {
@@ -14,6 +17,7 @@ class RefreshEmptyViewModel {
     }
 
     val tip = ObservableField<String>()
+    val tipColor = ObservableInt()
     val subTip = ObservableField<String>()
     val btnVisible = ObservableBoolean()
     val btnText = ObservableField("刷新")
@@ -24,6 +28,7 @@ class RefreshEmptyViewModel {
     fun showNoNet() {
         emptyBuilder {
             tip = "网络未连接"
+            tipColor = R.color.gray_353535.color()
             subTip = "请检查你的网络设置后刷新"
             btnVisible = true
             btnText = "刷新"
@@ -34,6 +39,7 @@ class RefreshEmptyViewModel {
     fun showNetUnavailable() {
         emptyBuilder {
             tip = "网络异常"
+            tipColor = R.color.gray_353535.color()
             subTip = "请检查你的网络设置后刷新"
             btnVisible = true
             btnText = "刷新"
@@ -48,6 +54,9 @@ class RefreshEmptyViewModel {
     fun builder(builder: EmptyBuilder) {
         builder.let {
             tip.set(it.tip)
+            if (it.tipColor == null) {
+                tipColor.set(Color.parseColor("#b2b2b2"))
+            }
             subTip.set(it.subTip)
             btnVisible.set(it.btnVisible)
             btnText.set(it.btnText)
@@ -59,9 +68,10 @@ class RefreshEmptyViewModel {
 
 class EmptyBuilder {
     var tip: String? = null
+    var tipColor: Int? = null
     var subTip: String? = null
-    var btnVisible: Boolean = true
+    var btnVisible: Boolean = false
     var btnText: String? = "刷新"
-    var iconDrawable: Drawable? = R.mipmap.empty_no_net_work.drawable()
+    var iconDrawable: Drawable? = R.mipmap.empty_icon_empty.drawable()
     var refreshClick:(()->Unit)? = null
 }

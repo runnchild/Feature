@@ -128,7 +128,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
         dialogVisible(false)
     }
 
-    fun finish() {
+    open fun finish() {
         finish.value = true
     }
 

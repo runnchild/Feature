@@ -1,11 +1,34 @@
 package com.rongc.feature.binding
 
 import android.graphics.PointF
+import android.net.Uri
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.Utils
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.generic.RoundingParams
+import com.facebook.drawee.interfaces.DraweeController
 import com.facebook.drawee.view.SimpleDraweeView
+import com.facebook.imagepipeline.postprocessors.IterativeBoxBlurPostProcessor
+import com.facebook.imagepipeline.request.ImageRequestBuilder
+
+object FrescoBinding {
+    @JvmStatic
+    @BindingAdapter("url", "blurRadius", requireAll = false)
+    fun SimpleDraweeView.blur(url: String?, radius: Int = 15) {
+        if (url.isNullOrEmpty()) {
+            return
+        }
+        val controller: DraweeController = Fresco.newDraweeControllerBuilder()
+            .setOldController(controller)
+            .setImageRequest(
+                ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
+                    .setPostprocessor(IterativeBoxBlurPostProcessor(10, radius)).build()
+            )
+            .build()
+        this.controller = controller
+    }
+}
 
 @BindingAdapter("url", "placeHolder", "placeScaleType", requireAll = false)
 fun SimpleDraweeView.url(

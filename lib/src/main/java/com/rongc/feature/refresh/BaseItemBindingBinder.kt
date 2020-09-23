@@ -36,7 +36,7 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
     }
 
     override fun createView(parent: ViewGroup, viewType: Int): View {
-        return DataBindingUtil.inflate<B>(LayoutInflater.from(parent.context), getViewRes(), parent, false).root
+        return getViewBinding(LayoutInflater.from(parent.context), parent).root
     }
 
     /**
@@ -50,5 +50,5 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
     /**
      * 返回Item布局资源id
      */
-    abstract fun getViewRes(): Int
+    abstract fun getViewBinding(inflater: LayoutInflater, parent: ViewGroup): B
 }
