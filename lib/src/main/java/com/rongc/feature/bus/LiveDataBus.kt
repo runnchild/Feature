@@ -24,13 +24,13 @@ object LiveDataBus {
         internal var mStickyData: T? = null
         internal var mVersion = 0
 
-        fun setStickyData(stickyData: T) {
+        fun setStickyValue(stickyData: T) {
             mStickyData = stickyData
             setValue(stickyData)
             //就是在主线程去发送数据
         }
 
-        fun postStickyData(stickyData: T) {
+        fun postStickyValue(stickyData: T) {
             mStickyData = stickyData
             postValue(stickyData)
             //不受线程的限制
