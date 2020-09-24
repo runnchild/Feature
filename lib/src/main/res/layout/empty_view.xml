@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.feature.viewmodel.RefreshEmptyViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/dp140"
+            android:src="@{viewModel.icon}"
+            android:layout_height="@dimen/dp140"
+            tools:src="@mipmap/empty_no_net_work" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="@{viewModel.tip}"
+            app:visible="@{!viewModel.tip.empty}"
+            android:textColor="@{viewModel.tipColor}"
+            android:textSize="@dimen/sp17"
+            tools:text="网络未连接" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp5"
+            android:textColor="#b2b2b2"
+            android:textSize="@dimen/sp13"
+            android:text="@{viewModel.subTip}"
+            app:visible="@{!viewModel.subTip.empty}"
+            tools:text="请检查你的网络设置后刷新" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp25"
+            android:gravity="center"
+            android:minWidth="@dimen/dp112"
+            android:minHeight="@dimen/dp35"
+            android:textColor="@color/white"
+            android:onClick="@{viewModel.refreshClick}"
+            app:visible="@{viewModel.btnVisible}"
+            android:text="@{viewModel.btnText}"
+            android:textSize="@dimen/sp16"
+            app:round_radius="@{@dimen/dp35}"
+            android:background="#404080"
+            tools:text="刷新" />
+    </LinearLayout>
+</layout>

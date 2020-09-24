@@ -99,6 +99,6 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
     }
 
     override fun refreshConfig() {
-        delegate.refreshConfig(requireActivity())
+        delegate.refreshConfig(activity ?: return)
     }
 }

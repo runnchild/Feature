@@ -8,13 +8,31 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
+import com.rongc.feature.viewmodel.RefreshEmptyViewModel
+import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.ItemDecoration
 import java.lang.reflect.ParameterizedType
+
+object RecyclerViewBinding {
+
+    fun RecyclerView.getEmptyViewModel(): RefreshEmptyViewModel? {
+        val adapter = adapter as BaseQuickAdapter<*, *>
+        return if (adapter.hasEmptyView()) {
+            val emptyView = adapter.emptyLayout?.getChildAt(0) as? EmptyView
+            emptyView?.getViewModel()
+        } else null
+    }
+}
+
 @BindingAdapter("adapter")
 fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? = null) {
     // 是否使用DataBinding
 //    val isBinding = getTag(R.id.layout_isBinding) as? Boolean == true
-    this.adapter = adapter ?: BaseBinderAdapter(null)
+    if (adapter != null && this.adapter == adapter) {
+        return
+    }
+    val adapter1 = adapter ?: BaseBinderAdapter(null)
+    this.adapter = adapter1
 }
 
 /**
@@ -23,7 +41,7 @@ fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? =
  * @param binders  binders的大小代表不同布局的数量， 数据内容的类型不可一样
  */
 @BindingAdapter("itemBinders")
-fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<T>>) {
+fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<T>>?) {
     if (binders.isNullOrEmpty()) {
         return
     }
@@ -55,12 +73,29 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
  * 绑定列表数据， 如果没设置adapter会默认设置BaseBinderAdapter
  */
 @BindingAdapter("items")
-fun RecyclerView.items(items: Collection<Any>) {
+fun RecyclerView.items(items: Collection<Any>?) {
     val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter(null).apply { adapter = this }
     adapter.setList(items)
 }
 
 @BindingAdapter("itemDecoration")
-fun RecyclerView.itemDecoration(decorator: ItemDecoration) {
-    addItemDecoration(decorator)
+fun RecyclerView.itemDecoration(decorator: ItemDecoration?) {
+    decorator?.let {
+        addItemDecoration(decorator)
+    }
+}
+
+@BindingAdapter("enableEmptyView")
+fun RecyclerView.setupEmptyView(enable: Boolean = true): RefreshEmptyViewModel? {
+    adapter ?: setup<Any>()
+    val adapter = adapter as BaseQuickAdapter<*, *>
+    return if (enable && !adapter.hasEmptyView()) {
+        val emptyViewModel = RefreshEmptyViewModel()
+        adapter.setEmptyView(EmptyView(context).apply {
+            setViewModel(emptyViewModel)
+        })
+        emptyViewModel
+    } else {
+        (adapter.headerLayout?.getChildAt(0) as? EmptyView)?.getViewModel()
+    }
 }

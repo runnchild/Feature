@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -14,10 +15,8 @@ import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.rongc.feature.R
-import com.rongc.feature.databinding.CommonToolbarBinding
+import com.rongc.feature.databinding.PsnToolbarBinding
 import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.idp
 import com.rongc.feature.viewmodel.ToolBarViewModel
@@ -32,6 +31,16 @@ class PsnToolbar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     companion object {
+
+        @JvmStatic
+        @BindingAdapter("psn_background")
+        fun View.backgroundAndLightMode(it: Drawable?) {
+            val value = (it as? ColorDrawable)?.color ?: 0
+            val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
+            (parent as PsnToolbar).setLightMode(isLightMode)
+            background = it
+        }
+
         @JvmStatic
         @BindingAdapter("menus")
         fun ViewGroup.setMenus(items: ArrayList<TextView.() -> Unit>) {
@@ -61,18 +70,11 @@ class PsnToolbar @JvmOverloads constructor(
         }
     }
 
-    val binding = CommonToolbarBinding.inflate(LayoutInflater.from(context), this, true)
+    val binding = PsnToolbarBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setViewModel(owner: LifecycleOwner, viewModel: ToolBarViewModel) {
+    fun setViewModel(viewModel: ToolBarViewModel) {
         binding.viewModel = viewModel
-        binding.executePendingBindings()
-
-        viewModel.background.observe(owner, Observer {
-            val value = (it as? ColorDrawable)?.color ?: 1
-            val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
-            setLightMode(isLightMode)
-            background = it
-        })
+//        binding.executePendingBindings()
     }
 
     fun setTitleColor(color: Int) {
@@ -92,7 +94,7 @@ class PsnToolbar @JvmOverloads constructor(
     }
 
     override fun setBackgroundColor(color: Int) {
-        binding.viewModel?.background?.value = color.toDrawable()
+        binding.viewModel?.background?.set(color.toDrawable())
     }
 
     fun setLightMode(isLight: Boolean) {

@@ -8,8 +8,14 @@ import kotlinx.coroutines.delay
 
 class MainRefreshViewModel : BaseRefreshViewModel<Any, BaseModel>() {
 
+    var empty = false
+
     override fun loadData(page: Int, dataRequestCall: DataRequestCallback<List<Any>>) {
         val items = arrayListOf<Any>()
+        if (empty) {
+            dataRequestCall.onSuccess(1, items)
+            return
+        }
         if (page < 5) {
             launch({
                 delay(2000)
@@ -22,12 +28,17 @@ class MainRefreshViewModel : BaseRefreshViewModel<Any, BaseModel>() {
                 }
                 dataRequestCall.onSuccess(page, items)
             }, showDialog = true, showToast = true)
-
         }
     }
 
     override fun providerItemBinders(binders: MutableSet<BaseRecyclerItemBinder<out Any>>) {
         binders.add(MainItemHolder())
         binders.add(MainOtherItemHolder())
+    }
+
+    fun emptyList() {
+        empty = true
+        refresh()
+        empty = false
     }
 }

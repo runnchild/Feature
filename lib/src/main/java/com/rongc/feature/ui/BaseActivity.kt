@@ -50,7 +50,7 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
             findToolBar(view)?.let {
                 val toolBarViewModel by viewModels<ToolBarViewModel>()
                 viewModel.toolbarModel = toolBarViewModel
-                it.setViewModel(this, toolBarViewModel)
+                it.setViewModel(toolBarViewModel)
             }
             delegate.init(this, view)
         }

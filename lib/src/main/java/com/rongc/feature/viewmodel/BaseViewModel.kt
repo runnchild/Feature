@@ -43,16 +43,21 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
-        val modelCls = findModelType(this::class.java)?.actualTypeArguments?.lastOrNull() as Class<*>
+        val modelCls = findModelType(this::class.java)?:throw IllegalStateException("没有找到申明的Model")
 
         @Suppress("UNCHECKED_CAST")
         model = modelCls.newInstance() as M
     }
 
-    private fun findModelType(clazz: Class<*>?): ParameterizedType? {
+    private fun findModelType(clazz: Class<*>?): Class<*>? {
         val type = clazz?.genericSuperclass ?: return null
+
         if (type is ParameterizedType) {
-            return type
+            (type.actualTypeArguments.lastOrNull() as? Class<*>)?.run {
+                if (BaseModel::class.java.isAssignableFrom(this)) {
+                    return this
+                }
+            }
         }
         return findModelType(clazz.superclass as? Class<*>)
     }
@@ -123,7 +128,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
         dialogVisible(false)
     }
 
-    fun finish() {
+    open fun finish() {
         finish.value = true
     }
 

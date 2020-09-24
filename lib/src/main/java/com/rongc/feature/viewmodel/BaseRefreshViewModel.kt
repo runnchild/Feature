@@ -4,6 +4,8 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.NetworkUtils
+import com.rongc.feature.SingleLiveData
 import com.rongc.feature.binding.LoadStatus
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
@@ -52,6 +54,10 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      */
     var autoRefresh = false
 
+    lateinit var emptyRefreshViewModel: RefreshEmptyViewModel
+
+    val setupEmptyView = SingleLiveData<Int>()
+
     private val dataRequestCall = object : DataRequestCallback<List<T>> {
         override fun onSuccess(page: Int, data: List<T>) {
             if (page == PageIndicator.PAGE_START) {
@@ -68,6 +74,10 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
                     setStatus(LoadStatus.FINISH_LOAD_NO_MORE)
                 }
             }
+
+            if (items.isEmpty()) {
+                setupEmptyView.value = RefreshEmptyViewModel.EMPTY_EMPTY
+            }
         }
 
         override fun onFailed(page: Int) {
@@ -75,6 +85,11 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
                 setStatus(LoadStatus.FINISH_REFRESH_FAILED)
             } else {
                 setStatus(LoadStatus.FINISH_LOAD_FAILED)
+            }
+            if (!NetworkUtils.isConnected()) {
+                setupEmptyView.value = RefreshEmptyViewModel.EMPTY_NET_DISCONNECT
+            } else if (!NetworkUtils.isAvailable()) {
+                setupEmptyView.value = RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE
             }
         }
     }

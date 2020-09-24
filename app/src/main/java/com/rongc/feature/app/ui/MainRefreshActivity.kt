@@ -7,6 +7,7 @@ import com.rongc.feature.databinding.BaseRefreshLayoutBinding
 import com.rongc.feature.ui.BaseBindingActivity
 import com.rongc.feature.ui.IRefreshDelegate
 import com.rongc.feature.ui.toolbar.BarConfig
+import com.rongc.feature.viewmodel.EmptyBuilder
 
 class MainRefreshActivity : BaseBindingActivity<BaseRefreshLayoutBinding, MainRefreshViewModel>(),
     IRefreshDelegate {
@@ -27,11 +28,19 @@ class MainRefreshActivity : BaseBindingActivity<BaseRefreshLayoutBinding, MainRe
                 }
             }
             menu {
-                text = "刷新2"
+                text = "Empty"
                 setOnClickListener {
-                    viewModel.refresh()
+                    viewModel.emptyList()
                 }
             }
+        }
+    }
+
+    override fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit {
+        return {
+            tip = "暂无数据"
+            btnText = "Refresh"
+            btnVisible = true
         }
     }
 }
