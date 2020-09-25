@@ -59,7 +59,7 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
         viewModel.toolbarModel?.title?.set(title)
         viewModel.toolbarModel?.backLiveData?.observe(this, Observer {
-            navigateUp()
+            onBackPressed()
         })
 
         refreshDelegate?.run {
@@ -130,10 +130,6 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     override fun dismissDialog() {
         delegate.dismissDialog()
-    }
-
-    override fun navigateUp() {
-        finish()
     }
 
     override fun initObserver() {

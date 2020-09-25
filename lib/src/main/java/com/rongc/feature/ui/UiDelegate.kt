@@ -61,16 +61,15 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             }
         })
 
+        viewModel.backPressed.observe(owner, Observer {
+            api.onBackPressed()
+        })
         viewModel.finish.observe(owner, Observer {
-            navigateUp()
+            api.finish()
         })
         viewModel.viewsClickLiveData.observe(owner, Observer {
             api.viewClick(it)
         })
-    }
-
-    private fun navigateUp() {
-        api.navigateUp()
     }
 
     fun destroy() {

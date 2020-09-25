@@ -88,7 +88,13 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
     /**
      * 退出页面，由页面决定弹出Fragment Stack还出关闭附属的Activity
      */
-    override fun navigateUp() {
+    override fun onBackPressed() {
+        dismissDialog()
+    }
+
+    override fun finish() {
+        dismissDialog()
+        requireActivity().finish()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

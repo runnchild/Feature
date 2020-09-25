@@ -28,6 +28,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     var mainScope = MainScope()
     val dialogVisible = SingleLiveData<Boolean>()
+    val backPressed = SingleLiveData<Boolean>()
     val finish = SingleLiveData<Boolean>()
 
     /**
@@ -130,6 +131,10 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     open fun finish() {
         finish.value = true
+    }
+
+    fun onBackPressed() {
+        backPressed.value = true
     }
 
     /**
