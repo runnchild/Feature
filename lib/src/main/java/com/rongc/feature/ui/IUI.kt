@@ -49,7 +49,9 @@ interface IUI<M : BaseViewModel<out BaseModel>> : ViewModelStoreOwner {
      * @author rongc
      * @date 20-8-20
      */
-    fun navigateUp()
+    fun onBackPressed()
+
+    fun finish()
 
     /**
      * @description 控件点击回调
