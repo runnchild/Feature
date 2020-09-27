@@ -85,6 +85,35 @@ fun RecyclerView.itemDecoration(decorator: ItemDecoration?) {
     }
 }
 
+@BindingAdapter(
+    "decoration_left",
+    "decoration_top",
+    "decoration_right",
+    "decoration_bottom",
+    "decoration_vertical_line",
+    "decoration_horizontal_line",
+    requireAll = false
+)
+fun RecyclerView.divider(
+    left: Float = 0f,
+    top: Float = 0f,
+    right: Float = 0f,
+    bottom: Float = 0f,
+    vLine: Float = 0f,
+    hLine: Float = 0f
+) {
+    addItemDecoration(
+        ItemDecoration.Builder()
+            .setVerticalTopWidth(top.toInt())
+            .setHorizontalStartWidth(left.toInt())
+            .setHorizontalEndWidth(right.toInt())
+            .setVerticalBottomWidth(bottom.toInt())
+            .setVerticalLineWidth(vLine.toInt())
+            .setHorizontalLineWidth(hLine.toInt())
+            .build()
+    )
+}
+
 @BindingAdapter("enableEmptyView")
 fun RecyclerView.setupEmptyView(enable: Boolean = true): RefreshEmptyViewModel? {
     adapter ?: setup<Any>()

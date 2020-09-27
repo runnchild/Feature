@@ -4,6 +4,7 @@ import com.rongc.feature.model.BaseModel
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.refresh.DataRequestCallback
 import com.rongc.feature.viewmodel.BaseRefreshViewModel
+import com.rongc.feature.widget.ItemDecoration
 import kotlinx.coroutines.delay
 
 class MainRefreshViewModel : BaseRefreshViewModel<Any, BaseModel>() {
@@ -40,5 +41,9 @@ class MainRefreshViewModel : BaseRefreshViewModel<Any, BaseModel>() {
         empty = true
         refresh()
         empty = false
+    }
+
+    override fun decorationBuilder(): ItemDecoration.Builder.() -> Unit {
+        return super.decorationBuilder()
     }
 }
