@@ -13,9 +13,9 @@ dependencies {
     api "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle"
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
 
-    implementation "com.scwang.smart:refresh-layout-kernel:$refresh"
-    implementation "com.scwang.smart:refresh-header-classics:$refresh"
-    implementation "com.scwang.smart:refresh-footer-classics:$refresh"
+    api "com.scwang.smart:refresh-layout-kernel:$refresh"
+    api "com.scwang.smart:refresh-header-classics:$refresh"
+    api "com.scwang.smart:refresh-footer-classics:$refresh"
     api('com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4') {
         exclude group: 'org.jetbrains.kotlin'
     }

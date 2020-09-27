@@ -11,6 +11,7 @@ import com.rongc.feature.model.BaseModel
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.refresh.DataRequestCallback
 import com.rongc.feature.refresh.PageIndicator
+import com.rongc.feature.widget.ItemDecoration
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 
@@ -127,6 +128,13 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      * 列表item数据， 由页面监听数组变化， 继承类不应直接操作
      */
     val items = ObservableArrayList<T>()
+
+    val itemDecoration: ItemDecoration
+        get() = ItemDecoration.Builder().apply(decorationBuilder()).build()
+
+    open fun decorationBuilder(): ItemDecoration.Builder.() -> Unit {
+        return { }
+    }
 
     fun refresh() {
         loadData(PageIndicator.PAGE_START, dataRequestCall)
