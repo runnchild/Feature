@@ -19,11 +19,11 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
     override fun convert(holder: BaseViewHolder, data: T) {
         pos = holder.adapterPosition
         entity = data
-        convert(DataBindingUtil.findBinding<B>(holder.itemView)!!.apply {
+        val binding = DataBindingUtil.findBinding<B>(holder.itemView)!!.apply {
             try {
                 // 如果xml中没定义mEntity属性
-                this::class.java.getDeclaredField("mEntity")
-                setVariable(BR.entity, data)
+                this::class.java.getDeclaredField("mBean")
+                setVariable(BR.bean, data)
             } catch (e: Exception) {
             }
             try {
@@ -31,8 +31,9 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
                 setVariable(BR.binder, this@BaseItemBindingBinder)
             } catch (e: Exception) {
             }
-            executePendingBindings()
-        }, holder, data)
+        }
+        convert(binding, holder, data)
+        binding.executePendingBindings()
     }
 
     override fun createView(parent: ViewGroup, viewType: Int): View {
