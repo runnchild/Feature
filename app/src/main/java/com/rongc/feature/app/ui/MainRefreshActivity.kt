@@ -17,6 +17,7 @@ class MainRefreshActivity : BaseBindingActivity<BaseRefreshLayoutBinding, MainRe
     }
 
     override fun initData() {
+        binding.includeRecycler.baseRecyclerView
     }
 
     override fun getBarConfig(): BarConfig.() -> Unit {
