@@ -7,7 +7,6 @@ import com.rongc.feature.SingleLiveData
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.network.MainScope
 import com.rongc.feature.network.ServicesException
-import com.rongc.feature.utils.Compat.loge
 import com.rongc.feature.utils.Compat.toast
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -90,25 +89,29 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
      */
     fun launch(
         scope: suspend (coroutineScope: CoroutineScope) -> Unit,
-        failed: ((Throwable) -> Unit)? = null,
+        failed: ((ServicesException) -> Unit)? = null,
         showDialog: Boolean = true,
         showToast: Boolean = true
     ): Job {
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             dialogVisible(false)
             e.printStackTrace()
-            if (showToast) {
-                val error = if (e is ServicesException && !e.message.isNullOrEmpty()) {
-                    e.message!!
-                } else if (e is ConnectException) {
-                    "网络连接失败"
-                } else {
-                    "服务器错误"
+            val error = when (e) {
+                is ServicesException -> {
+                    e
                 }
-                error.loge()
-                error.toast()
+                is ConnectException -> {
+                    ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败")
+                }
+                else -> {
+                    ServicesException(ServicesException.CODE_OTHER, "服务器错误")
+                }
             }
-            failed?.invoke(e)
+            if (showToast) {
+                error.message.toast()
+            }
+
+            failed?.invoke(error)
         }
         return viewModelScope.launch(exceptionHandler) {
             dialogVisible(showDialog)
