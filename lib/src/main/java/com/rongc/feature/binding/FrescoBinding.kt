@@ -14,7 +14,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 object FrescoBinding {
     @JvmStatic
-    @BindingAdapter("url", "blurRadius", requireAll = false)
+    @BindingAdapter("blur_url", "blur_radius", requireAll = false)
     fun SimpleDraweeView.blur(url: String?, radius: Int = 15) {
         if (url.isNullOrEmpty()) {
             return
@@ -56,7 +56,7 @@ fun SimpleDraweeView.url(
 
 @BindingAdapter("src")
 fun SimpleDraweeView.src(src: Int) {
-    url("res://${Utils.getApp().packageName}/$src")
+    setImageURI("res://${Utils.getApp().packageName}/$src")
 }
 
 @BindingAdapter("file")

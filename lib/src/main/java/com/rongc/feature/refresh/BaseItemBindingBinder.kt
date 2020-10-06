@@ -21,13 +21,13 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
         entity = data
         val binding = DataBindingUtil.findBinding<B>(holder.itemView)!!.apply {
             try {
-                // 如果xml中没定义mEntity属性
-                this::class.java.getDeclaredField("mBean")
+                // 如果xml中没定义mBean
+                this::class.java.superclass?.getDeclaredField("mBean")
                 setVariable(BR.bean, data)
             } catch (e: Exception) {
             }
             try {
-                this::class.java.getDeclaredField("mBinder")
+                this::class.java.superclass?.getDeclaredField("mBinder")
                 setVariable(BR.binder, this@BaseItemBindingBinder)
             } catch (e: Exception) {
             }
