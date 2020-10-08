@@ -24,5 +24,17 @@
             app:bgColor="@{@color/gray_999}"
             app:bgPressedColor="@{@color/gray_333}"
             android:onClick="@{viewModel.viewsClick}" />
+
+        <TextView
+            android:id="@+id/tv_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp55"
+            android:text="登录即同意{0}《信号 用户协议》{0}和{1}《隐私政策》{1}"
+            android:textColor="#b2b2b2"
+            android:textSize="@dimen/sp11"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 </layout>

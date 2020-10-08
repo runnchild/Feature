@@ -33,16 +33,17 @@ object ClickSpanEt {
         movementMethod = LinkMovementMethod()
         val indexArr = mutableListOf<Pair<Int, Int>>()
         val replaceText = text.run {
-            var lastTargetLen = 3
+            var lastTargetLen = 0
             repeat(100) {
                 val target = "{$it}"
                 val indexOf = indexOf(target)
                 if (indexOf < 0) {
                     return@repeat
                 }
-                val lastClipLen = lastTargetLen * 2 * it
-                indexArr.add(indexOf - lastClipLen to indexOf + target.length * 2 - lastClipLen)
-                lastTargetLen = target.length
+                val start = kotlin.math.max(0, indexOf - lastTargetLen)
+                val end = lastIndexOf(target) - lastTargetLen - target.length
+                indexArr.add(start to end)
+                lastTargetLen += target.length * 2
             }
 
             replace("[{]\\d+[}]".toRegex(), "")

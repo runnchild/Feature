@@ -2,14 +2,17 @@ package com.rongc.feature.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.blankj.utilcode.util.KeyboardUtils
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.viewmodel.BaseViewModel
@@ -144,5 +147,30 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     override fun refreshConfig() {
         delegate.refreshConfig(this)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent):Boolean {
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (isShouldHideKeyboard(v, ev)) {
+                KeyboardUtils.hideSoftInput(this);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    // Return whether touch the view.
+    private fun isShouldHideKeyboard(v:View?, event:MotionEvent):Boolean {
+        if ((v is EditText)) {
+            val l = IntArray(2)
+            v.getLocationOnScreen(l)
+            val left = l[0]
+            val top = l[1]
+            val bottom = top + v.getHeight()
+            val right = left + v.getWidth()
+            return !(event.rawX > left && event.rawX < right
+                    && event.rawY > top && event.rawY < bottom)
+        }
+        return false
     }
 }
