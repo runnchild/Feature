@@ -59,6 +59,11 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
 
     val setupEmptyView = SingleLiveData<Int>()
 
+    /**
+     * 没有数据时是否允许刷新
+     */
+    var enableRefreshWhenEmpty = true
+
     private val dataRequestCall = object : DataRequestCallback<List<T>> {
         override fun onSuccess(page: Int, data: List<T>) {
             if (page == PageIndicator.PAGE_START) {
@@ -78,6 +83,10 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
 
             if (items.isEmpty()) {
                 setupEmptyView.value = RefreshEmptyViewModel.EMPTY_EMPTY
+
+                if (!enableRefreshWhenEmpty) {
+                    enableRefresh.set(false)
+                }
             }
         }
 

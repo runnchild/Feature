@@ -48,7 +48,7 @@ class RefreshEmptyViewModel {
     }
 
     fun emptyBuilder(builder: EmptyBuilder.() -> Unit) {
-        builder(EmptyBuilder().apply(builder))
+        this.builder(EmptyBuilder().apply(builder))
     }
 
     fun builder(builder: EmptyBuilder) {
