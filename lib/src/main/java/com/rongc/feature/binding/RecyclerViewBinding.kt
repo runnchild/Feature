@@ -17,7 +17,7 @@ object RecyclerViewBinding {
 
     fun RecyclerView.getEmptyViewModel(): RefreshEmptyViewModel? {
         val adapter = adapter as BaseQuickAdapter<*, *>
-        return if (adapter.hasEmptyView()) {
+        return if (adapter.emptyLayout?.childCount != 0) {
             val emptyView = adapter.emptyLayout?.getChildAt(0) as? EmptyView
             emptyView?.getViewModel()
         } else null
