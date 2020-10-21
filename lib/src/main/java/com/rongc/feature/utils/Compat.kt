@@ -155,8 +155,8 @@ object Compat {
         "round_color",
         "tl_radius",
         "tr_radius",
-        "bl_radius",
         "br_radius",
+        "bl_radius",
         requireAll = false
     )
     @JvmStatic
