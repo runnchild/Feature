@@ -1,10 +1,7 @@
 package com.rongc.feature.utils
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Build
-import androidx.core.app.ActivityCompat
 import com.blankj.utilcode.constant.PermissionConstants
 import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.PhoneUtils
@@ -33,6 +30,6 @@ object DeviceUtils {
                 override fun onDenied() {
                 }
             })
-
+            .request()
     }
 }
