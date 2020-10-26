@@ -1,6 +1,7 @@
 package com.rongc.feature.binding
 
 import android.graphics.PointF
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.Utils
@@ -30,15 +31,20 @@ object FrescoBinding {
     }
 }
 
-@BindingAdapter("url", "placeHolder", "placeScaleType", requireAll = false)
+@BindingAdapter("url", "placeHolder","placeHolderDrawable", "placeScaleType", requireAll = false)
 fun SimpleDraweeView.url(
     url: String?,
     placeHolder: Int = 0,
+    placeHolderDrawable: Drawable? = null,
     placeHolderScale: ScalingUtils.ScaleType? = null
 ) {
     if (placeHolder != 0) {
         hierarchy.setPlaceholderImage(
             placeHolder, placeHolderScale ?: ScalingUtils.ScaleType.CENTER
+        )
+    } else if (placeHolderDrawable != null) {
+        hierarchy.setPlaceholderImage(
+            placeHolderDrawable, placeHolderScale ?: ScalingUtils.ScaleType.CENTER
         )
     }
     when {

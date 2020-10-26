@@ -1,5 +1,6 @@
 package com.rongc.feature.binding
 
+import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.widget.EmptyView
+import com.rongc.feature.widget.IEmptyView
 import com.rongc.feature.widget.ItemDecoration
 import java.lang.reflect.ParameterizedType
 
@@ -114,14 +116,15 @@ fun RecyclerView.divider(
     )
 }
 
-@BindingAdapter("enableEmptyView")
-fun RecyclerView.setupEmptyView(enable: Boolean = true): RefreshEmptyViewModel? {
+@BindingAdapter("emptyView", "enableEmptyView", requireAll = false)
+fun RecyclerView.setupEmptyView(emptyView: IEmptyView = EmptyView(context), enable: Boolean = true): RefreshEmptyViewModel? {
     adapter ?: setup<Any>()
     val adapter = adapter as BaseQuickAdapter<*, *>
     return if (enable && !adapter.hasEmptyView()) {
         val emptyViewModel = RefreshEmptyViewModel()
-        adapter.setEmptyView(EmptyView(context).apply {
+        adapter.setEmptyView(emptyView.run {
             setViewModel(emptyViewModel)
+            this as View
         })
         emptyViewModel
     } else {

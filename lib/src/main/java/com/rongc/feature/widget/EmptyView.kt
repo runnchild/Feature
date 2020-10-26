@@ -9,13 +9,13 @@ import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 
 class EmptyView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr), IEmptyView {
     private var binding: EmptyViewBinding =
         EmptyViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setViewModel(viewModel: RefreshEmptyViewModel) {
+    override fun setViewModel(viewModel: RefreshEmptyViewModel) {
         binding.viewModel = viewModel
     }
 
-    fun getViewModel(): RefreshEmptyViewModel = binding.viewModel!!
+    override fun getViewModel(): RefreshEmptyViewModel = binding.viewModel!!
 }

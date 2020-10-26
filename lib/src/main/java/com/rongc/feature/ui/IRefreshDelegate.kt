@@ -17,6 +17,8 @@ import com.rongc.feature.viewmodel.BaseRefreshViewModel
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.EmptyBuilder
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
+import com.rongc.feature.widget.EmptyView
+import com.rongc.feature.widget.IEmptyView
 
 /**
  * Activity和Fragment带刷新功能的代理类
@@ -43,7 +45,7 @@ interface IRefreshDelegate {
         })
         baseRefreshViewModel?.autoRefresh = autoRefresh()
 
-        val emptyViewModel = recyclerView.setupEmptyView()?.apply {
+        val emptyViewModel = recyclerView.setupEmptyView(providerEmptyView(view.context))?.apply {
             baseRefreshViewModel?.emptyRefreshViewModel = this
         }
         baseRefreshViewModel?.setupEmptyView?.observe(owner, Observer {
@@ -88,4 +90,6 @@ interface IRefreshDelegate {
     fun autoRefresh() = true
 
     fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit = {}
+    
+    fun providerEmptyView(context: Context): IEmptyView = EmptyView(context)
 }
