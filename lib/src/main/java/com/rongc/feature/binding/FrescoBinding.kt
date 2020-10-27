@@ -51,7 +51,7 @@ fun SimpleDraweeView.url(
         url == null -> {
             setImageURI(null as String?)
         }
-        url.startsWith("http") -> {
+        url.startsWith("http") || url.startsWith("res") -> {
             setImageURI(url)
         }
         else -> {
