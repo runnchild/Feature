@@ -92,4 +92,8 @@ interface IRefreshDelegate {
     fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit = {}
     
     fun providerEmptyView(context: Context): IEmptyView = EmptyView(context)
+    
+    fun recyclerView(view: View) = view.findViewById<RecyclerView?>(R.id.base_recyclerView)
+    
+    fun adapter(view: View) = recyclerView(view)?.adapter
 }

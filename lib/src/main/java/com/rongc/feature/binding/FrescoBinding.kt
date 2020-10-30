@@ -103,7 +103,7 @@ fun SimpleDraweeView.round(
     val roundingParams = hierarchy.roundingParams ?: RoundingParams.fromCornersRadius(corners)
     roundingParams.run {
         roundAsCircle = isCircle
-        if (tl * tr * bl * br != 0f) {
+        if (tl + tr + bl + br != 0f) {
             setCornersRadii(tl, tr, br, bl)
         } else {
             setCornersRadius(corners)

@@ -47,4 +47,6 @@ abstract class BaseRecyclerItemBinder<T> : BaseItemBinder<T, BaseViewHolder>() {
      * 如果是inflate xml， 需要把parent设置进去
      */
     abstract fun createView(parent: ViewGroup, viewType: Int): View
+    
+    open fun spanSize(pos: Int): Int = 1
 }
