@@ -36,9 +36,13 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      * 是否支持下拉刷新
      */
     var enableRefresh = ObservableBoolean(true)
+    
+    private var firstRefresh = true
 
     val onRefreshListener = OnRefreshListener {
-        refresh()
+        // 开启了自动刷新的首次判断为非用户操作
+        refresh(!(autoRefresh && firstRefresh))
+        firstRefresh = false
     }
 
     val onLoadMoreListener = OnLoadMoreListener {
@@ -65,6 +69,7 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
     var enableRefreshWhenEmpty = true
 
     private val dataRequestCall = object : DataRequestCallback<List<T>> {
+        var refreshByUser = false
         override fun onSuccess(page: Int, data: List<T>) {
             if (page == PageIndicator.PAGE_START) {
                 items.clear()
@@ -145,11 +150,17 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
         return { }
     }
 
-    fun refresh() {
+    /**
+     * 刷新
+     * @param byPull 是否通过下拉的刷新
+     */
+    fun refresh(byPull: Boolean = false) {
+        dataRequestCall.refreshByUser = byPull
         loadData(PageIndicator.PAGE_START, dataRequestCall)
     }
 
     private fun loadMore() {
+        dataRequestCall.refreshByUser = true
         loadData(pageIndicator.page + 1, dataRequestCall)
     }
 

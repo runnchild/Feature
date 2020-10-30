@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
+import com.rongc.feature.ui.BinderAdapter
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.IEmptyView
@@ -33,7 +34,7 @@ fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? =
     if (adapter != null && this.adapter == adapter) {
         return
     }
-    val adapter1 = adapter ?: BaseBinderAdapter(null)
+    val adapter1 = adapter ?: BinderAdapter(null)
     this.adapter = adapter1
 }
 
@@ -56,7 +57,7 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
         return findBinderType(clazz.superclass as? Class<*>)
     }
 
-    val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter(null).apply { adapter = this }
+    val adapter = adapter as? BaseBinderAdapter ?: BinderAdapter(null).apply { adapter = this }
     binders.forEach { item ->
         val arguments = findBinderType(item::class.java)!!.actualTypeArguments
         val actualClz = arguments.lastOrNull() ?: return@forEach
@@ -76,7 +77,7 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
  */
 @BindingAdapter("items")
 fun RecyclerView.items(items: Collection<Any>?) {
-    val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter(null).apply { adapter = this }
+    val adapter = adapter as? BaseBinderAdapter ?: BinderAdapter(null).apply { adapter = this }
     adapter.setList(items)
 }
 

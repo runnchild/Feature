@@ -40,6 +40,9 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
      */
     val viewsClick = { v: View -> viewsClickLiveData.value = v }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    open fun onResume(){}
+    
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
