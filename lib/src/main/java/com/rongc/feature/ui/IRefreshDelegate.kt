@@ -45,16 +45,17 @@ interface IRefreshDelegate {
         })
         baseRefreshViewModel?.autoRefresh = autoRefresh()
 
-        val emptyViewModel = recyclerView.setupEmptyView(providerEmptyView(view.context))?.apply {
+        val emptyView = providerEmptyView(view.context) ?: return
+        val emptyViewModel = recyclerView.setupEmptyView(emptyView)?.apply {
             baseRefreshViewModel?.emptyRefreshViewModel = this
         }
         baseRefreshViewModel?.setupEmptyView?.observe(owner, Observer {
             when (it) {
                 RefreshEmptyViewModel.EMPTY_NET_DISCONNECT -> {
-                    emptyViewModel?.showNoNet()
+                    emptyViewModel?.showNoNet { baseRefreshViewModel.refresh() }
                 }
                 RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE -> {
-                    emptyViewModel?.showNetUnavailable()
+                    emptyViewModel?.showNetUnavailable { baseRefreshViewModel.refresh() }
                 }
                 else -> {
                     val builder = EmptyBuilder().apply(setupEmptyView(it)).apply {
@@ -90,10 +91,10 @@ interface IRefreshDelegate {
     fun autoRefresh() = true
 
     fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit = {}
-    
-    fun providerEmptyView(context: Context): IEmptyView = EmptyView(context)
-    
+
+    fun providerEmptyView(context: Context): IEmptyView? = EmptyView(context)
+
     fun recyclerView(view: View) = view.findViewById<RecyclerView?>(R.id.base_recyclerView)
-    
+
     fun adapter(view: View) = recyclerView(view)?.adapter
 }

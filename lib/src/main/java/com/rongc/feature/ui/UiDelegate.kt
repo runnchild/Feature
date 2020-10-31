@@ -43,10 +43,10 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun init(owner: LifecycleOwner, root: View) {
-        initObserver(owner, api.viewModel())
-
         api.initObserver()
         api.initView(root)
+
+        initObserver(owner, api.viewModel())
         api.initData()
     }
 

@@ -23,9 +23,9 @@ class RefreshEmptyViewModel {
     val btnText = ObservableField("刷新")
     val icon = ObservableField<Drawable>()
 
-    var refreshClick = {}
+    var refreshClick = ObservableField {}
 
-    fun showNoNet() {
+    fun showNoNet(refresh: ()->Unit) {
         emptyBuilder {
             tip = "网络未连接"
             tipColor = R.color.gray_353535.color()
@@ -33,10 +33,11 @@ class RefreshEmptyViewModel {
             btnVisible = true
             btnText = "刷新"
             iconDrawable = R.mipmap.empty_no_net_work.drawable()
+            refreshClick = refresh
         }
     }
 
-    fun showNetUnavailable() {
+    fun showNetUnavailable(refresh: ()->Unit) {
         emptyBuilder {
             tip = "网络异常"
             tipColor = R.color.gray_353535.color()
@@ -44,6 +45,7 @@ class RefreshEmptyViewModel {
             btnVisible = true
             btnText = "刷新"
             iconDrawable = R.mipmap.empty_no_net_work.drawable()
+            refreshClick = refresh
         }
     }
 
@@ -61,7 +63,7 @@ class RefreshEmptyViewModel {
             btnVisible.set(it.btnVisible)
             btnText.set(it.btnText)
             icon.set(it.iconDrawable)
-            refreshClick = it.refreshClick?:{}
+            refreshClick.set(it.refreshClick?:{})
         }
     }
 }
