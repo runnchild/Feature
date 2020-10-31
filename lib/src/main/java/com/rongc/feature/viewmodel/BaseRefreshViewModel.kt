@@ -59,7 +59,7 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      */
     var autoRefresh = false
 
-    lateinit var emptyRefreshViewModel: RefreshEmptyViewModel
+    var emptyRefreshViewModel: RefreshEmptyViewModel? = null
 
     val setupEmptyView = SingleLiveData<Int>()
 
@@ -115,6 +115,9 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
         providerItemBinders(binders)
         binders.forEach {
             itemBinders.value?.add(it)
+        }
+        if (autoRefresh) {
+            refresh()
         }
     }
 
