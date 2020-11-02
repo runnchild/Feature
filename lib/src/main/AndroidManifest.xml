@@ -17,5 +17,11 @@
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
 
+        <provider
+            android:name=".CoreContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:multiprocess="false"/>
     </application>
+
 </manifest>
