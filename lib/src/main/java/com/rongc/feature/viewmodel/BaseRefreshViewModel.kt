@@ -162,7 +162,7 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
         loadData(PageIndicator.PAGE_START, dataRequestCall)
     }
 
-    private fun loadMore() {
+    fun loadMore() {
         dataRequestCall.refreshByUser = true
         loadData(pageIndicator.page + 1, dataRequestCall)
     }

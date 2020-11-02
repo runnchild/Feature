@@ -3,6 +3,7 @@ package com.rongc.feature.binding
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.Utils
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -51,7 +52,7 @@ fun SimpleDraweeView.url(
         url == null -> {
             setImageURI(null as String?)
         }
-        url.startsWith("http") || url.startsWith("res") -> {
+        !url.toUri().scheme.isNullOrEmpty() -> {
             setImageURI(url)
         }
         else -> {
