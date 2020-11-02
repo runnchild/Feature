@@ -149,18 +149,22 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         delegate.refreshConfig(this)
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent):Boolean {
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus
             if (isShouldHideKeyboard(v, ev)) {
-                KeyboardUtils.hideSoftInput(this);
+                shouldHideSoftInput()
             }
         }
         return super.dispatchTouchEvent(ev);
     }
 
+    open fun shouldHideSoftInput() {
+        KeyboardUtils.hideSoftInput(this)
+    }
+
     // Return whether touch the view.
-    private fun isShouldHideKeyboard(v:View?, event:MotionEvent):Boolean {
+    open fun isShouldHideKeyboard(v: View?, event: MotionEvent): Boolean {
         if ((v is EditText)) {
             val l = IntArray(2)
             v.getLocationOnScreen(l)
