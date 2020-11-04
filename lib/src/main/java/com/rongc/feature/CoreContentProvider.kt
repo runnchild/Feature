@@ -6,12 +6,9 @@ import android.database.Cursor
 import android.net.Uri
 import android.view.Gravity
 import com.blankj.utilcode.util.ToastUtils
-import com.facebook.drawee.backends.pipeline.Fresco
 
 class CoreContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-//        Utils.init(context)
-        Fresco.initialize(context)
         ToastUtils.setGravity(Gravity.CENTER, 0, 0)
         return true
     }

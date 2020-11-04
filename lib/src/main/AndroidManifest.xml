@@ -19,7 +19,7 @@
 
         <provider
             android:name=".CoreContentProvider"
-            android:authorities="${applicationId}"
+            android:authorities="${applicationId}_core"
             android:exported="false"
             android:multiprocess="false"/>
     </application>
