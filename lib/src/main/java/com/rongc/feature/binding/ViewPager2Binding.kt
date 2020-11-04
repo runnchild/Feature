@@ -41,10 +41,7 @@ object ViewPager2Binding {
     @JvmStatic
     @BindingAdapter("items")
     fun ViewPager2.items(items: Collection<Any>) {
-        val adapter = adapter as? BaseBinderAdapter
-        if (adapter == null) {
-            this.adapter = BaseBinderAdapter()
-        }
-        adapter?.setList(items)
+        val adapter = adapter as? BaseBinderAdapter ?: BaseBinderAdapter().apply { adapter = this }
+        adapter.setList(items)
     }
 }
