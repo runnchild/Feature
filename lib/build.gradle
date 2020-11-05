@@ -22,7 +22,7 @@ dependencies {
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
-    api 'com.blankj:utilcodex:1.29.0'
+    api 'com.blankj:utilcodex:1.30.0'
     api Deps.Lib.Gson
 
     api(Deps.Lib.retrofit) {

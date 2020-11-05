@@ -9,7 +9,6 @@ import com.blankj.utilcode.util.ToastUtils
 
 class CoreContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        ToastUtils.setGravity(Gravity.CENTER, 0, 0)
         return true
     }
 
