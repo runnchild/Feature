@@ -17,11 +17,11 @@
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
 
-        <provider
-            android:name=".CoreContentProvider"
-            android:authorities="${applicationId}_core"
-            android:exported="false"
-            android:multiprocess="false"/>
+<!--        <provider-->
+<!--            android:name=".CoreContentProvider"-->
+<!--            android:authorities="${applicationId}_core"-->
+<!--            android:exported="false"-->
+<!--            android:multiprocess="false"/>-->
     </application>
 
 </manifest>

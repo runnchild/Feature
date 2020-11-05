@@ -14,6 +14,7 @@ import com.rongc.feature.refresh.PageIndicator
 import com.rongc.feature.widget.ItemDecoration
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
+import kotlin.concurrent.thread
 
 /**
  * 支持下拉刷新ViewModel，维护上拉和加载更多数据请求及ui业务
@@ -101,10 +102,12 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
             } else {
                 setStatus(LoadStatus.FINISH_LOAD_FAILED)
             }
-            if (!NetworkUtils.isConnected()) {
-                setupEmptyView.value = RefreshEmptyViewModel.EMPTY_NET_DISCONNECT
-            } else if (!NetworkUtils.isAvailable()) {
-                setupEmptyView.value = RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE
+            thread {
+                if (!NetworkUtils.isConnected()) {
+                    setupEmptyView.postValue(RefreshEmptyViewModel.EMPTY_NET_DISCONNECT)
+                } else if (!NetworkUtils.isAvailable()) {
+                    setupEmptyView.postValue(RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE)
+                }
             }
         }
     }
