@@ -15,6 +15,7 @@
     <application
         android:networkSecurityConfig="@xml/network"
         android:requestLegacyExternalStorage="true"
+        android:name=".CoreApplication"
         android:usesCleartextTraffic="true">
 
 <!--        <provider-->
