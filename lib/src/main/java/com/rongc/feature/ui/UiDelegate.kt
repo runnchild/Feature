@@ -33,7 +33,11 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
 
     @Suppress("UNCHECKED_CAST")
     fun provideViewModel(owner: ViewModelStoreOwner): M {
-        val modelClass = (owner.javaClass.genericSuperclass as ParameterizedType)
+        var cls: Class<*> = owner.javaClass
+        while (cls.genericSuperclass !is ParameterizedType) {
+            cls = cls.superclass as Class<*>
+        }
+        val modelClass = (cls.genericSuperclass as ParameterizedType)
             .actualTypeArguments.last() as Class<M>
         return ViewModelProvider(owner, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(clz: Class<T>): T {
