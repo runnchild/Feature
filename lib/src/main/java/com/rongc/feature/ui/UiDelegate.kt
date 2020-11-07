@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.BarConfig
 import com.rongc.feature.viewmodel.BaseViewModel
+import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -18,7 +19,9 @@ import java.lang.reflect.ParameterizedType
 open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action: (M) -> Unit) {
 
     private val barConfig by lazy { BarConfig() }
-//    var toolBar: PsnToolbar? = null
+
+    //    var toolBar: PsnToolbar? = null
+    private var dialogJob: Job? = null
 
     private val dialog by lazy {
         AlertDialog.Builder(api.getContext()!!)
@@ -47,10 +50,10 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun init(owner: LifecycleOwner, root: View) {
+        initObserver(owner, api.viewModel())
+        
         api.initObserver()
         api.initView(root)
-
-        initObserver(owner, api.viewModel())
         api.initData()
     }
 
@@ -81,12 +84,19 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun showDialog() {
-        if (!dialog.isShowing) {
-            dialog.show()
+        dialogJob?.cancel()
+        dialogJob = GlobalScope.launch(Dispatchers.IO) {
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                if (!dialog.isShowing) {
+                    dialog.show()
+                }
+            }
         }
     }
 
     fun dismissDialog() {
+        dialogJob?.cancel()
         if (dialog.isShowing) {
             dialog.dismiss()
         }

@@ -4,6 +4,7 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.NetworkUtils
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.binding.LoadStatus
@@ -14,6 +15,8 @@ import com.rongc.feature.refresh.PageIndicator
 import com.rongc.feature.widget.ItemDecoration
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 /**
@@ -119,8 +122,11 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
         binders.forEach {
             itemBinders.value?.add(it)
         }
-        if (autoRefresh) {
-            refresh()
+        // 刷新时机延后，到UI的initView，initData方法后
+        viewModelScope.launch(Dispatchers.Main) {
+            if (autoRefresh) {
+                refresh()
+            }
         }
     }
 
