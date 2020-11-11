@@ -118,12 +118,12 @@ fun RecyclerView.divider(
 }
 
 @BindingAdapter("emptyView", "enableEmptyView", requireAll = false)
-fun RecyclerView.setupEmptyView(emptyView: IEmptyView = EmptyView(context), enable: Boolean = true): RefreshEmptyViewModel? {
+fun RecyclerView.setupEmptyView(emptyView: IEmptyView? = EmptyView(context), enable: Boolean = true): RefreshEmptyViewModel? {
     adapter ?: setup<Any>()
     val adapter = adapter as BaseQuickAdapter<*, *>
     return if (enable && !adapter.hasEmptyView()) {
         val emptyViewModel = RefreshEmptyViewModel()
-        adapter.setEmptyView(emptyView.run {
+        adapter.setEmptyView((emptyView ?: EmptyView(context)).run {
             setViewModel(emptyViewModel)
             this as View
         })

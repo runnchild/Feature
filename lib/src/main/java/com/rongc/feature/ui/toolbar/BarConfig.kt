@@ -1,5 +1,6 @@
 package com.rongc.feature.ui.toolbar
 
+import android.graphics.Color
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.rongc.feature.R
@@ -54,7 +55,7 @@ class BarConfig {
 
     internal var navLightMode = false
 
-    var navColor = UNDEFINE
+    var navColor = Color.BLACK
         set(value) {
             navLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value
