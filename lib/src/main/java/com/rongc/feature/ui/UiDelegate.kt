@@ -112,10 +112,9 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             BarUtils.setStatusBarColor(activity, barConfig.statusColor)
         }
         BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
-        if (barConfig.navColor != BarConfig.UNDEFINE) {
-            BarUtils.setNavBarColor(activity, barConfig.navColor)
-            BarUtils.setNavBarLightMode(activity, barConfig.navLightMode)
-        }
+
+        BarUtils.setNavBarColor(activity, barConfig.navColor)
+        BarUtils.setNavBarLightMode(activity, barConfig.navLightMode)
 
         activity.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
             if (!barConfig.isStatusTransparent) {
