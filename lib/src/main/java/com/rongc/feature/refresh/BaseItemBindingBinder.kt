@@ -52,4 +52,46 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
      * 返回Item布局资源id
      */
     abstract fun getViewBinding(inflater: LayoutInflater, parent: ViewGroup): B
+
+    override fun onClick(holder: BaseViewHolder, view: View, data: T, position: Int) {
+        val binding = DataBindingUtil.findBinding<B>(holder.itemView)!!
+        onItemClick(binding, view, data, position)
+    }
+
+    override fun onChildClick(holder: BaseViewHolder, view: View, data: T, position: Int) {
+        onItemChildClick(DataBindingUtil.findBinding<B>(holder.itemView)!!, view, data, position)
+    }
+
+    override fun onLongClick(holder: BaseViewHolder, view: View, data: T, position: Int): Boolean {
+        return onItemLongClick(
+            DataBindingUtil.findBinding<B>(holder.itemView)!!,
+            view,
+            data,
+            position
+        )
+    }
+
+    override fun onChildLongClick(
+        holder: BaseViewHolder,
+        view: View,
+        data: T,
+        position: Int
+    ): Boolean {
+        return onItemChildLongClick(
+            DataBindingUtil.findBinding<B>(holder.itemView)!!,
+            view,
+            data,
+            position
+        )
+    }
+
+    open fun onItemChildLongClick(binding: B, view: View, data: T, position: Int) = false
+
+    open fun onItemLongClick(binding: B, view: View, data: T, position: Int) = false
+
+    open fun onItemChildClick(binding: B, view: View, data: T, position: Int) {
+    }
+
+    open fun onItemClick(binding: B, view: View, data: T, position: Int) {
+    }
 }
