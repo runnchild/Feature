@@ -3,7 +3,7 @@ buildscript {
     if (file("../config.gradle").exists()) {
         apply from: "../config.gradle"
     } else {
-        apply from: "https://gitee.com/qiurongc/codes/u92rp1aow0kcn3is6y5xd84/raw?blob_name=config.gradle"
+        apply from: "https://gitee.com/qiurongc/codes/u2jmvw8oy1edhfbr50sz675/raw?blob_name=config.gradle"
     }
     repositories {
         mavenLocal()
