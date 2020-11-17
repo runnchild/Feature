@@ -59,7 +59,7 @@ interface IRefreshDelegate {
                 }
                 else -> {
                     val builder = EmptyBuilder().apply(setupEmptyView(it)).apply {
-                        if (refreshClick == null) {
+                        if (refreshClick == null && refreshBuilder == null) {
                             refreshClick = {
                                 baseRefreshViewModel.refresh()
                             }
