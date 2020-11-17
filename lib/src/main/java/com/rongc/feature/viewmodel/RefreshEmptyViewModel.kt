@@ -2,6 +2,7 @@ package com.rongc.feature.viewmodel
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.widget.TextView
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -22,10 +23,13 @@ class RefreshEmptyViewModel {
     val btnVisible = ObservableBoolean()
     val btnText = ObservableField("刷新")
     val icon = ObservableField<Drawable>()
+    var refreshBuilder = ObservableField<TextView.() -> Unit>()
+    var tipBuilder = ObservableField<TextView.() -> Unit>()
+    var subTipBuilder = ObservableField<TextView.() -> Unit>()
 
     var refreshClick = ObservableField {}
 
-    fun showNoNet(refresh: ()->Unit) {
+    fun showNoNet(refresh: () -> Unit) {
         emptyBuilder {
             tip = "网络未连接"
             tipColor = R.color.gray_353535.color()
@@ -37,7 +41,7 @@ class RefreshEmptyViewModel {
         }
     }
 
-    fun showNetUnavailable(refresh: ()->Unit) {
+    fun showNetUnavailable(refresh: () -> Unit) {
         emptyBuilder {
             tip = "网络异常"
             tipColor = R.color.gray_353535.color()
@@ -55,15 +59,25 @@ class RefreshEmptyViewModel {
 
     fun builder(builder: EmptyBuilder) {
         builder.let {
-            tip.set(it.tip)
-            if (it.tipColor == null) {
-                tipColor.set(Color.parseColor("#b2b2b2"))
-            }
-            subTip.set(it.subTip)
-            btnVisible.set(it.btnVisible)
-            btnText.set(it.btnText)
             icon.set(it.iconDrawable)
-            refreshClick.set(it.refreshClick?:{})
+            refreshBuilder.set(builder.refreshBuilder)
+            tipBuilder.set(builder.tipBuilder)
+            subTipBuilder.set(builder.subTipBuilder)
+
+            if (refreshBuilder.get() == null) {
+                btnVisible.set(it.btnVisible)
+                btnText.set(it.btnText)
+                refreshClick.set(it.refreshClick ?: {})
+            }
+            if (tipBuilder.get() == null) {
+                tip.set(it.tip)
+                if (it.tipColor == null) {
+                    tipColor.set(Color.parseColor("#b2b2b2"))
+                }
+            }
+            if (subTipBuilder.get() == null) {
+                subTip.set(it.subTip)
+            }
         }
     }
 }
@@ -75,5 +89,21 @@ class EmptyBuilder {
     var btnVisible: Boolean = false
     var btnText: String? = "刷新"
     var iconDrawable: Drawable? = R.mipmap.empty_icon_empty.drawable()
-    var refreshClick:(()->Unit)? = null
+    var refreshClick: (() -> Unit)? = null
+    var refreshBuilder: (TextView.() -> Unit)? = null
+    var tipBuilder: (TextView.() -> Unit)? = null
+    var subTipBuilder: (TextView.() -> Unit)? = null
+
+    fun refreshBtn(build: TextView.() -> Unit) {
+        refreshBuilder = build
+    }
+
+    fun tip(build: TextView.() -> Unit) {
+        tipBuilder = build
+    }
+
+    fun subTip(build: TextView.() -> Unit) {
+        subTipBuilder = build
+    }
+
 }
