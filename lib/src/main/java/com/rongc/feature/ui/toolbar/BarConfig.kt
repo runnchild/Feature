@@ -55,7 +55,7 @@ class BarConfig {
 
     internal var navLightMode = false
 
-    var navColor = Color.BLACK
+    var navColor = -1
         set(value) {
             navLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value
