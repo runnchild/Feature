@@ -1,6 +1,5 @@
 package com.rongc.feature.ui.toolbar
 
-import android.graphics.Color
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.rongc.feature.R
@@ -53,7 +52,7 @@ class BarConfig {
 
     var toolbarBackDrawable = R.mipmap.common_icon_back.drawable()!!
 
-    internal var navLightMode = false
+    internal var navLightMode = true
 
     var navColor = -1
         set(value) {
