@@ -53,7 +53,7 @@ object LiveDataBus {
         fun observerSticky(owner: LifecycleOwner, sticky: Boolean, observer: Observer<in T>) {
             //允许指定注册的观察则 是否需要关心黏性事件
             //sticky =true, 如果之前存在已经发送的数据，那么这个observer会受到之前的黏性事件消息
-            owner.lifecycle.addObserver(LifecycleEventObserver { source, event ->
+            owner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
                 //监听 宿主 发生销毁事件，主动把livedata 移除掉。
                 if (event == Lifecycle.Event.ON_DESTROY) {
                     eventMap.remove(eventName)

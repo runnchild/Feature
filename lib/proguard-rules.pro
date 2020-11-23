@@ -14,15 +14,37 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-optimizationpasses 5
+-verbose
+-optimizations !code/simplification/cast,!field/*,!class/merging/*
+-keepattributes SourceFile,LineNumberTable
+#不使用大小寫混合，混淆後類名稱為小寫
+-dontusemixedcaseclassnames
 
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+-keep class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+# 保留 Parcelable 子类中的 CREATOR 字段
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keepclassmembernames class com.chad.library.adapter.base.BaseBinderAdapter {
+    com.chad.library.adapter.base.BaseBinderAdapter addItemBinder(java.lang.Class,com.chad.library.adapter.base.binder.BaseItemBinder,androidx.recyclerview.widget.DiffUtil$ItemCallback);
+}
+-keep class * implements java.io.Serializable {
+    static final long serialVersionUID;
+}
+-keepnames class * extends com.rongc.feature.model.BaseModel {*;}
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
--keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes *Annotation*, Signature, InnerClasses, EnclosingMethod
 
 # Retrofit does reflection on method and parameter annotations.
 -keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
@@ -53,3 +75,7 @@
 #okio
 # Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
 -dontwarn org.codehaus.mojo.animal_sniffer.*
+# Gson
+-dontwarn com.google.gson.**
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
