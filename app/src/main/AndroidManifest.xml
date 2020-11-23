@@ -8,7 +8,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".MyApplication"
         android:theme="@style/Theme.Feature">
         <activity android:name=".ui.StatusBarActivity" android:label="StatusBar"/>
         <activity android:name=".ui.ViewPager2Activity" />

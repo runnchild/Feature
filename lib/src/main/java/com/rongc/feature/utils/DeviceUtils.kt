@@ -18,7 +18,7 @@ import com.blankj.utilcode.util.PhoneUtils
 object DeviceUtils {
     fun getImei(call: (String) -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-             ""
+            call("")
         }
         PermissionUtils.permission(PermissionConstants.PHONE)
             .callback(object : PermissionUtils.SimpleCallback {

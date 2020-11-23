@@ -1,5 +1,22 @@
 apply plugin: 'com.rongc.app'
 apply plugin: 'kotlin-android'
+android {
+    signingConfigs {
+        release {
+            storeFile file("${file(rootProject.rootDir).parent}/keystore.jks")
+            storePassword "qwe123"
+            keyAlias "signal"
+            keyPassword "qwe123"
+        }
+    }
+    defaultConfig {
+        signingConfig signingConfigs.release
+    }
+    packagingOptions {
+        exclude 'META-INF/*.kotlin_module'
+        exclude 'META-INF/xxx'
+    }
+}
 dependencies {
     implementation project(':lib')
 }

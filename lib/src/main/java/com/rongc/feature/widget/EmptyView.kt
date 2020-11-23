@@ -10,19 +10,17 @@ import androidx.databinding.BindingAdapter
 import com.rongc.feature.databinding.EmptyViewBinding
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 
+@BindingAdapter("textBuilder")
+fun TextView.refreshBuilder(builder: (TextView.() -> Unit)? = null) {
+    builder?.let {
+        apply(builder)
+        isVisible = true
+    }
+}
+
 class EmptyView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), IEmptyView {
-    companion object {
-        @JvmStatic
-        @BindingAdapter("textBuilder")
-        fun TextView.refreshBuilder(builder: (TextView.() -> Unit)? = null) {
-            builder?.let {
-                apply(builder)
-                isVisible = true
-            }
-        }
-    }
 
     private var binding: EmptyViewBinding =
         EmptyViewBinding.inflate(LayoutInflater.from(context), this, true)
