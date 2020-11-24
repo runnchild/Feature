@@ -27,7 +27,7 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
     /**
      * 请求页码
      */
-    private val pageIndicator by lazy {
+    private val pageIndicator: PageIndicator by lazy {
         PageIndicator()
     }
 
@@ -40,7 +40,7 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      * 是否支持下拉刷新
      */
     var enableRefresh = ObservableBoolean(true)
-    
+
     private var firstRefresh = true
 
     val onRefreshListener = OnRefreshListener {
@@ -72,7 +72,9 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      */
     var enableRefreshWhenEmpty = true
 
-    private val dataRequestCall = object : DataRequestCallback<List<T>> {
+    private val dataRequestCall = RequestCallback()
+
+    inner class RequestCallback : DataRequestCallback<List<T>> {
         var refreshByUser = false
         override fun onSuccess(page: Int, data: List<T>) {
             if (page == PageIndicator.PAGE_START) {

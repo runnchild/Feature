@@ -41,7 +41,26 @@
 -keep class * implements java.io.Serializable {
     static final long serialVersionUID;
 }
--keepnames class * extends com.rongc.feature.model.BaseModel {*;}
+-keep class com.rongc.feature.model.BaseModel
+-keep class * extends com.rongc.feature.model.BaseModel
+-keep class com.rongc.feature.refresh.BaseRecyclerItemBinder
+-keep class * extends com.rongc.feature.refresh.BaseRecyclerItemBinder {}
+
+# 这样以来我们在layout中写的onClick就不会被影响
+-keepclassmembers class * extends android.app.Activity{
+    public void *(android.view.View);
+}
+# 保留枚举类不被混淆
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class androidx.databinding.** { *; }
+-keepclasseswithmembers class * extends androidx.databinding.ViewDataBinding {
+    <methods>;
+}
+
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
 -keepattributes *Annotation*, Signature, InnerClasses, EnclosingMethod
@@ -79,3 +98,13 @@
 -dontwarn com.google.gson.**
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
+
+-keep class com.rongc.feature.** {*;}
+
+#-keep class com.rongc.feature.** {
+#    public <init>(***);
+#    public <methods>;
+#    public <fields>;
+#    public get*();
+#    public set*(***);
+#}
