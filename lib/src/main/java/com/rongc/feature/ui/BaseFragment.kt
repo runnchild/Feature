@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
@@ -54,6 +56,13 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
 
     override fun generateViewModel(modelClass: Class<M>): M {
         return modelClass.newInstance()
+    }
+
+    fun <T : ViewModel> obtainSubViewModel(viewModel: Class<T>): T {
+        return ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[viewModel].apply {
+            @Suppress("UNCHECKED_CAST")
+            delegate.initObserver(this@BaseFragment, this as M)
+        }
     }
 
     /**

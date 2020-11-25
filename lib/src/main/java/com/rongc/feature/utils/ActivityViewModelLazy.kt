@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.ui.BaseActivity
+import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.viewmodel.BaseViewModel
 
 /**
@@ -20,11 +21,23 @@ object ActivityViewModelLazy {
     @MainThread
     inline fun <reified VM : BaseViewModel<*>> Fragment.activityViewModel(
         noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
-    ) =  createViewModelLazy(VM::class, { requireActivity().viewModelStore },
+    ) = createViewModelLazy(VM::class, { requireActivity().viewModelStore },
         factoryProducer ?: {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(clz: Class<T>): T {
                     return (requireActivity() as BaseActivity<*>).obtainSubViewModel(clz)
+                }
+            }
+        })
+    
+    @MainThread
+    inline fun <reified VM : BaseViewModel<*>> BaseFragment<*>.fragmentViewModel(
+        noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
+    ) = createViewModelLazy(VM::class, { viewModelStore },
+        factoryProducer ?: {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(clz: Class<T>): T {
+                    return obtainSubViewModel(clz)
                 }
             }
         })
