@@ -1,9 +1,7 @@
 package com.rongc.feature.ui
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -72,8 +70,9 @@ interface IRefreshDelegate {
                     emptyViewModel?.builder(builder)
                 }
             }
-            (emptyView as View?)?.doOnLayout {empty->
-                empty.updateLayoutParams { height = recyclerView.measuredHeight }
+            (emptyView as View?)?.updateLayoutParams {
+                width = recyclerView.measuredWidth
+                height = recyclerView.measuredHeight
             }
         })
     }

@@ -3,6 +3,7 @@ package com.rongc.feature.utils
 import android.annotation.SuppressLint
 import android.os.Build
 import com.blankj.utilcode.constant.PermissionConstants
+import com.blankj.utilcode.util.DeviceUtils
 import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.PhoneUtils
 
@@ -18,7 +19,7 @@ import com.blankj.utilcode.util.PhoneUtils
 object DeviceUtils {
     fun getImei(call: (String) -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            call("")
+            call(DeviceUtils.getAndroidID())
         }
         PermissionUtils.permission(PermissionConstants.PHONE)
             .callback(object : PermissionUtils.SimpleCallback {
