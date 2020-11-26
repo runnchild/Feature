@@ -35,7 +35,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepclassmembernames class com.chad.library.adapter.base.BaseBinderAdapter {
+-keepclasseswithmembers class com.chad.library.adapter.base.BaseBinderAdapter {
     com.chad.library.adapter.base.BaseBinderAdapter addItemBinder(java.lang.Class,com.chad.library.adapter.base.binder.BaseItemBinder,androidx.recyclerview.widget.DiffUtil$ItemCallback);
 }
 -keep class * implements java.io.Serializable {
@@ -45,6 +45,10 @@
 -keep class * extends com.rongc.feature.model.BaseModel
 -keep class com.rongc.feature.refresh.BaseRecyclerItemBinder
 -keep class * extends com.rongc.feature.refresh.BaseRecyclerItemBinder {}
+-keep class * extends androidx.databinding.ViewDataBinding {
+    ** mBean;
+    ** mBinder;
+}
 
 # 这样以来我们在layout中写的onClick就不会被影响
 -keepclassmembers class * extends android.app.Activity{
@@ -99,8 +103,10 @@
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
 
--keep class com.rongc.feature.** {*;}
-
+-keep class * extends androidx.fragment.app.Fragment {
+    public <init>();
+}
+-keep class * extends android.app.Activity
 #-keep class com.rongc.feature.** {
 #    public <init>(***);
 #    public <methods>;
