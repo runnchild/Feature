@@ -107,7 +107,9 @@ object Compat {
     }
 
     fun String?.toast() {
-        ToastUtils.showShort(this ?: return)
+        if (!isNullOrEmpty()) {
+            ToastUtils.showShort(this)
+        }
     }
 
     fun Any?.logd() {
