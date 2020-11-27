@@ -15,6 +15,7 @@ class BarConfig {
     }
 
     var toolbarVisible = true
+    var titleVisible = true
     
     var statusBarState = 0
         set(value) {

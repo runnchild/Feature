@@ -39,6 +39,7 @@ class ToolBarViewModel: ViewModel() {
         backIcon.set(toolbarBackDrawable)
         background.set(barConfig.toolBarBackground.toDrawable())
         toolbarVisible.set(barConfig.toolbarVisible)
+        titleVisible.set(barConfig.titleVisible)
     }
 
     val toolbarVisible = ObservableBoolean(true)
