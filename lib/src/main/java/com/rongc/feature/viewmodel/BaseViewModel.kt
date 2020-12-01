@@ -44,7 +44,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     open fun onResume(){}
     
     @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+//    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
         val modelCls = findModelType(this::class.java)?:throw IllegalStateException("没有找到申明的Model")
 

@@ -1,10 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    if (file("../config.gradle").exists()) {
-        apply from: "../config.gradle"
-    } else {
+//    if (file("../config.gradle").exists()) {
+//        apply from: "../config.gradle"
+//    } else {
         apply from: "https://gitee.com/qiurongc/codes/u2jmvw8oy1edhfbr50sz675/raw?blob_name=config.gradle"
-    }
+//    }
     repositories {
         mavenLocal()
         google()
