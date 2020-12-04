@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -82,7 +83,7 @@ object Compat {
         )
     }
 
-    fun Int?.toBoolean() = this != null && this != 0
+    fun Int?.toBoolean(): Boolean = this != null && this != 0
     fun Boolean.toInt() = if (this) 1 else 0
 
     fun Boolean?.then(block: (Boolean) -> Unit): Boolean {
@@ -106,9 +107,13 @@ object Compat {
         }
     }
 
+    private val toastInstance by lazy {
+        ToastUtils.make().setGravity(Gravity.CENTER, 0, 0)
+    }
+
     fun String?.toast() {
         if (!isNullOrEmpty()) {
-            ToastUtils.showShort(this)
+            toastInstance.show(this)
         }
     }
 
