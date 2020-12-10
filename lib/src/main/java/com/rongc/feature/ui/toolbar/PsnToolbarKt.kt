@@ -1,5 +1,6 @@
 package com.rongc.feature.ui.toolbar
 
+import android.animation.ValueAnimator
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.Gravity
@@ -8,7 +9,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.rongc.feature.R
 import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.idp
@@ -46,4 +52,13 @@ private fun ViewGroup.addItemMenu(item: TextView.() -> Unit) {
         menu, childCount - 1,
         FrameLayout.LayoutParams(-2, -1)
     )
+}
+
+@BindingAdapter("visible", "transition")
+fun View.visibleWithTransition(visible: Boolean, transition: Boolean) {
+//    if (isVisible == visible) {
+//        return
+//    }
+    TransitionManager.beginDelayedTransition(parent as ViewGroup, AutoTransition())
+    isVisible = visible
 }

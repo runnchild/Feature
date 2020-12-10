@@ -82,16 +82,17 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
 
     fun destroy() {
         api.getLifecycle().removeObserver(api.viewModel())
+        dismissDialog()
     }
 
     fun showDialog() {
         dialogJob?.cancel()
-        dialogJob = GlobalScope.launch(Dispatchers.IO) {
-            delay(1000)
-            withContext(Dispatchers.Main) {
-                if (!dialog.isShowing) {
-                    dialog.show()
-                }
+        dialogJob = GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                delay(1000)
+            }
+            if (!dialog.isShowing) {
+                dialog.show()
             }
         }
     }
