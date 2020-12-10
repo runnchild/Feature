@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
+import com.rongc.feature.utils.Compat.removeFromParent
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
 
@@ -29,6 +30,7 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return if (::mView.isInitialized) {
+            mView.removeFromParent()
             mView
         } else {
             delegate = getUiDelegate {
