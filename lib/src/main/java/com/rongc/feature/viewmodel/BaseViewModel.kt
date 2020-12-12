@@ -107,7 +107,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
                     ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败")
                 }
                 else -> {
-                    ServicesException(ServicesException.CODE_OTHER, "服务器错误")
+                    ServicesException(ServicesException.CODE_OTHER, "网络异常")
                 }
             }
             if (showToast) {

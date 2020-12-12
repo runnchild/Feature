@@ -14,7 +14,6 @@ import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 fun TextView.refreshBuilder(builder: (TextView.() -> Unit)? = null) {
     builder?.let {
         apply(builder)
-        isVisible = true
     }
 }
 

@@ -2,7 +2,9 @@ package com.rongc.feature.viewmodel
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -60,23 +62,33 @@ class RefreshEmptyViewModel {
     fun builder(builder: EmptyBuilder) {
         builder.let {
             icon.set(it.iconDrawable)
-            refreshBuilder.set(builder.refreshBuilder)
-            tipBuilder.set(builder.tipBuilder)
-            subTipBuilder.set(builder.subTipBuilder)
 
+            refreshBuilder.set(builder.refreshBuilder)
             if (refreshBuilder.get() == null) {
-                btnVisible.set(it.btnVisible)
-                btnText.set(it.btnText)
-                refreshClick.set(it.refreshClick ?: {})
-            }
-            if (tipBuilder.get() == null) {
-                tip.set(it.tip)
-                if (it.tipColor == null) {
-                    tipColor.set(Color.parseColor("#b2b2b2"))
+                refreshBuilder.set {
+                    isVisible = it.btnVisible
+                    text = it.btnText
+                    setOnClickListener { _ ->
+                        it.refreshClick?.invoke()
+                    }
                 }
             }
+
+            tipBuilder.set(builder.tipBuilder)
+            if (tipBuilder.get() == null) {
+                tipBuilder.set {
+                    text = it.tip
+                    if (it.tipColor == null) {
+                        setTextColor(Color.parseColor("#b2b2b2"))
+                    }
+                }
+            }
+
+            subTipBuilder.set(builder.subTipBuilder)
             if (subTipBuilder.get() == null) {
-                subTip.set(it.subTip)
+                subTipBuilder.set {
+                    text = it.subTip
+                }
             }
         }
     }
