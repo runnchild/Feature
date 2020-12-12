@@ -26,10 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp10"
-            android:text="@{viewModel.tip}"
             app:textBuilder="@{viewModel.tipBuilder}"
-            app:visible="@{!viewModel.tip.empty}"
-            android:textColor="@{viewModel.tipColor}"
             android:textSize="@dimen/sp17"
             tools:text="网络未连接" />
 
@@ -40,8 +37,6 @@
             android:textColor="#b2b2b2"
             android:textSize="@dimen/sp13"
             app:textBuilder="@{viewModel.subTipBuilder}"
-            android:text="@{viewModel.subTip}"
-            app:visible="@{!viewModel.subTip.empty}"
             tools:text="请检查你的网络设置后刷新" />
 
         <TextView
@@ -53,10 +48,8 @@
             android:minWidth="@dimen/dp112"
             android:minHeight="@dimen/dp35"
             android:textColor="@color/white"
-            android:onClick="@{viewModel.refreshClick}"
-            app:visible="@{viewModel.btnVisible}"
-            android:text="@{viewModel.btnText}"
             android:textSize="@dimen/sp16"
+            android:visibility="gone"
             app:textBuilder="@{viewModel.refreshBuilder}"
             app:round_radius="@{@dimen/dp35}"
             android:background="#404080"
