@@ -96,6 +96,11 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
     override fun initObserver() {
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mView.removeFromParent()
+    }
+    
     /**
      * 退出页面，由页面决定弹出Fragment Stack还出关闭附属的Activity
      */

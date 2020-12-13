@@ -1,5 +1,6 @@
 package com.rongc.feature.utils
 
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -7,6 +8,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
+import androidx.core.text.clearSpans
 import androidx.databinding.BindingAdapter
 
 /**
@@ -17,6 +19,8 @@ import androidx.databinding.BindingAdapter
  * @date 20-8-21
  * @param content 需要设置的内容，为空使用TextView里面的text
  * @param clicks span点击回调
+ * note: 使用了此方法在页面退出时clicks仍被ClickableSpan内部持有造成泄露，
+ * 因此在退出时需调用#clearSpans
  */
 @BindingAdapter("spanColor", "spanClicks", "spanContent")
 fun TextView.setClickSpans(
@@ -61,5 +65,15 @@ fun TextView.setClickSpans(
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
+    }
+}
+
+fun TextView.clearSpans() {
+    (text as? SpannableString)?.clearSpans()
+    try {
+        val field = text::class.java.superclass.getDeclaredField("mSpans")
+        field.isAccessible = true
+        field.set(this, null)
+    } catch (e: Exception) {
     }
 }
