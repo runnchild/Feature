@@ -17,6 +17,7 @@ import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.rongc.feature.R
 
 /**
  * Desc: 常用的扩展方法
@@ -108,7 +109,10 @@ object Compat {
     }
 
     private val toastInstance by lazy {
-        ToastUtils.make().setGravity(Gravity.CENTER, 0, 0)
+        ToastUtils.make()
+            .setBgColor(R.color.black_70.color())
+            .setTextColor(Color.WHITE)
+            .setGravity(Gravity.CENTER, 0, 0)
     }
 
     fun String?.toast() {

@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.ui.BinderAdapter
+import com.rongc.feature.utils.Compat.removeFromParent
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.IEmptyView
@@ -119,15 +120,20 @@ fun RecyclerView.divider(
 }
 
 @BindingAdapter("emptyView", "enableEmptyView", requireAll = false)
-fun RecyclerView.setupEmptyView(emptyView: IEmptyView? = EmptyView(context), enable: Boolean = true): RefreshEmptyViewModel? {
+fun RecyclerView.setupEmptyView(
+    emptyView: IEmptyView? = EmptyView(context),
+    enable: Boolean = true
+): RefreshEmptyViewModel? {
     adapter ?: setup<Any>()
     val adapter = adapter as BaseQuickAdapter<*, *>
     return if (enable && !adapter.hasEmptyView()) {
-        val emptyViewModel = RefreshEmptyViewModel()
-        adapter.setEmptyView((emptyView ?: EmptyView(context)).run {
+        val emptyViewModel = emptyView?.getViewModel() ?: RefreshEmptyViewModel()
+        val emptyView1 = (emptyView ?: EmptyView(context)).run {
             setViewModel(emptyViewModel)
             this as View
-        })
+        }
+        emptyView1.removeFromParent()
+        adapter.setEmptyView(emptyView1)
         emptyViewModel
     } else {
         (adapter.headerLayout?.getChildAt(0) as? EmptyView)?.getViewModel()

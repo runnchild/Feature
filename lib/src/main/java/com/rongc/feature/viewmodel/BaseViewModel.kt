@@ -8,10 +8,7 @@ import com.rongc.feature.model.BaseModel
 import com.rongc.feature.network.MainScope
 import com.rongc.feature.network.ServicesException
 import com.rongc.feature.utils.Compat.toast
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
 import java.net.ConnectException
 
@@ -117,9 +114,13 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
             failed?.invoke(error)
         }
         return viewModelScope.launch(exceptionHandler) {
-            dialogVisible(showDialog)
+            if (showDialog) {
+                dialogVisible(showDialog)
+            }
             scope(this)
-            dialogVisible(false)
+            if (showDialog) {
+                dialogVisible(false)
+            }
         }
     }
 
