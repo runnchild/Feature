@@ -2,4 +2,6 @@
 <resources>
     <item name="base_recyclerView" type="id" />
     <item name="layout_isBinding" type="id" />
+    <item name="tag_time_mills" type="id" />
+    <item name="tag_binding" type="id" />
 </resources>

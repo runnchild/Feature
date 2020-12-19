@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.core.view.postDelayed
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.transition.AutoTransition
@@ -59,6 +60,16 @@ fun View.visibleWithTransition(visible: Boolean, transition: Boolean) {
 //    if (isVisible == visible) {
 //        return
 //    }
-    TransitionManager.beginDelayedTransition(parent as ViewGroup, AutoTransition())
-    isVisible = visible
+//    if (!isVisible && visible) {
+//        postDelayed(100) {
+//            TransitionManager.beginDelayedTransition(parent as ViewGroup, AutoTransition().apply {
+//                duration = 50
+//            })
+//            isVisible = visible
+//        }
+//    } else {
+        isVisible = visible
+//    }
+//    TransitionManager.beginDelayedTransition(parent as ViewGroup, AutoTransition())
+//    isVisible = visible
 }

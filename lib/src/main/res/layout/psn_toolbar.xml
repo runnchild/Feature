@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         app:psn_background="@{viewModel.background}"
         app:visible="@{viewModel.toolbarVisible}"
+        app:transition="@{true}"
         tools:background="@color/white"
         tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 

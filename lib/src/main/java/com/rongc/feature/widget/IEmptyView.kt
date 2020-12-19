@@ -6,5 +6,5 @@ interface IEmptyView {
 
     fun setViewModel(viewModel: RefreshEmptyViewModel)
 
-    fun getViewModel(): RefreshEmptyViewModel
+    fun getViewModel(): RefreshEmptyViewModel?
 }

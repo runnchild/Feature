@@ -23,7 +23,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     //    var toolBar: PsnToolbar? = null
     private var dialogJob: Job? = null
 
-    private val dialog by lazy {
+    open val dialog by lazy {
         AlertDialog.Builder(api.getContext()!!)
             .setView(ProgressBar(api.getContext()))
             .create()
@@ -89,7 +89,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         dialogJob?.cancel()
         dialogJob = GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
-                delay(1000)
+                delay(600)
             }
             if (!dialog.isShowing) {
                 dialog.show()

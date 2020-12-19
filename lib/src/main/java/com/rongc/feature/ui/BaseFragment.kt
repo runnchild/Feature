@@ -26,6 +26,21 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
         this as? IRefreshDelegate
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        delegate = getUiDelegate {
+            viewModel = it
+        }
+    }
+
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return inflate(inflater, container)
+//    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -51,6 +66,19 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
             mView
         }
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        refreshDelegate?.run {
+//            init(viewModel, this@BaseFragment, mView)
+//        }
+//
+//        val toolbarViewModel by activityViewModels<ToolBarViewModel>()
+//        viewModel.toolbarModel = toolbarViewModel
+//        refreshConfig()
+//
+//        delegate.init(this, mView)
+//    }
 
     override fun getUiDelegate(action: (M) -> Unit): UiDelegate<M> {
         return UiDelegate(this, action)

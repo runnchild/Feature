@@ -28,5 +28,5 @@ class EmptyView @JvmOverloads constructor(
         binding.viewModel = viewModel
     }
 
-    override fun getViewModel(): RefreshEmptyViewModel = binding.viewModel!!
+    override fun getViewModel(): RefreshEmptyViewModel? = binding.viewModel
 }
