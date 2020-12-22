@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.BR
+import com.rongc.feature.utils.singleAction
 
 /**
  * 支持DataBinding的ItemBinder
@@ -54,12 +55,16 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
     abstract fun getViewBinding(inflater: LayoutInflater, parent: ViewGroup): B
 
     override fun onClick(holder: BaseViewHolder, view: View, data: T, position: Int) {
-        val binding = DataBindingUtil.findBinding<B>(holder.itemView)!!
-        onItemClick(binding, view, data, position)
+        view.singleAction {
+            val binding = DataBindingUtil.findBinding<B>(holder.itemView)!!
+            onItemClick(binding, view, data, position)
+        }
     }
 
     override fun onChildClick(holder: BaseViewHolder, view: View, data: T, position: Int) {
-        onItemChildClick(DataBindingUtil.findBinding<B>(holder.itemView)!!, view, data, position)
+        view.singleAction {
+            onItemChildClick(DataBindingUtil.findBinding<B>(holder.itemView)!!, view, data, position)
+        }
     }
 
     override fun onLongClick(holder: BaseViewHolder, view: View, data: T, position: Int): Boolean {

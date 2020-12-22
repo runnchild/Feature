@@ -22,7 +22,7 @@ import com.blankj.utilcode.util.ClickUtils
  */
 @BindingAdapter("android:onClick", "debounce", requireAll = false)
 fun View.onClick(call: () -> Unit, debounce: Boolean = false) {
-    onClick({ _: View -> call() }, debounce)
+    onClick({ _: View -> call() }, true)
 }
 
 /**
