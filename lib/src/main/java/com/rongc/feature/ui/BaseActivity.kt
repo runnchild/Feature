@@ -4,17 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.KeyboardUtils
 import com.rongc.feature.model.BaseModel
-import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
 
@@ -50,7 +47,7 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         setContentView(view)
 
         if (savedInstanceState == null) {
-            findToolBar(view)?.let {
+            delegate.findToolBar(view)?.let {
                 val toolBarViewModel by viewModels<ToolBarViewModel>()
                 viewModel.toolbarModel = toolBarViewModel
                 it.setViewModel(toolBarViewModel)
@@ -69,22 +66,6 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
             init(viewModel, this@BaseActivity, view)
         }
     }
-
-    private fun findToolBar(view: View): PsnToolbar? {
-        if (view is PsnToolbar) {
-            return view
-        }
-        if (view is ViewGroup) {
-            view.forEach {
-                val findView = findToolBar(it)
-                if (findView is PsnToolbar) {
-                    return findView
-                }
-            }
-        }
-        return null
-    }
-
 
     override fun getUiDelegate(action: (M) -> Unit): UiDelegate<M> {
         return UiDelegate(this, action)

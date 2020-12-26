@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
+import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.utils.Compat.removeFromParent
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
@@ -51,14 +53,34 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
             delegate = getUiDelegate {
                 viewModel = it
             }
-            mView = inflate(inflater, container)
+            val view = inflate(inflater, container)
 
             refreshDelegate?.run {
-                init(viewModel, this@BaseFragment, mView)
+                init(viewModel, this@BaseFragment, view)
             }
 
-            val toolbarViewModel by activityViewModels<ToolBarViewModel>()
-            viewModel.toolbarModel = toolbarViewModel
+            mView = if (delegate.barConfig.toolbarVisible) {
+                LinearLayoutCompat(view.context).apply {
+                    orientation = LinearLayoutCompat.VERTICAL
+                    addView(
+                        PsnToolbar(context),
+                        ViewGroup.LayoutParams(-1, -2)
+                    )
+                    addView(view, LinearLayoutCompat.LayoutParams(-1, 0, 1f))
+                }
+            } else {
+                view
+            }
+
+            delegate.findToolBar(mView)?.run {
+                val toolbarViewModel by viewModels<ToolBarViewModel>()
+                viewModel.toolbarModel = toolbarViewModel
+                setViewModel(toolbarViewModel)
+                viewModel.toolbarModel?.backLiveData?.observe(this@BaseFragment, {
+                    onBackPressed()
+                })
+            }
+
             refreshConfig()
 
             delegate.init(this, mView)
@@ -128,7 +150,7 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
         super.onDestroyView()
         mView.removeFromParent()
     }
-    
+
     /**
      * 退出页面，由页面决定弹出Fragment Stack还出关闭附属的Activity
      */

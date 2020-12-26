@@ -31,14 +31,14 @@ class ToolBarViewModel: ViewModel() {
         }
         menuItems.clear()
         menuItems.addAll(barConfig.menuItems)
-        barConfig.menuItems.clear()
+//        barConfig.menuItems.clear()
         backVisible.set(barConfig.toolbarBackVisible)
 
         val toolbarBackDrawable = barConfig.toolbarBackDrawable
         toolbarBackDrawable.setTint(if (!barConfig.isLightMode) Color.WHITE else Color.BLACK)
         backIcon.set(toolbarBackDrawable)
         background.set(barConfig.toolBarBackground.toDrawable())
-        toolbarVisible.set(barConfig.toolbarVisible)
+//        toolbarVisible.set(barConfig.toolbarVisible)
         titleVisible.set(barConfig.titleVisible)
     }
 

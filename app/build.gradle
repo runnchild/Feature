@@ -1,5 +1,4 @@
 apply plugin: 'com.rongc.app'
-apply plugin: 'kotlin-android'
 android {
     signingConfigs {
         release {
@@ -11,10 +10,6 @@ android {
     }
     defaultConfig {
         signingConfig signingConfigs.release
-    }
-    packagingOptions {
-        exclude 'META-INF/*.kotlin_module'
-        exclude 'META-INF/xxx'
     }
 }
 dependencies {

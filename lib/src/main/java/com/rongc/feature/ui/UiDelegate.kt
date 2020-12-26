@@ -5,10 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.forEach
+import androidx.core.view.get
+import androidx.core.view.updatePadding
 import androidx.lifecycle.*
 import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.BarConfig
+import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.viewmodel.BaseViewModel
 import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
@@ -18,9 +22,9 @@ import java.lang.reflect.ParameterizedType
  */
 open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action: (M) -> Unit) {
 
-    private val barConfig by lazy { BarConfig() }
+    val barConfig by lazy { BarConfig() }
 
-    //    var toolBar: PsnToolbar? = null
+    var toolBar: PsnToolbar? = null
     private var dialogJob: Job? = null
 
     open val dialog by lazy {
@@ -32,6 +36,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     init {
         val provideViewModel = provideViewModel(api)
         action(provideViewModel)
+        barConfig.apply { statusColor = -1 }.apply(api.getBarConfig())
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -80,6 +85,22 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         })
     }
 
+    fun findToolBar(view: View): PsnToolbar? {
+        if (view is PsnToolbar) {
+            toolBar = view
+            return view
+        }
+        if (view is ViewGroup) {
+            view.forEach {
+                val findView = findToolBar(it)
+                if (findView is PsnToolbar) {
+                    return findView
+                }
+            }
+        }
+        return null
+    }
+
     fun destroy() {
         api.getLifecycle().removeObserver(api.viewModel())
         dismissDialog()
@@ -105,26 +126,38 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     fun setupStatusBar(activity: Activity) {
-        barConfig.apply { statusColor = -1 }.apply(api.getBarConfig())
-
         if (barConfig.isStatusTransparent) {
-            BarUtils.transparentStatusBar(activity)
-            hideStatusBarView(activity)
+            transparentStatusBar(activity)
         } else if (barConfig.statusColor != BarConfig.UNDEFINE) {
-            BarUtils.setStatusBarColor(activity, barConfig.statusColor)
+            if (barConfig.statusColor == barConfig.toolBarBackground) {
+                transparentStatusBar(activity)
+            } else {
+                BarUtils.setStatusBarColor(activity, barConfig.statusColor)
+            }
         }
         BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
 
         BarUtils.setNavBarColor(activity, barConfig.navColor)
         BarUtils.setNavBarLightMode(activity, barConfig.navLightMode)
 
-        activity.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
-            if (!barConfig.isStatusTransparent) {
-                BarUtils.addMarginTopEqualStatusBarHeight(it)
-            } else {
-                BarUtils.subtractMarginTopEqualStatusBarHeight(it)
-            }
-        }
+//        activity.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0)?.let {
+//            if (!barConfig.isStatusTransparent) {
+//                BarUtils.addMarginTopEqualStatusBarHeight(it)
+//            } else {
+//                BarUtils.subtractMarginTopEqualStatusBarHeight(it)
+//            }
+//        }
+    }
+
+    fun transparentStatusBar(activity: Activity) {
+        BarUtils.transparentStatusBar(activity)
+        hideStatusBarView(activity)
+
+        barConfig.isStatusTransparent = true
+        toolBar?.get(0)?.updatePadding(top = BarUtils.getStatusBarHeight())
+//        BarUtils.subtractMarginTopEqualStatusBarHeight(
+//            activity.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0) ?: return
+//        )
     }
 
     fun refreshConfig(activity: Activity) {
