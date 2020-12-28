@@ -9,6 +9,7 @@ import androidx.lifecycle.*
 import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.BarConfig
+import com.rongc.feature.utils.singleAction
 import com.rongc.feature.viewmodel.BaseViewModel
 import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
@@ -76,7 +77,9 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
             api.finish()
         })
         viewModel.viewsClickLiveData.observe(owner, Observer {
-            api.viewClick(it)
+            it.singleAction {
+                api.viewClick(it)
+            }
         })
     }
 
