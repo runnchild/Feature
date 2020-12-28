@@ -1,6 +1,6 @@
 package com.rongc.feature.network
 
-class ServicesException(val code: Int, message: String?, val error: Throwable?): Exception(message) {
+class ServicesException(val code: Int, message: String?, val error: Throwable? = null): Exception(message) {
     companion object {
         /**
          * 网络链接失败

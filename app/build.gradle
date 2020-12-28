@@ -1,4 +1,4 @@
-apply plugin: 'com.rongc.app'
+plugins { id 'com.rongc.app' }
 android {
     signingConfigs {
         release {

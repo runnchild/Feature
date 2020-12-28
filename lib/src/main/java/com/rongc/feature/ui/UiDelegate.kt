@@ -7,12 +7,12 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.forEach
 import androidx.core.view.get
-import androidx.core.view.updatePadding
 import androidx.lifecycle.*
 import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.BarConfig
 import com.rongc.feature.ui.toolbar.PsnToolbar
+import com.rongc.feature.ui.toolbar.addPaddingTopEqualStatusBar
 import com.rongc.feature.viewmodel.BaseViewModel
 import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
@@ -154,7 +154,7 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
         hideStatusBarView(activity)
 
         barConfig.isStatusTransparent = true
-        toolBar?.get(0)?.updatePadding(top = BarUtils.getStatusBarHeight())
+        toolBar?.get(0)?.addPaddingTopEqualStatusBar(true)
 //        BarUtils.subtractMarginTopEqualStatusBarHeight(
 //            activity.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0) ?: return
 //        )

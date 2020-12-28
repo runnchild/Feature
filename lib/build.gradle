@@ -1,6 +1,6 @@
 import com.rongc.plugin.config.Deps
 
-apply plugin: 'com.rongc.lib'
+plugins { id 'com.rongc.lib' }
 
 ext {
     refresh = '2.0.1'
