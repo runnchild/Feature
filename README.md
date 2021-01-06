@@ -37,7 +37,7 @@ class ViewBindingAdapterActivity : BaseBindingActivity<ActivityViewBindingAdapte
     }
 }
 ```
-3. 如果页面需要ToolBar，在页面xml中添加
+3. 页面默认添加PsnToolBar, 也可在页面xml中添加。如不需要，可重写getBarConfig()方法配置toolBarVisible = false,
 ```
 <com.rongc.feature.ui.toolbar.PsnToolbar
         app:layout_constraintTop_toTopOf="parent"
