@@ -11,7 +11,6 @@ implementation 'com.rongc:feature:$latest_version'
 + RecyclerView Adapter: [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 + 下拉刷新：[SmartRefresh](https://github.com/scwang90/SmartRefreshLayout)
 + 工具库：[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
-+ 图片加载库：Fresco
 
 > 3.使用
 1.不使用DatabBinding, 继承BaseActivity 并指定这个页面的ViewModel
