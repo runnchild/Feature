@@ -36,7 +36,6 @@ class StatusBarActivity : BaseActivity<EmptyViewModel>() {
                 setTextColor(Color.WHITE)
                 setOnClickListener { title.toString().toast() }
             }
-            toolBarBackground = Color.BLUE
         }
     }
 }
