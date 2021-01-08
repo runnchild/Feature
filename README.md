@@ -11,7 +11,6 @@ implementation 'com.rongc:feature:$latest_version'
 + RecyclerView Adapter: [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 + 下拉刷新：[SmartRefresh](https://github.com/scwang90/SmartRefreshLayout)
 + 工具库：[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
-+ 图片加载库：Fresco
 
 > 3.使用
 1.不使用DatabBinding, 继承BaseActivity 并指定这个页面的ViewModel
@@ -38,7 +37,7 @@ class ViewBindingAdapterActivity : BaseBindingActivity<ActivityViewBindingAdapte
     }
 }
 ```
-3. 如果页面需要ToolBar，在页面xml中添加
+3. 页面默认添加PsnToolBar, 也可在页面xml中添加。如不需要，可重写getBarConfig()方法配置toolBarVisible = false,
 ```
 <com.rongc.feature.ui.toolbar.PsnToolbar
         app:layout_constraintTop_toTopOf="parent"

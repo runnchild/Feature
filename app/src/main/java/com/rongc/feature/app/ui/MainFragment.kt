@@ -23,4 +23,10 @@ class MainFragment : BaseBindingFragment<MainFragmentBinding, MainFragmentViewMo
             R.id.btn_status_bar-> startActivity(Intent(view.context, StatusBarActivity::class.java))
         }
     }
+
+    override fun getBarConfig(): BarConfig.() -> Unit {
+        return {
+            toolbarVisible = false
+        }
+    }
 }
