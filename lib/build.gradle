@@ -1,7 +1,6 @@
 import com.rongc.plugin.config.Deps
 
-apply plugin: 'com.rongc.lib'
-apply plugin: 'kotlin-android'
+plugins { id 'com.rongc.lib' }
 
 ext {
     refresh = '2.0.1'
@@ -33,7 +32,4 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    api 'com.noober.background:core:1.6.5'
 }

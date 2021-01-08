@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -34,12 +34,10 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!::delegate.isInitialized) {
-            delegate = getUiDelegate {
-                viewModel = it
-            }
+        delegate = getUiDelegate {
+            viewModel = it
         }
-        val view = when {
+        var view = when {
             getContentViewRes() > 0 -> {
                 View.inflate(this, getContentViewRes(), null)
             }
@@ -47,16 +45,30 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
                 getContentView()!!
             }
         }
+
+        var toolBar = delegate.findToolBar(view)
+        if (delegate.barConfig.toolbarVisible) {
+            if (toolBar == null) {
+                view = LinearLayoutCompat(view.context).apply {
+                    orientation = LinearLayoutCompat.VERTICAL
+                    addView(
+                        PsnToolbar(context).apply { toolBar = this },
+                        ViewGroup.LayoutParams(-1, -2)
+                    )
+                    delegate.toolBar = toolBar
+                    addView(view, LinearLayoutCompat.LayoutParams(-1, 0, 1f))
+                }
+            }
+        }
         setContentView(view)
 
-        if (savedInstanceState == null) {
-            findToolBar(view)?.let {
-                val toolBarViewModel by viewModels<ToolBarViewModel>()
-                viewModel.toolbarModel = toolBarViewModel
-                it.setViewModel(toolBarViewModel)
-            }
-            delegate.init(this, view)
+        toolBar?.let {
+            val toolBarViewModel by viewModels<ToolBarViewModel>()
+            viewModel.toolbarModel = toolBarViewModel
+            it.setViewModel(toolBarViewModel)
         }
+
+        delegate.init(this, view)
 
         refreshConfig()
 
@@ -69,22 +81,6 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
             init(viewModel, this@BaseActivity, view)
         }
     }
-
-    private fun findToolBar(view: View): PsnToolbar? {
-        if (view is PsnToolbar) {
-            return view
-        }
-        if (view is ViewGroup) {
-            view.forEach {
-                val findView = findToolBar(it)
-                if (findView is PsnToolbar) {
-                    return findView
-                }
-            }
-        }
-        return null
-    }
-
 
     override fun getUiDelegate(action: (M) -> Unit): UiDelegate<M> {
         return UiDelegate(this, action)

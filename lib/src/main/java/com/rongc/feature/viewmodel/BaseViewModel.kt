@@ -8,7 +8,10 @@ import com.rongc.feature.model.BaseModel
 import com.rongc.feature.network.MainScope
 import com.rongc.feature.network.ServicesException
 import com.rongc.feature.utils.Compat.toast
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.reflect.ParameterizedType
 import java.net.ConnectException
 
@@ -39,7 +42,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     open fun onResume(){}
-    
+
     @CallSuper
 //    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
@@ -101,10 +104,10 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
                     e
                 }
                 is ConnectException -> {
-                    ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败")
+                    ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败", e)
                 }
                 else -> {
-                    ServicesException(ServicesException.CODE_OTHER, "网络异常")
+                    ServicesException(ServicesException.CODE_OTHER, "网络异常", e)
                 }
             }
             if (showToast) {

@@ -3,7 +3,6 @@ package com.rongc.feature.ui.toolbar
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.rongc.feature.R
-import com.rongc.feature.utils.Compat.color
 import com.rongc.feature.utils.Compat.drawable
 
 class BarConfig {
@@ -45,7 +44,7 @@ class BarConfig {
             field = value
         }
 
-    var toolBarDividerColor = R.color.divider_color.color()
+    var toolBarDividerColor = 0
 
     internal var toolBarLightMode = false
 

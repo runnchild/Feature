@@ -48,6 +48,7 @@
 -keep class * extends androidx.databinding.ViewDataBinding {
     ** mBean;
     ** mBinder;
+    ** mUi;
 }
 
 # 这样以来我们在layout中写的onClick就不会被影响

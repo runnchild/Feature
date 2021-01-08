@@ -4,6 +4,7 @@ import android.view.View
 import com.rongc.feature.app.R
 import com.rongc.feature.app.ui.viewmodel.MainViewModel
 import com.rongc.feature.ui.BaseActivity
+import com.rongc.feature.ui.toolbar.BarConfig
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
@@ -14,5 +15,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
             R.id.fragmentLayout,
             MainFragment(), ""
         ).commit()
+    }
+
+    override fun getBarConfig(): BarConfig.() -> Unit {
+        return {
+            toolbarBackVisible = false
+        }
     }
 }

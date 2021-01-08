@@ -3,7 +3,6 @@ package com.rongc.feature.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.NetworkUtils
 import com.rongc.feature.SingleLiveData
@@ -148,7 +147,7 @@ abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
     /**
      * 列表item类型， 由页面监听数组变化， 继承类不应直接操作
      */
-    val itemBinders = MutableLiveData<MutableList<BaseRecyclerItemBinder<out T>>>().apply {
+    val itemBinders = SingleLiveData<MutableList<BaseRecyclerItemBinder<out T>>>().apply {
         value = mutableListOf()
     }
 
