@@ -20,14 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="backGround"
-            app:bgColor="@{@color/gray_999}"
-            app:bgPressedColor="@{@color/gray_333}"
-            android:onClick="@{viewModel.viewsClick}" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="backGround"-->
+<!--            app:bgColor="@{@color/gray_999}"-->
+<!--            app:bgPressedColor="@{@color/gray_333}"-->
+<!--            android:onClick="@{viewModel.viewsClick}" />-->
 
         <TextView
             android:id="@+id/tv_agreement"

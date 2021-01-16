@@ -7,11 +7,13 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.text.Html
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.*
@@ -239,5 +241,13 @@ object Compat {
 
     fun TextView.drawableSide(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) {
         setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom)
+    }
+
+    fun Float.formatWith(fraction: Int = 1, isHalf: Boolean = false): String? {
+        return NumberUtils.format(this, fraction, isHalf)
+    }
+
+    fun Double.formatWith(fraction: Int = 1, isHalf: Boolean = false): String? {
+        return NumberUtils.format(this, fraction, isHalf)
     }
 }

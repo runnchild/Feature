@@ -79,20 +79,22 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
                 init(viewModel, this@BaseFragment, view)
             }
 
-            mView = if (delegate.barConfig.toolbarVisible) {
-                LinearLayoutCompat(view.context).apply {
+            var toolBar = delegate.findToolBar(view)
+            if (delegate.barConfig.toolbarVisible && toolBar == null) {
+                mView = LinearLayoutCompat(view.context).apply {
                     orientation = LinearLayoutCompat.VERTICAL
                     addView(
-                        PsnToolbar(context),
+                        PsnToolbar(context).apply { toolBar = this },
                         ViewGroup.LayoutParams(-1, -2)
                     )
+                    delegate.toolBar = toolBar
                     addView(view, LinearLayoutCompat.LayoutParams(-1, 0, 1f))
                 }
             } else {
-                view
+                mView = view
             }
 
-            delegate.findToolBar(mView)?.run {
+            toolBar?.run {
                 val toolbarViewModel by viewModels<ToolBarViewModel>()
                 viewModel.toolbarModel = toolbarViewModel
                 setViewModel(toolbarViewModel)
