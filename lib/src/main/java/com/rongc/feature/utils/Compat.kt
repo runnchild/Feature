@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.text.Html
+import android.util.Half.toFloat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.blankj.utilcode.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rongc.feature.R
+import com.rongc.feature.utils.Compat.dp
 
 /**
  * Desc: 常用的扩展方法
@@ -33,36 +35,50 @@ import com.rongc.feature.R
  *
  * @author: QiuRongCai
  */
+
+val Float.dp: Float get() {
+    val it = Utils.getApp()
+    val res = it.resources.getIdentifier("dp$this", "dimen", it.packageName)
+    return if (res != 0) {
+        it.resources.getDimension(res)
+    } else {
+        SizeUtils.dp2px(this@dp).toFloat()
+    }
+}
+val Int.dp get() = toFloat().dp
+
+val Float.idp get() = dp.toInt()
+
+val Int.idp get() = dp.toInt()
+
+val Float.sp: Float get() {
+    val it = Utils.getApp()
+    val res = it.resources.getIdentifier("sp$this", "dimen", it.packageName)
+    return if (res != 0) {
+        it.resources.getDimension(res)
+    } else {
+        SizeUtils.dp2px(this).toFloat()
+    }
+}
+val Int.sp get()= toFloat().sp
+val Int.isp get()= toFloat().sp.toInt()
+
 object Compat {
     // -------------------dimension--------------------------------------------
-    fun Float.dp(): Float {
-        val it = Utils.getApp()
-        val res = it.resources.getIdentifier("dp$this", "dimen", it.packageName)
-        return if (res != 0) {
-            it.resources.getDimension(res)
-        } else {
-            SizeUtils.dp2px(this@dp).toFloat()
-        }
-    }
-
-    fun Int.dp() = toFloat().dp()
-
-    fun Float.idp() = dp().toInt()
-
-    fun Int.idp() = dp().toInt()
-
-    fun Float.sp(): Float {
-        val it = Utils.getApp()
-        val res = it.resources.getIdentifier("sp$this", "dimen", it.packageName)
-        return if (res != 0) {
-            it.resources.getDimension(res)
-        } else {
-            SizeUtils.dp2px(this).toFloat()
-        }
-    }
-
-    fun Int.sp() = toFloat().sp()
-    fun Int.isp() = toFloat().sp().toInt()
+    @Deprecated("", ReplaceWith("dp"))
+    fun Float.dp() = dp
+    @Deprecated("", ReplaceWith("dp"))
+    fun Int.dp() = dp
+    @Deprecated("", ReplaceWith("idp"))
+    fun Float.idp() = idp
+    @Deprecated("", ReplaceWith("idp"))
+    fun Int.idp() = idp
+    @Deprecated("", ReplaceWith("sp"))
+    fun Float.sp() = sp
+    @Deprecated("", ReplaceWith("sp"))
+    fun Int.sp() = sp
+    @Deprecated("", ReplaceWith("isp"))
+    fun Int.isp() = isp
 
 // -------------------dimension end-----------------------------------------
 
