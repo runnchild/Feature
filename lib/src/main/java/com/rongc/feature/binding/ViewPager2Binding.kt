@@ -1,5 +1,6 @@
 package com.rongc.feature.binding
 
+import androidx.core.view.doOnDetach
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.ui.BinderAdapter
+import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
 
 object ViewPager2Binding {
@@ -76,6 +78,66 @@ object ViewPager2Binding {
             block(adapter as T)
         } else {
             setTag(R.id.tag_adapter_callback, block)
+        }
+    }
+}
+
+@BindingAdapter("auto_scroll", "scroll_interval", "loop", requireAll = false)
+fun ViewPager2.loop(autoScroll: Boolean, interval: Long = 3000, loop: Boolean = false) {
+    (getTag(R.id.tag_job) as? Job)?.cancel()
+
+    doOnDetach {
+        (getTag(R.id.tag_job) as? Job)?.cancel()
+        val callbackTag = getTag(R.id.srl_tag)
+        if (callbackTag is ViewPager2.OnPageChangeCallback) {
+            unregisterOnPageChangeCallback(callbackTag)
+        }
+    }
+
+    fun loop(): Job {
+        (getTag(R.id.tag_job) as? Job)?.cancel()
+        return GlobalScope.launch(Dispatchers.IO) {
+            delay(interval)
+            withContext(Dispatchers.Main) {
+                val count = adapter?.itemCount ?: 0
+                if (count > 0) {
+                    if (currentItem + 1 == count) {
+                        if (loop) {
+                            currentItem = 0
+                            loop(autoScroll, interval, loop)
+                        }
+                    } else {
+                        currentItem += 1
+                        loop(autoScroll, interval, loop)
+                    }
+                }
+            }
+        }
+    }
+
+    val callbackTag = getTag(R.id.srl_tag)
+    if (autoScroll) {
+        (getTag(R.id.tag_job) as? Job)?.cancel()
+        setTag(R.id.tag_job, loop())
+
+        if (callbackTag !is ViewPager2.OnPageChangeCallback) {
+            val value = object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageScrollStateChanged(state: Int) {
+                    if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                        (getTag(R.id.tag_job) as? Job)?.cancel()
+                    } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                        loop(autoScroll, interval, loop)
+                    }
+                }
+            }
+
+            setTag(R.id.srl_tag, value)
+            registerOnPageChangeCallback(value)
+        }
+    } else {
+        if (callbackTag is ViewPager2.OnPageChangeCallback) {
+            unregisterOnPageChangeCallback(callbackTag)
+            setTag(R.id.srl_tag, null)
         }
     }
 }

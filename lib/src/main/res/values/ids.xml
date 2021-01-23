@@ -5,4 +5,5 @@
     <item name="tag_time_mills" type="id" />
     <item name="tag_binding" type="id" />
     <item name="tag_adapter_callback" type="id" />
+    <item name="tag_job" type="id" />
 </resources>
