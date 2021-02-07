@@ -128,7 +128,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     }
 
     private fun dialogVisible(visible: Boolean) {
-        dialogVisible.value = visible
+        dialogVisible.postValue(visible)
     }
 
     fun showDialog() {
