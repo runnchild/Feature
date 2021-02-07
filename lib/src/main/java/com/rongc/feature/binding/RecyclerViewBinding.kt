@@ -2,6 +2,7 @@ package com.rongc.feature.binding
 
 import android.view.View
 import androidx.databinding.BindingAdapter
+import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
@@ -111,6 +112,16 @@ fun <T> RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<T>) {
 fun RecyclerView.items(items: Collection<Any>?) {
     val adapter = setup(adapter) as BaseBinderAdapter
     adapter.setList(items)
+//    if (items is ObservableArrayList<Any>) {
+//        adapter.setList(items)
+//        return
+//    }
+//    val data = if (items is MutableList<Any>) {
+//        items
+//    } else {
+//        items?.toMutableList()
+//    }
+//    adapter.setDiffNewData(data)
 }
 
 @BindingAdapter("itemDecoration")
@@ -138,7 +149,7 @@ fun RecyclerView.divider(
     vLine: Float = 0f,
     hLine: Float = 0f
 ) {
-    addItemDecoration(
+    itemDecoration(
         ItemDecoration.Builder()
             .setVerticalTopWidth(top.toInt())
             .setHorizontalStartWidth(left.toInt())
@@ -155,7 +166,7 @@ fun RecyclerView.setupEmptyView(
     emptyView: IEmptyView? = EmptyView(context),
     enable: Boolean = true
 ): RefreshEmptyViewModel? {
-    val adapter = setup(adapter) as BaseQuickAdapter<*,*>
+    val adapter = setup(adapter) as BaseQuickAdapter<*, *>
     return if (enable && !adapter.hasEmptyView()) {
         val emptyViewModel = emptyView?.getViewModel() ?: RefreshEmptyViewModel()
         val emptyView1 = (emptyView ?: EmptyView(context)).run {
@@ -176,6 +187,6 @@ fun RecyclerView.doOnAdapter(block: (BaseQuickAdapter<*, *>) -> Unit) {
     if (adapter != null) {
         block(adapter as BaseQuickAdapter<*, *>)
     } else {
-        setTag(R.id.tag_adapter_callback,  block)
+        setTag(R.id.tag_adapter_callback, block)
     }
 }

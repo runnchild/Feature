@@ -16,20 +16,20 @@ import com.blankj.utilcode.util.ClickUtils
  *     }
  * </code>
  */
-@BindingAdapter("android:onClick", "debounce", requireAll = false)
-fun View.onClick(call: (() -> Unit)?, debounce: Boolean = false) {
+@BindingAdapter("android:onClick", "debounce", "disableDebounce", requireAll = false)
+fun View.onClick(call: (() -> Unit)?, debounce: Boolean = false, disableDebounce: Boolean = false) {
     call?:return
-    onClick({ _: View -> call() }, true)
+    onClick({ _: View -> call() }, debounce, disableDebounce)
 }
 
 /**
  * View点击时间，传递View本身
- * @param debounce 是否去抖动
+ * @param disableDebounce 是否关闭去抖动
  */
-@BindingAdapter("android:onClick", "debounce", requireAll = false)
-fun View.onClick(call: ((View) -> Unit)?, debounce: Boolean = false) {
+@BindingAdapter("android:onClick", "debounce", "disableDebounce", requireAll = false)
+fun View.onClick(call: ((View) -> Unit)?, debounce: Boolean = false, disableDebounce: Boolean = false) {
     call?:return
-    if (debounce) {
+    if (!disableDebounce) {
         ClickUtils.applySingleDebouncing(this, call)
     } else {
         setOnClickListener {
