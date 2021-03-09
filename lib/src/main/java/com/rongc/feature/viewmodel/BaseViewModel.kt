@@ -41,12 +41,14 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
     val viewsClick = { v: View -> viewsClickLiveData.value = v }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    open fun onResume(){}
+    open fun onResume() {
+    }
 
     @CallSuper
 //    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreate() {
-        val modelCls = findModelType(this::class.java)?:throw IllegalStateException("没有找到申明的Model")
+        val modelCls =
+            findModelType(this::class.java) ?: throw IllegalStateException("没有找到申明的Model")
 
         @Suppress("UNCHECKED_CAST")
         model = modelCls.newInstance() as M
@@ -101,16 +103,17 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
             e.printStackTrace()
             val error = when (e) {
                 is ServicesException -> {
+                    handleServiceError(e)
                     e
                 }
                 is ConnectException -> {
-                    ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败", e)
+                    ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败", error = e)
                 }
                 else -> {
-                    ServicesException(ServicesException.CODE_OTHER, "网络异常", e)
+                    ServicesException(ServicesException.CODE_OTHER, "服务器繁忙", error = e)
                 }
             }
-            if (showToast) {
+            if (showToast && !error.message.isNullOrEmpty()) {
                 error.message.toast()
             }
 
@@ -125,6 +128,9 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
                 dialogVisible(false)
             }
         }
+    }
+
+    open fun handleServiceError(error: ServicesException) {
     }
 
     private fun dialogVisible(visible: Boolean) {
