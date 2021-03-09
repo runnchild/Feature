@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rongc.feature.R
 import com.rongc.feature.utils.Compat.dp
+import org.json.JSONObject
 
 /**
  * Desc: 常用的扩展方法
@@ -36,47 +37,55 @@ import com.rongc.feature.utils.Compat.dp
  * @author: QiuRongCai
  */
 
-val Float.dp: Float get() {
-    val it = Utils.getApp()
-    val res = it.resources.getIdentifier("dp$this", "dimen", it.packageName)
-    return if (res != 0) {
-        it.resources.getDimension(res)
-    } else {
-        SizeUtils.dp2px(this@dp).toFloat()
+val Float.dp: Float
+    get() {
+        val it = Utils.getApp()
+        val res = it.resources.getIdentifier("dp$this", "dimen", it.packageName)
+        return if (res != 0) {
+            it.resources.getDimension(res)
+        } else {
+            SizeUtils.dp2px(this@dp).toFloat()
+        }
     }
-}
 val Int.dp get() = toFloat().dp
 
 val Float.idp get() = dp.toInt()
 
 val Int.idp get() = dp.toInt()
 
-val Float.sp: Float get() {
-    val it = Utils.getApp()
-    val res = it.resources.getIdentifier("sp$this", "dimen", it.packageName)
-    return if (res != 0) {
-        it.resources.getDimension(res)
-    } else {
-        SizeUtils.dp2px(this).toFloat()
+val Float.sp: Float
+    get() {
+        val it = Utils.getApp()
+        val res = it.resources.getIdentifier("sp$this", "dimen", it.packageName)
+        return if (res != 0) {
+            it.resources.getDimension(res)
+        } else {
+            SizeUtils.dp2px(this).toFloat()
+        }
     }
-}
-val Int.sp get()= toFloat().sp
-val Int.isp get()= toFloat().sp.toInt()
+val Int.sp get() = toFloat().sp
+val Int.isp get() = toFloat().sp.toInt()
 
 object Compat {
     // -------------------dimension--------------------------------------------
     @Deprecated("", ReplaceWith("dp"))
     fun Float.dp() = dp
+
     @Deprecated("", ReplaceWith("dp"))
     fun Int.dp() = dp
+
     @Deprecated("", ReplaceWith("idp"))
     fun Float.idp() = idp
+
     @Deprecated("", ReplaceWith("idp"))
     fun Int.idp() = idp
+
     @Deprecated("", ReplaceWith("sp"))
     fun Float.sp() = sp
+
     @Deprecated("", ReplaceWith("sp"))
     fun Int.sp() = sp
+
     @Deprecated("", ReplaceWith("isp"))
     fun Int.isp() = isp
 
@@ -175,6 +184,20 @@ object Compat {
 
     fun Any.toJson(): String {
         return Gson().toJson(this)
+    }
+
+    fun <T> String?.opt(block: JSONObject.() -> T): T? {
+        try {
+            this ?: return null
+            return JSONObject(this).run(block)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    fun String?.optString(what: String, default: String = ""): String {
+        return opt { optString(what, default) } ?: ""
     }
 // -------------------------GsonKt end -----------------------
 
