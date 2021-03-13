@@ -7,17 +7,22 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.text.Html
+import android.util.Half.toFloat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rongc.feature.R
+import com.rongc.feature.utils.Compat.dp
+import org.json.JSONObject
 
 /**
  * Desc: 常用的扩展方法
@@ -31,9 +36,9 @@ import com.rongc.feature.R
  *
  * @author: QiuRongCai
  */
-object Compat {
-    // -------------------dimension--------------------------------------------
-    fun Float.dp(): Float {
+
+val Float.dp: Float
+    get() {
         val it = Utils.getApp()
         val res = it.resources.getIdentifier("dp$this", "dimen", it.packageName)
         return if (res != 0) {
@@ -42,14 +47,14 @@ object Compat {
             SizeUtils.dp2px(this@dp).toFloat()
         }
     }
+val Int.dp get() = toFloat().dp
 
-    fun Int.dp() = toFloat().dp()
+val Float.idp get() = dp.toInt()
 
-    fun Float.idp() = dp().toInt()
+val Int.idp get() = dp.toInt()
 
-    fun Int.idp() = dp().toInt()
-
-    fun Float.sp(): Float {
+val Float.sp: Float
+    get() {
         val it = Utils.getApp()
         val res = it.resources.getIdentifier("sp$this", "dimen", it.packageName)
         return if (res != 0) {
@@ -58,9 +63,31 @@ object Compat {
             SizeUtils.dp2px(this).toFloat()
         }
     }
+val Int.sp get() = toFloat().sp
+val Int.isp get() = toFloat().sp.toInt()
 
-    fun Int.sp() = toFloat().sp()
-    fun Int.isp() = toFloat().sp().toInt()
+object Compat {
+    // -------------------dimension--------------------------------------------
+    @Deprecated("", ReplaceWith("dp"))
+    fun Float.dp() = dp
+
+    @Deprecated("", ReplaceWith("dp"))
+    fun Int.dp() = dp
+
+    @Deprecated("", ReplaceWith("idp"))
+    fun Float.idp() = idp
+
+    @Deprecated("", ReplaceWith("idp"))
+    fun Int.idp() = idp
+
+    @Deprecated("", ReplaceWith("sp"))
+    fun Float.sp() = sp
+
+    @Deprecated("", ReplaceWith("sp"))
+    fun Int.sp() = sp
+
+    @Deprecated("", ReplaceWith("isp"))
+    fun Int.isp() = isp
 
 // -------------------dimension end-----------------------------------------
 
@@ -158,6 +185,20 @@ object Compat {
     fun Any.toJson(): String {
         return Gson().toJson(this)
     }
+
+    fun <T> String?.opt(block: JSONObject.() -> T): T? {
+        try {
+            this ?: return null
+            return JSONObject(this).run(block)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    fun String?.optString(what: String, default: String = ""): String {
+        return opt { optString(what, default) } ?: ""
+    }
 // -------------------------GsonKt end -----------------------
 
     fun View.setBgDrawable(drawable: Drawable) = ViewCompat.setBackground(this, drawable)
@@ -239,5 +280,13 @@ object Compat {
 
     fun TextView.drawableSide(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) {
         setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom)
+    }
+
+    fun Float.formatWith(fraction: Int = 1, isHalf: Boolean = false): String? {
+        return NumberUtils.format(this, fraction, isHalf)
+    }
+
+    fun Double.formatWith(fraction: Int = 1, isHalf: Boolean = false): String? {
+        return NumberUtils.format(this, fraction, isHalf)
     }
 }

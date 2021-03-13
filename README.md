@@ -231,8 +231,8 @@ android:onClick="@{viewModel.someClick}"
 android:onClick="@{viewModel.clickWithParam(any)}"
 // 直接toast
 android:onClick='@{viewModel.toast("waw")}'
-// 可选， 防抖动
-app:debounce="@{true}"
+// 可选， 去除防抖动
+app:debounce="@{false}"
 ```
 
 ```

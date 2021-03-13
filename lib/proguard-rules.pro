@@ -108,10 +108,4 @@
     public <init>();
 }
 -keep class * extends android.app.Activity
-#-keep class com.rongc.feature.** {
-#    public <init>(***);
-#    public <methods>;
-#    public <fields>;
-#    public get*();
-#    public set*(***);
-#}
+-keep class androidx.viewpager2.widget.ViewPager2 {*;}

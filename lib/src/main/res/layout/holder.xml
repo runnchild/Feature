@@ -10,6 +10,10 @@
         <variable
             name="binder"
             type="Object" />
+
+        <variable
+            name="ui"
+            type="Object" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
