@@ -91,3 +91,14 @@ object LiveDataBus {
 
     }
 }
+
+/**
+ * 保证所有事件不丢失，保存非激活状态的事件，并能够在激活状态回调，且没有内存泄漏
+ */
+fun <T> MutableLiveData<T>.observeAny(owner: LifecycleOwner, observer: Observer<T>) {
+    AnyEventObserver.bind(this, owner, observer)
+}
+
+fun <T> String.liveBus(): LiveDataBus.StickyLiveData<T> {
+    return LiveDataBus.with(this)
+}
