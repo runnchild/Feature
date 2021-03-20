@@ -27,7 +27,7 @@
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="wrap_content" />-->
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.rongc.feature.widget.InterceptRecyclerView
             android:id="@id/base_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
