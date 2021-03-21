@@ -13,7 +13,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun initView(view: View) {
         supportFragmentManager.beginTransaction().add(
             R.id.fragmentLayout,
-            MainFragment(), ""
+            ViewPagerFragment(), ""
         ).commit()
     }
 

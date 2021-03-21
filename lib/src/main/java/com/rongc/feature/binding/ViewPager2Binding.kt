@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
+import com.rongc.feature.ui.BaseViewPagerAdapter
 import com.rongc.feature.ui.BinderAdapter
 import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
@@ -48,9 +49,14 @@ object ViewPager2Binding {
     @JvmStatic
     @BindingAdapter("items")
     fun ViewPager2.items(items: Collection<Any>) {
-        @Suppress("UNCHECKED_CAST")
-        val adapter = setup(adapter) as BaseQuickAdapter<Any, *>
-        adapter.setList(items)
+        val adapter1 = adapter
+        if (adapter1 is BaseViewPagerAdapter) {
+            adapter1.setList(items)
+        } else {
+            @Suppress("UNCHECKED_CAST")
+            val adapter = setup(adapter) as? BaseQuickAdapter<Any, *>
+            adapter?.setList(items)
+        }
     }
 
     @BindingAdapter("adapter")
