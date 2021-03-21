@@ -1,6 +1,5 @@
 package com.rongc.feature.network
 
-import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.Utils
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -18,13 +17,7 @@ object HttpClient {
     fun getRetrofit(provider: HttpProvider): Retrofit {
         //打印网络请求相关日志
         val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.setLevel(
-            if (AppUtils.isAppDebug()) {
-                provider.logLevel()
-            } else {
-                HttpLoggingInterceptor.Level.BODY
-            }
-        )
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.valueOf(provider.logLevel().name))
 
         val cacheFile = File(Utils.getApp().cacheDir, "cache")
         val cache = Cache(cacheFile, 1024 * 1024 * 100) //100Mb
@@ -38,6 +31,10 @@ object HttpClient {
             .apply {
                 provider.providerInterceptors()?.forEach {
                     addInterceptor(it)
+                }
+                val providerProxy = provider.providerProxy()
+                if (providerProxy != null) {
+                    proxy(providerProxy)
                 }
             }.addInterceptor(loggingInterceptor)
             .cache(cache)

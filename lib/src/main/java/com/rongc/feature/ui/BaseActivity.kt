@@ -4,14 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.KeyboardUtils
 import com.rongc.feature.model.BaseModel
+import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
 
@@ -31,12 +34,10 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!::delegate.isInitialized) {
-            delegate = getUiDelegate {
-                viewModel = it
-            }
+        delegate = getUiDelegate {
+            viewModel = it
         }
-        val view = when {
+        var view = when {
             getContentViewRes() > 0 -> {
                 View.inflate(this, getContentViewRes(), null)
             }
@@ -44,16 +45,30 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
                 getContentView()!!
             }
         }
+
+        var toolBar = delegate.findToolBar(view)
+        if (delegate.barConfig.toolbarVisible) {
+            if (toolBar == null) {
+                view = LinearLayoutCompat(view.context).apply {
+                    orientation = LinearLayoutCompat.VERTICAL
+                    addView(
+                        PsnToolbar(context).apply { toolBar = this },
+                        ViewGroup.LayoutParams(-1, -2)
+                    )
+                    delegate.toolBar = toolBar
+                    addView(view, LinearLayoutCompat.LayoutParams(-1, 0, 1f))
+                }
+            }
+        }
         setContentView(view)
 
-        if (savedInstanceState == null) {
-            delegate.findToolBar(view)?.let {
-                val toolBarViewModel by viewModels<ToolBarViewModel>()
-                viewModel.toolbarModel = toolBarViewModel
-                it.setViewModel(toolBarViewModel)
-            }
-            delegate.init(this, view)
+        toolBar?.let {
+            val toolBarViewModel by viewModels<ToolBarViewModel>()
+            viewModel.toolbarModel = toolBarViewModel
+            it.setViewModel(toolBarViewModel)
         }
+
+        delegate.init(this, view)
 
         refreshConfig()
 

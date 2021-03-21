@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.createViewModelLazy
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.utils.Compat.removeFromParent
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
-import java.lang.reflect.ParameterizedType
 
 /**
  * Fragment的基类
@@ -79,20 +76,22 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
                 init(viewModel, this@BaseFragment, view)
             }
 
-            mView = if (delegate.barConfig.toolbarVisible) {
-                LinearLayoutCompat(view.context).apply {
+            var toolBar = delegate.findToolBar(view)
+            if (delegate.barConfig.toolbarVisible && toolBar == null) {
+                mView = LinearLayoutCompat(view.context).apply {
                     orientation = LinearLayoutCompat.VERTICAL
                     addView(
-                        PsnToolbar(context),
+                        PsnToolbar(context).apply { toolBar = this },
                         ViewGroup.LayoutParams(-1, -2)
                     )
+                    delegate.toolBar = toolBar
                     addView(view, LinearLayoutCompat.LayoutParams(-1, 0, 1f))
                 }
             } else {
-                view
+                mView = view
             }
 
-            delegate.findToolBar(mView)?.run {
+            toolBar?.run {
                 val toolbarViewModel by viewModels<ToolBarViewModel>()
                 viewModel.toolbarModel = toolbarViewModel
                 setViewModel(toolbarViewModel)

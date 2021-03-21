@@ -21,41 +21,55 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{viewModel.click(121)}"
             android:text="MainFragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{viewModel.click(121)}" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{viewModel.openListPage}"
             android:text="open list activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{viewModel.openListPage}" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_viewBinding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="viewBindingAdapter"
-            android:onClick="@{viewModel.viewsClick}" />
+            android:onClick="@{viewModel.viewsClick}"
+            android:text="viewBindingAdapter" />
+
         <Button
             android:id="@+id/btn_viewPager2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="viewPager2"
-            android:onClick="@{viewModel.viewsClick}" />
+            android:onClick="@{viewModel.viewsClick}"
+            android:text="viewPager2" />
 
         <Button
             android:id="@+id/btn_status_bar"
             android:layout_width="wrap_content"
-            android:text="StatusBar"
+            android:layout_height="wrap_content"
             android:onClick="@{viewModel.viewsClick}"
-            android:layout_height="wrap_content" />
+            android:text="StatusBar" />
 
+        <com.github.xiaofeidev.shadow.ShadowFrameLayout
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp30"
+            app:shadow_blur_radius="10dp"
+            app:shadow_color="#80D9D9D9"
+            app:shadow_corner_radius="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="shadow view" />
+        </com.github.xiaofeidev.shadow.ShadowFrameLayout>
     </LinearLayout>
 </layout>

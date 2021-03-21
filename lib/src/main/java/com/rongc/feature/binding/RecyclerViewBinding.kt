@@ -2,12 +2,14 @@ package com.rongc.feature.binding
 
 import android.view.View
 import androidx.databinding.BindingAdapter
+import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.ui.BinderAdapter
 import com.rongc.feature.utils.Compat.removeFromParent
@@ -29,14 +31,22 @@ object RecyclerViewBinding {
 }
 
 @BindingAdapter("adapter")
-fun <T : Any> RecyclerView.setup(adapter: BaseQuickAdapter<T, BaseViewHolder>? = null) {
+fun RecyclerView.setup(adapter: RecyclerView.Adapter<*>? = null): RecyclerView.Adapter<*> {
     // 是否使用DataBinding
 //    val isBinding = getTag(R.id.layout_isBinding) as? Boolean == true
     if (adapter != null && this.adapter == adapter) {
-        return
+        return adapter
     }
     val adapter1 = adapter ?: BinderAdapter(null)
     this.adapter = adapter1
+
+    if (adapter1 is BaseQuickAdapter<*, *>) {
+        @Suppress("UNCHECKED_CAST")
+        val block = getTag(R.id.tag_adapter_callback) as? (BaseQuickAdapter<*, *>) -> Unit
+        block?.invoke(adapter1)
+        setTag(R.id.tag_adapter_callback, null)
+    }
+    return adapter1
 }
 
 /**
@@ -58,10 +68,15 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
         return findBinderType(clazz.superclass as? Class<*>)
     }
 
-    val adapter = adapter as? BaseBinderAdapter ?: BinderAdapter(null).apply { adapter = this }
+    val adapter = setup(adapter)
     binders.forEach { item ->
         val arguments = findBinderType(item::class.java)!!.actualTypeArguments
-        val actualClz = arguments.lastOrNull() ?: return@forEach
+        var actualClz = arguments.lastOrNull() ?: return@forEach
+
+        while (actualClz is ParameterizedType) {
+            actualClz = actualClz.rawType
+        }
+
         val method = BaseBinderAdapter::class.java.getDeclaredMethod(
             "addItemBinder",
             Class::class.java,
@@ -73,13 +88,40 @@ fun <T> RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder
     }
 }
 
+@BindingAdapter("itemBinderName")
+fun <T> RecyclerView.itemBinder(binderClz: String) {
+    try {
+        val instance = Class.forName(binderClz).newInstance()
+        if (instance is BaseRecyclerItemBinder<*>) {
+            itemBinder(instance)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+@BindingAdapter("itemBinder")
+fun <T> RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<T>) {
+    itemBinders(arrayListOf(binder))
+}
+
 /**
  * 绑定列表数据， 如果没设置adapter会默认设置BaseBinderAdapter
  */
 @BindingAdapter("items")
 fun RecyclerView.items(items: Collection<Any>?) {
-    val adapter = adapter as? BaseBinderAdapter ?: BinderAdapter(null).apply { adapter = this }
+    val adapter = setup(adapter) as BaseBinderAdapter
     adapter.setList(items)
+//    if (items is ObservableArrayList<Any>) {
+//        adapter.setList(items)
+//        return
+//    }
+//    val data = if (items is MutableList<Any>) {
+//        items
+//    } else {
+//        items?.toMutableList()
+//    }
+//    adapter.setDiffNewData(data)
 }
 
 @BindingAdapter("itemDecoration")
@@ -107,7 +149,7 @@ fun RecyclerView.divider(
     vLine: Float = 0f,
     hLine: Float = 0f
 ) {
-    addItemDecoration(
+    itemDecoration(
         ItemDecoration.Builder()
             .setVerticalTopWidth(top.toInt())
             .setHorizontalStartWidth(left.toInt())
@@ -124,8 +166,7 @@ fun RecyclerView.setupEmptyView(
     emptyView: IEmptyView? = EmptyView(context),
     enable: Boolean = true
 ): RefreshEmptyViewModel? {
-    adapter ?: setup<Any>()
-    val adapter = adapter as BaseQuickAdapter<*, *>
+    val adapter = setup(adapter) as BaseQuickAdapter<*, *>
     return if (enable && !adapter.hasEmptyView()) {
         val emptyViewModel = emptyView?.getViewModel() ?: RefreshEmptyViewModel()
         val emptyView1 = (emptyView ?: EmptyView(context)).run {
@@ -137,5 +178,15 @@ fun RecyclerView.setupEmptyView(
         emptyViewModel
     } else {
         (adapter.headerLayout?.getChildAt(0) as? EmptyView)?.getViewModel()
+    }
+}
+
+fun RecyclerView.baseAdapter() = adapter as? BaseQuickAdapter<*, *>
+
+fun RecyclerView.doOnAdapter(block: (BaseQuickAdapter<*, *>) -> Unit) {
+    if (adapter != null) {
+        block(adapter as BaseQuickAdapter<*, *>)
+    } else {
+        setTag(R.id.tag_adapter_callback, block)
     }
 }
