@@ -10,9 +10,9 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 object HttpClient {
-    private const val DEFAULT_CONNECT_TIME = 10L
-    private const val DEFAULT_WRITE_TIME = 30L
-    private const val DEFAULT_READ_TIME = 30L
+    private const val DEFAULT_CONNECT_TIME = 5L
+    private const val DEFAULT_WRITE_TIME = 5L
+    private const val DEFAULT_READ_TIME = 5L
 
     fun getRetrofit(provider: HttpProvider): Retrofit {
         //打印网络请求相关日志

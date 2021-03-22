@@ -13,8 +13,8 @@ import com.rongc.feature.R
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.ui.toolbar.BarConfig
 import com.rongc.feature.utils.Compat.color
-import com.rongc.feature.utils.Compat.dp
 import com.rongc.feature.utils.Compat.drawable
+import com.rongc.feature.utils.dp
 
 class ToolBarViewModel: ViewModel() {
 
@@ -48,7 +48,7 @@ class ToolBarViewModel: ViewModel() {
 
     val backVisible = ObservableBoolean(true)
     val dividerColor = ObservableField<Drawable>(R.color.divider_color.color().toDrawable())
-    val dividerSize = ObservableFloat(0.5f.dp())
+    val dividerSize = ObservableFloat(0.5f.dp)
     val backIcon = ObservableField<Drawable>(R.mipmap.common_icon_back.drawable())
     val background = ObservableField<Drawable>()
 
