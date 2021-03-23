@@ -20,7 +20,6 @@ abstract class BaseBindingFragment<B : ViewDataBinding, M : BaseViewModel<out Ba
             binding = this
             binding.lifecycleOwner = this@BaseBindingFragment
             binding.setVariable(BR.viewModel, viewModel)
-            binding.setVariable(BR.ui, this)
         }.root
     }
 }
