@@ -1,9 +1,13 @@
 package com.rongc.feature.app.ui
 
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
 import com.rongc.feature.app.ui.viewmodel.ViewPagerFragmentViewModel
-import com.rongc.feature.ui.BaseViewPagerAdapter
-import com.rongc.feature.ui.BaseViewPagerFragment
+import com.rongc.feature.databinding.BaseViewpagerWithRefreshBinding
+import com.rongc.feature.ui.*
+import com.rongc.feature.ui.delegate.IFragmentAbility
+import com.rongc.feature.ui.delegate.ViewPagerAbility
 import com.rongc.feature.ui.toolbar.BarConfig
 
 /**
@@ -15,13 +19,27 @@ import com.rongc.feature.ui.toolbar.BarConfig
  * @date 2021/3/21
  * @since 2.1.4
  */
-class ViewPagerFragment : BaseViewPagerFragment<ViewPagerFragmentViewModel>() {
+class ViewPagerFragment :
+    BaseBindingFragment<BaseViewpagerWithRefreshBinding, ViewPagerFragmentViewModel>() {
 
-    override fun obtainAdapter() = object : BaseViewPagerAdapter(this) {
-        override fun createFragment(position: Int): Fragment {
-            return MainFragment()
+    override fun binding(inflater: LayoutInflater, container: ViewGroup?) =
+        BaseViewpagerWithRefreshBinding.inflate(inflater)
+
+    override fun obtainAbility(): IFragmentAbility {
+        return object : ViewPagerAbility(viewModel) {
+
+            override val baseViewPager: ViewPager2
+                get() = binding.baseViewPager
+
+            override fun obtainAdapter() =
+                object : BaseViewPagerAdapter<Any>(this@ViewPagerFragment) {
+                    override fun createItemFragment(position: Int): IPagerItem<Any> {
+                        return EmptyViewPagerFragmentItem()
+                    }
+                }
         }
     }
+
 
     override fun getBarConfig(): BarConfig.() -> Unit {
         return {

@@ -183,9 +183,10 @@ fun RecyclerView.setupEmptyView(
 
 fun RecyclerView.baseAdapter() = adapter as? BaseQuickAdapter<*, *>
 
-fun RecyclerView.doOnAdapter(block: (BaseQuickAdapter<*, *>) -> Unit) {
+fun RecyclerView.doOnAdapter(block: (BaseQuickAdapter<Any, *>) -> Unit) {
     if (adapter != null) {
-        block(adapter as BaseQuickAdapter<*, *>)
+        @Suppress("UNCHECKED_CAST")
+        block(adapter as BaseQuickAdapter<Any, *>)
     } else {
         setTag(R.id.tag_adapter_callback, block)
     }

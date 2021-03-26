@@ -37,7 +37,6 @@ abstract class BaseDialogFragment<B : ViewDataBinding, M : BaseViewModel<out Bas
         viewModel.onCreate()
         lifecycle.addObserver(viewModel)
         initData()
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun onCreateView(
@@ -70,6 +69,7 @@ abstract class BaseDialogFragment<B : ViewDataBinding, M : BaseViewModel<out Bas
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             onBackPressed()
         }
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     abstract fun binding(inflater: LayoutInflater, container: ViewGroup?): B

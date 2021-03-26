@@ -24,13 +24,13 @@ object LiveDataBus {
         internal var mStickyData: T? = null
         internal var mVersion = 0
 
-        fun setStickyData(stickyData: T) {
+        fun setStickyValue(stickyData: T) {
             mStickyData = stickyData
             setValue(stickyData)
             //就是在主线程去发送数据
         }
 
-        fun postStickyData(stickyData: T) {
+        fun postStickyValue(stickyData: T) {
             mStickyData = stickyData
             postValue(stickyData)
             //不受线程的限制
@@ -90,4 +90,15 @@ object LiveDataBus {
         }
 
     }
+}
+
+/**
+ * 保证所有事件不丢失，保存非激活状态的事件，并能够在激活状态回调，且没有内存泄漏
+ */
+fun <T> MutableLiveData<T>.observeAny(owner: LifecycleOwner, observer: Observer<T>) {
+    AnyEventObserver.bind(this, owner, observer)
+}
+
+fun <T> String.liveBus(): LiveDataBus.StickyLiveData<T> {
+    return LiveDataBus.with(this)
 }

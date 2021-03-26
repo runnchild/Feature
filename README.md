@@ -74,7 +74,7 @@ override fun getBarConfig(): BarConfig.() -> Unit {
         }
     }
 ```
-4. 列表页面
+> 4. 列表页面
 只需在1或者2步中多实现IRefreshDelegate接口， 对应的ViewModel需要继承BaseRefreshViewModel<T, Model>。
   + 1 该方案已实现下拉刷新和上拉加载、没有数据或没有网络的空页面。简单交互的列表可不需要编写Adapter，只需在ViewModel中添加ItemBinder，支持多布局列表样式,每种Binder对应一种样式.
   + 2 数据请求操作在loadData()中配合kotlin的协程即可方便实现
@@ -159,7 +159,7 @@ class MainOtherItemBinder : BaseItemBindingBinder<MainOtherBindingItemBinding, I
 }
 ```
 
-5. 如果不是列表页面，但也想使用RecycerView时：
+> 5. 如果不是列表页面，但也想使用RecycerView时：
 + app:items绑定列表数据源， 
 + app:itemBinders添加列表样式，
 + app:itemDecoration添加间距等装饰
@@ -184,16 +184,28 @@ class ViewModel {
 }
            
 ```
-
-6. 其他
+> 6. LiveDataBus：自动管理生命周期的EventBus，不需要反注册。只会在页面可见时接收
+    ```
+    // 注册监听
+    LiveDataBus.with<T>(key).observe(this) {
+        // do str with it
+    }
+    // 发送事件
+    LiveDataBus.with<T>(key).setValue("hello")
+    // 子线程发送事件
+    LiveDataBus.with<T>(key).postValue("hello")
+    // 发送粘性事件
+    LiveDataBus.with<T>(key).setStickValue("hello")
+    ```
+> 7. 其他
  + ViewPager2， 跟RecyclerView一样的使用体验
  ```
- <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            app:items="@{viewModel.items}"
-            app:itemBinders="@{viewModel.itemBinder}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <androidx.viewpager2.widget.ViewPager2
+       android:id="@+id/viewPager"
+       app:items="@{viewModel.items}"
+       app:itemBinders="@{viewModel.itemBinder}"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
  ```
  + android:onCLick, 轻松设置点击事件
  UI相关的操作都建议放在Activity/Fragment中，可再xml的控件中加上android:onClick="@{viewModel.viewsClick}"，并在Activity/Fragment中重写viewClick()方法
@@ -240,5 +252,28 @@ class ViewModel {
   }
 }
 ```
+> 扩展函数
+ + dimension:
+ 10.dp()
+ 14.sp()
+ ...
 
++ resource:
+ R.string.hello.string()
+ R.color.white.color()
+ R.drawable.ic_launcher.drawable()
+
+ "hello word".toast()
+ "log anything".logd()
+ "log error".loge()
+ ...
+
+ + gson:
+ val user = "{"id":"1"}".parse<User>()
+ val list: List<User> = "[{"name":"a"},{"name":"b"}]".parseList<User>()
+ val jsonStr = user.toJson()
+
+ + View
+ view.setRoundBg(color, radius)
+ view.visible(false)
 更多可看library， 项目正在完善中。。。

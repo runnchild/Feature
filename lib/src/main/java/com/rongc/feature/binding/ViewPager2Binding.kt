@@ -12,6 +12,7 @@ import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.ui.BaseViewPagerAdapter
 import com.rongc.feature.ui.BinderAdapter
+import com.rongc.feature.widget.ItemDecoration
 import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
 
@@ -48,15 +49,53 @@ object ViewPager2Binding {
      */
     @JvmStatic
     @BindingAdapter("items")
-    fun ViewPager2.items(items: Collection<Any>) {
+    fun ViewPager2.items(items: Collection<Any>?) {
         val adapter1 = adapter
-        if (adapter1 is BaseViewPagerAdapter) {
+        @Suppress("UNCHECKED_CAST")
+        if (adapter1 as? BaseViewPagerAdapter<Any> != null) {
             adapter1.setList(items)
         } else {
             @Suppress("UNCHECKED_CAST")
             val adapter = setup(adapter) as? BaseQuickAdapter<Any, *>
             adapter?.setList(items)
         }
+    }
+
+    @BindingAdapter("itemDecoration")
+    fun ViewPager2.itemDecoration(decorator: ItemDecoration?) {
+        decorator?.let {
+            removeItemDecoration(decorator)
+            addItemDecoration(decorator)
+        }
+    }
+
+    @BindingAdapter(
+        "decoration_left",
+        "decoration_top",
+        "decoration_right",
+        "decoration_bottom",
+        "decoration_vertical_line",
+        "decoration_horizontal_line",
+        requireAll = false
+    )
+    fun ViewPager2.divider(
+        left: Float = 0f,
+        top: Float = 0f,
+        right: Float = 0f,
+        bottom: Float = 0f,
+        vLine: Float = 0f,
+        hLine: Float = 0f
+    ) {
+        itemDecoration(
+            ItemDecoration.Builder()
+                .setVerticalTopWidth(top.toInt())
+                .setHorizontalStartWidth(left.toInt())
+                .setHorizontalEndWidth(right.toInt())
+                .setVerticalBottomWidth(bottom.toInt())
+                .setVerticalLineWidth(vLine.toInt())
+                .setHorizontalLineWidth(hLine.toInt())
+                .build()
+        )
     }
 
     @BindingAdapter("adapter")
