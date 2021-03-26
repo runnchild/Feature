@@ -47,9 +47,11 @@ abstract class BaseViewPagerAdapter<T>(val fragmentManager: FragmentManager, lif
     abstract fun createItemFragment(position: Int): IPagerItem<T>
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: Collection<T>) {
+    fun setList(list: Collection<T>?) {
         data.clear()
-        data.addAll(list)
+        if (!list.isNullOrEmpty()) {
+            data.addAll(list)
+        }
         notifyDataSetChanged()
     }
 

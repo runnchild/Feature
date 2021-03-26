@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.rongc.feature.ui.IPagerItem
 
 /**
  * <p>
@@ -17,7 +18,7 @@ import androidx.fragment.app.Fragment
  * @date 2021/3/21
  * @since 2.1.4
  */
-class EmptyViewPagerFragmentItem : Fragment() {
+class EmptyViewPagerFragmentItem : Fragment(), IPagerItem<Any> {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,5 +29,8 @@ class EmptyViewPagerFragmentItem : Fragment() {
 //            layoutParams = ViewGroup.LayoutParams(200.idp, 300.idp)
             setBackgroundColor(Color.BLUE)
         }
+    }
+
+    override fun convert(position: Int, item: Any, payloads: MutableList<Any>?) {
     }
 }

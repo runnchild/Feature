@@ -49,7 +49,7 @@ object ViewPager2Binding {
      */
     @JvmStatic
     @BindingAdapter("items")
-    fun ViewPager2.items(items: Collection<Any>) {
+    fun ViewPager2.items(items: Collection<Any>?) {
         val adapter1 = adapter
         @Suppress("UNCHECKED_CAST")
         if (adapter1 as? BaseViewPagerAdapter<Any> != null) {

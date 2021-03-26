@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.BaseBinderAdapter
 interface IPagerItem<T> {
     fun convert(position: Int, item: T, payloads: MutableList<Any>?)
 
-    val adapter get() = ((this as Fragment).parentFragment as BaseViewPagerFragment<*>).mAdapter
+    val adapter get() = ((this as Fragment).parentFragment as BaseViewPagerFragment<*,*>).mAdapter
 
     @Suppress("UNCHECKED_CAST")
     val pagerAdapter

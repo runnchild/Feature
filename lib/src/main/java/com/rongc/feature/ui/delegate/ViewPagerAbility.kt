@@ -1,17 +1,7 @@
-package com.rongc.feature.ui
+package com.rongc.feature.ui.delegate
 
-/**
- * <p>
- * describe:
- *
- * </p>
- * @author qiurong
- * @date 2021/3/21
- * @since 2.1.4
- */
 import android.os.Bundle
 import android.view.View
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -25,8 +15,7 @@ import com.rongc.feature.viewmodel.EmptyBuilder
 import com.rongc.feature.widget.ItemDecoration
 import java.util.*
 
-abstract class BaseViewPagerFragment<B: ViewDataBinding, M : BaseListViewModel<*, out BaseModel>> :
-    BaseBindingFragment<B, M>() {
+abstract class ViewPagerAbility(private val viewModel: BaseListViewModel<*, out BaseModel>) : IFragmentAbility {
 
     lateinit var mAdapter: RecyclerView.Adapter<*>
     abstract val baseViewPager: ViewPager2
@@ -37,7 +26,6 @@ abstract class BaseViewPagerFragment<B: ViewDataBinding, M : BaseListViewModel<*
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         baseViewPager.run {
             adapter = obtainAdapter()
             itemDecoration(itemDecoration)

@@ -27,6 +27,8 @@
             android:id="@+id/base_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:overScrollMode="never"
             app:items="@{viewModel.items}" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
