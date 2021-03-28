@@ -1,23 +1,32 @@
 package com.rongc.feature.app.ui
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.rongc.feature.app.ui.viewmodel.MainRefreshViewModel
-import com.rongc.feature.databinding.BaseRefreshLayoutBinding
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
+import com.rongc.feature.app.ui.binders.MainItemHolder
+import com.rongc.feature.app.ui.binders.MainOtherItemHolder
+import com.rongc.feature.app.ui.viewmodel.RefreshListViewModel
+import com.rongc.feature.databinding.BaseRefreshListLayoutBinding
+import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.ui.BaseBindingActivity
-import com.rongc.feature.ui.IRefreshDelegate
+import com.rongc.feature.ui.ability.list.IRecyclerListAbility
+import com.rongc.feature.ui.ability.list.RecyclerListAbility
 import com.rongc.feature.ui.toolbar.BarConfig
+import com.rongc.feature.utils.idp
+import com.rongc.feature.utils.singleClick
 import com.rongc.feature.viewmodel.EmptyBuilder
+import com.rongc.feature.widget.ItemDecoration
 
-class MainRefreshActivity : BaseBindingActivity<BaseRefreshLayoutBinding, MainRefreshViewModel>(),
-    IRefreshDelegate {
+class MainRefreshActivity :
+    BaseBindingActivity<BaseRefreshListLayoutBinding, RefreshListViewModel>(),
+    IRecyclerListAbility by RecyclerListAbility() {
 
-    override fun binding(inflater: LayoutInflater, container: ViewGroup?): BaseRefreshLayoutBinding {
-        return BaseRefreshLayoutBinding.inflate(inflater)
+    override fun returnRecyclerView(): RecyclerView {
+        return binding.includeRecycler.baseRecyclerView
     }
 
-    override fun initData() {
-        binding.includeRecycler.baseRecyclerView
+    override fun registerItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>) {
+        binders.add(MainItemHolder())
+        binders.add(MainOtherItemHolder())
     }
 
     override fun getBarConfig(): BarConfig.() -> Unit {
@@ -25,11 +34,11 @@ class MainRefreshActivity : BaseBindingActivity<BaseRefreshLayoutBinding, MainRe
             menu {
                 text = "刷新"
                 setOnClickListener {
-                    viewModel.refresh()
+                    viewModel.refresh(true)
                 }
             }
             menu {
-                text = "Empty"
+                text = "Clear"
                 setOnClickListener {
                     viewModel.emptyList()
                 }
@@ -37,11 +46,37 @@ class MainRefreshActivity : BaseBindingActivity<BaseRefreshLayoutBinding, MainRe
         }
     }
 
+    override fun decorationBuilder(): ItemDecoration.Builder.() -> Unit {
+        return {
+            setVerticalLineWidth(5.idp)
+        }
+    }
+
+    override fun autoRefresh(): Boolean {
+        return true
+    }
+
     override fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit {
         return {
-            tip = "暂无数据"
-            btnText = "Refresh"
-            btnVisible = true
+            tip = "empty data"
+//            tip {
+//                text = "empty data"
+//            }
+
+            subTip = "pull to refresh"
+//            subTip {
+//                text = "pull to refresh"
+//            }
+
+//            btnText = "refresh"
+//            btnVisible = true
+            refreshBtn {
+                text = "refresh"
+                this.isVisible = true
+                singleClick {
+                    viewModel.refresh()
+                }
+            }
         }
     }
 }

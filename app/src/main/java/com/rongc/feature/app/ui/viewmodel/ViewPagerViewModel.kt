@@ -1,21 +1,33 @@
 package com.rongc.feature.app.ui.viewmodel
 
 import com.rongc.feature.model.BaseModel
-import com.rongc.feature.viewmodel.BaseViewModel
+import com.rongc.feature.utils.Compat.logd
+import com.rongc.feature.viewmodel.BaseListViewModel
 
 /**
- * @description 作用描述
- * @author rongc
- * @date 2020/8/31$
- * @update
+ * <p>
+ * describe:
+ *
+ * </p>
+ * @author qiurong
+ * @date 2021/3/21
+ * @since 2.1.4
  */
-class ViewPagerViewModel : BaseViewModel<BaseModel>() {
-    val items = arrayListOf<String>()
+class ViewPagerViewModel : BaseListViewModel<String, BaseModel>() {
+    var fistIsEmpty = true
 
-    override fun onCreate() {
-        super.onCreate()
-        repeat(10) {
-            items.add("items: $it")
+    override suspend fun fetchListData(page: Int): List<String> {
+        if (fistIsEmpty) {
+            fistIsEmpty = false
+            return emptyList()
         }
+        "fetch page = $page".logd()
+        return Array(5) {
+            "item:${items.size + it}"
+        }.toList()
+    }
+
+    fun clearData() {
+        items.clear()
     }
 }

@@ -1,4 +1,4 @@
-package com.rongc.feature.ui
+package com.rongc.feature.ui.adapter
 
 import android.annotation.SuppressLint
 import androidx.databinding.ObservableArrayList
@@ -7,8 +7,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
+import com.rongc.feature.ui.ability.IPagerItem
+import com.rongc.feature.ui.fragment.EmptyListFragment
+import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 
 /**
  * <p>
@@ -29,6 +33,8 @@ abstract class BaseViewPagerAdapter<T>(val fragmentManager: FragmentManager, lif
 
     constructor(fragment: Fragment) : this(fragment.childFragmentManager, fragment.lifecycle)
 
+    private var mEmptyData: RefreshEmptyViewModel? = null
+
     private val data = ObservableArrayList<T>()
 
     override fun getItemCount() = data.size
@@ -36,6 +42,13 @@ abstract class BaseViewPagerAdapter<T>(val fragmentManager: FragmentManager, lif
     fun getItem(position: Int) = data.getOrNull(position)
 
     override fun createFragment(position: Int): Fragment {
+        if (getItem(position) is RefreshEmptyViewModel) {
+            val fragment = generateEmptyFragment()
+            fragment.lifecycleScope.launchWhenStarted {
+                fragment.convert(position, mEmptyData!!, null)
+            }
+            return fragment
+        }
         val fragment = createItemFragment(position)
         fragment as Fragment
         fragment.lifecycleScope.launchWhenStarted {
@@ -43,6 +56,8 @@ abstract class BaseViewPagerAdapter<T>(val fragmentManager: FragmentManager, lif
         }
         return fragment
     }
+
+    open fun generateEmptyFragment() = EmptyListFragment()
 
     abstract fun createItemFragment(position: Int): IPagerItem<T>
 
@@ -98,7 +113,25 @@ abstract class BaseViewPagerAdapter<T>(val fragmentManager: FragmentManager, lif
         item?.convert(position, getItem(position)!!, payloads)
     }
 
+    override fun getItemId(position: Int): Long {
+        return if (getItem(position) is RefreshEmptyViewModel) {
+            RecyclerView.NO_ID
+        } else {
+            super.getItemId(position)
+        }
+    }
+
+    override fun containsItem(itemId: Long): Boolean {
+        return itemId != RecyclerView.NO_ID
+    }
+
     fun getCurrentFragment(position: Int): Fragment? {
         return fragmentManager.findFragmentByTag("f${getItemId(position)}")
     }
+
+    fun setEmptyData(emptyData: RefreshEmptyViewModel) {
+        this.mEmptyData = emptyData
+    }
+
+    fun emptyData() = mEmptyData
 }

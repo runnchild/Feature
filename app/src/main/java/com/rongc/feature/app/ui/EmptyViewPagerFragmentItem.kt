@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.rongc.feature.ui.IPagerItem
+import com.rongc.feature.ui.ability.IPagerItem
 
 /**
  * <p>
@@ -18,19 +18,18 @@ import com.rongc.feature.ui.IPagerItem
  * @date 2021/3/21
  * @since 2.1.4
  */
-class EmptyViewPagerFragmentItem : Fragment(), IPagerItem<Any> {
+class EmptyViewPagerFragmentItem : Fragment(), IPagerItem<String> {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return TextView(context).apply {
-            text = "Hello ViewPager"
-//            layoutParams = ViewGroup.LayoutParams(200.idp, 300.idp)
             setBackgroundColor(Color.BLUE)
         }
     }
 
-    override fun convert(position: Int, item: Any, payloads: MutableList<Any>?) {
+    override fun convert(position: Int, item: String, payloads: MutableList<Any>?) {
+        (view as TextView).text = item
     }
 }

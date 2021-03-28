@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.feature.viewmodel.BaseRefreshViewModel" />
+            type="com.rongc.feature.viewmodel.BaseListViewModel" />
     </data>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout

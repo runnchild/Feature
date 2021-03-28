@@ -5,7 +5,6 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.*
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.model.BaseModel
-import com.rongc.feature.network.MainScope
 import com.rongc.feature.network.ServicesException
 import com.rongc.feature.utils.Compat.toast
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,7 +24,6 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     var toolbarModel: ToolBarViewModel? = null
 
-    var mainScope = MainScope()
     val dialogVisible = SingleLiveData<Boolean>()
     val backPressed = SingleLiveData<Boolean>()
     val finish = SingleLiveData<Boolean>()
@@ -81,7 +79,6 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     open fun onDestroy() {
-        mainScope.onDestroy()
     }
 
     /**

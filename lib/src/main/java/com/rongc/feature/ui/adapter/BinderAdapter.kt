@@ -1,4 +1,4 @@
-package com.rongc.feature.ui
+package com.rongc.feature.ui.adapter
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

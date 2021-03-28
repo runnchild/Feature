@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rongc.feature.model.BaseModel
-import com.rongc.feature.ui.delegate.IFragmentAbility
+import com.rongc.feature.ui.ability.IAbility
 import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.utils.Compat.removeFromParent
 import com.rongc.feature.viewmodel.BaseViewModel
@@ -25,20 +25,28 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
     protected lateinit var viewModel: M
     private lateinit var delegate: UiDelegate<M>
 
-    private var ability: IFragmentAbility? = null
+    private var abilities: ArrayList<IAbility> = arrayListOf()
 
     private val refreshDelegate by lazy {
         this as? IRefreshDelegate
     }
 
-    open fun obtainAbility(): IFragmentAbility? = null
+    open fun obtainAbility(abilities: ArrayList<IAbility>) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         delegate = getUiDelegate {
             viewModel = it
         }
-        ability?.onCreate(savedInstanceState)
+        abilities.clear()
+        if (this is IAbility) {
+            @Suppress("UNCHECKED_CAST")
+            abilities.add(this as IAbility)
+        }
+        obtainAbility(abilities)
+        abilities.forEach {
+            it.onPageCreate(viewModel, this, savedInstanceState)
+        }
 //        delegate.initObserver(this, viewModel)
 //
 //        initObserver()
@@ -69,13 +77,15 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        return if (::mView.isInitialized) {
+        var fistCreate = false
+        val view = if (::mView.isInitialized) {
             mView.removeFromParent()
             mView
         } else {
 //            delegate = getUiDelegate {
 //                viewModel = it
 //            }
+            fistCreate = true
             val view = inflate(inflater, container)
 
             refreshDelegate?.run {
@@ -109,8 +119,26 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
             refreshConfig()
 
             delegate.init(this, mView)
-            ability?.onCreateView(inflater, container, savedInstanceState)
             mView
+        }
+
+        abilities.forEach {
+            it.onPageCreateView(mView, fistCreate, savedInstanceState)
+        }
+        return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        abilities.forEach {
+            it.onPageResume()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        abilities.forEach {
+            it.onPagePause()
         }
     }
 
@@ -133,7 +161,9 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
 ////        delegate.init(this, mView)
 //        initView(view)
 //        initData()
-        ability?.onViewCreated(view, savedInstanceState)
+        abilities.forEach {
+            it.onPageViewCreated(view, savedInstanceState)
+        }
     }
 
     override fun getUiDelegate(action: (M) -> Unit): UiDelegate<M> {
@@ -155,11 +185,9 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
      * inflate view后调用，先于{@link #initData()}
      */
     override fun initView(view: View) {
-        ability?.initView(view)
     }
 
     override fun initData() {
-        ability?.initData()
     }
 
     abstract fun inflate(inflater: LayoutInflater, container: ViewGroup?): View
@@ -169,7 +197,9 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
     override fun onDestroy() {
         super.onDestroy()
         delegate.destroy()
-        ability?.onDestroy()
+        abilities.forEach {
+            it.onPageDestroy()
+        }
     }
 
     override fun showDialog() {
@@ -193,7 +223,9 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
      */
     override fun onBackPressed() {
         dismissDialog()
-        ability?.onBackPressed()
+        abilities.forEach {
+            it.onPageBackPressed()
+        }
     }
 
     override fun finish() {
@@ -206,7 +238,9 @@ abstract class BaseFragment<M : BaseViewModel<out BaseModel>> : Fragment(), IUI<
         if (!hidden) {
             refreshConfig()
         }
-        ability?.onHiddenChanged(hidden)
+        abilities.forEach {
+            it.onPageHiddenChanged(hidden)
+        }
     }
 
     override fun refreshConfig() {

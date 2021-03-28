@@ -7,6 +7,7 @@ import com.rongc.feature.databinding.BaseRefreshLayoutBinding
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.viewmodel.BaseViewModel
 
+@Deprecated("use IRecyclerListAbility")
 open class BaseRefreshFragment<M : BaseViewModel<out BaseModel>> :
     BaseBindingFragment<BaseRefreshLayoutBinding, M>(), IRefreshDelegate {
 

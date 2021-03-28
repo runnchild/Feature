@@ -1,5 +1,6 @@
 package com.rongc.feature.binding
 
+import android.view.View
 import androidx.core.view.doOnDetach
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -10,8 +11,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
-import com.rongc.feature.ui.BaseViewPagerAdapter
-import com.rongc.feature.ui.BinderAdapter
+import com.rongc.feature.ui.adapter.BaseViewPagerAdapter
+import com.rongc.feature.ui.adapter.BinderAdapter
+import com.rongc.feature.utils.Compat.removeFromParent
+import com.rongc.feature.viewmodel.RefreshEmptyViewModel
+import com.rongc.feature.widget.EmptyView
+import com.rongc.feature.widget.IEmptyView
 import com.rongc.feature.widget.ItemDecoration
 import kotlinx.coroutines.*
 import java.lang.reflect.ParameterizedType
@@ -53,7 +58,13 @@ object ViewPager2Binding {
         val adapter1 = adapter
         @Suppress("UNCHECKED_CAST")
         if (adapter1 as? BaseViewPagerAdapter<Any> != null) {
-            adapter1.setList(items)
+            if (items != null && items.isEmpty() && adapter1.emptyData() != null) {
+                val emptyList = items.toMutableList()
+                emptyList.add(adapter1.emptyData()!!)
+                adapter1.setList(emptyList)
+            } else {
+                adapter1.setList(items)
+            }
         } else {
             @Suppress("UNCHECKED_CAST")
             val adapter = setup(adapter) as? BaseQuickAdapter<Any, *>
@@ -185,4 +196,42 @@ fun ViewPager2.loop(autoScroll: Boolean, interval: Long = 3000, loop: Boolean = 
             setTag(R.id.srl_tag, null)
         }
     }
+}
+
+@BindingAdapter("emptyView", "enableEmptyView", requireAll = false)
+fun ViewPager2.setupEmptyView(
+    emptyView: IEmptyView? = EmptyView(context),
+    enable: Boolean = true
+): RefreshEmptyViewModel? {
+    if (enable) {
+        fun getEmptyView(): IEmptyView {
+            val emptyViewModel = emptyView?.getViewModel() ?: RefreshEmptyViewModel()
+            return (emptyView ?: EmptyView(context)).run {
+                setViewModel(emptyViewModel)
+                this
+            }
+        }
+
+        return adapter?.let {
+            when (it) {
+                is BaseQuickAdapter<*, *> -> {
+                    val iEmpty = if (!it.hasEmptyView()) {
+                        getEmptyView()
+                    } else {
+                        (it.headerLayout?.getChildAt(0) as? EmptyView)
+                    }
+                    it.setEmptyView(iEmpty as View)
+                    iEmpty.removeFromParent()
+                    iEmpty.getViewModel()
+                }
+                is BaseViewPagerAdapter<*> -> {
+                    val emptyView1 = getEmptyView()
+                    it.setEmptyData(emptyView1.getViewModel()!!)
+                    emptyView1.getViewModel()
+                }
+                else -> null
+            }
+        }
+    }
+    return null
 }

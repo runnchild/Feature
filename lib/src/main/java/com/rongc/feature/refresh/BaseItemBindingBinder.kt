@@ -63,13 +63,13 @@ abstract class BaseItemBindingBinder<B : ViewDataBinding, T> : BaseRecyclerItemB
 
     override fun onChildClick(holder: BaseViewHolder, view: View, data: T, position: Int) {
         view.singleAction {
-            onItemChildClick(DataBindingUtil.findBinding<B>(holder.itemView)!!, view, data, position)
+            onItemChildClick(DataBindingUtil.findBinding(holder.itemView)!!, view, data, position)
         }
     }
 
     override fun onLongClick(holder: BaseViewHolder, view: View, data: T, position: Int): Boolean {
         return onItemLongClick(
-            DataBindingUtil.findBinding<B>(holder.itemView)!!,
+            DataBindingUtil.findBinding(holder.itemView)!!,
             view,
             data,
             position

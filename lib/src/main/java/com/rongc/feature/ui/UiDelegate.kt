@@ -66,7 +66,6 @@ open class UiDelegate<M : BaseViewModel<out BaseModel>>(val api: IUI<M>, action:
     }
 
     open fun initObserver(owner: LifecycleOwner, viewModel: M) {
-        viewModel.mainScope.onCreate()
         viewModel.onCreate()
         api.getLifecycle().addObserver(viewModel)
         viewModel.dialogVisible.observe(owner, Observer {

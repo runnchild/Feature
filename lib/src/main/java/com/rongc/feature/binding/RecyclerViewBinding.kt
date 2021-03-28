@@ -2,16 +2,14 @@ package com.rongc.feature.binding
 
 import android.view.View
 import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.binder.BaseItemBinder
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
-import com.rongc.feature.ui.BinderAdapter
+import com.rongc.feature.ui.adapter.BinderAdapter
 import com.rongc.feature.utils.Compat.removeFromParent
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.widget.EmptyView

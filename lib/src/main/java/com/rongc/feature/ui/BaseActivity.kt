@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.KeyboardUtils
 import com.rongc.feature.model.BaseModel
+import com.rongc.feature.ui.ability.IAbility
 import com.rongc.feature.ui.toolbar.PsnToolbar
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.viewmodel.ToolBarViewModel
@@ -28,6 +29,8 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
     private lateinit var delegate: UiDelegate<M>
     protected lateinit var viewModel: M
 
+    private var abilities: ArrayList<IAbility> = arrayListOf()
+
     private val refreshDelegate by lazy {
         this as? IRefreshDelegate
     }
@@ -37,6 +40,16 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         delegate = getUiDelegate {
             viewModel = it
         }
+        abilities.clear()
+        if (this is IAbility) {
+            @Suppress("UNCHECKED_CAST")
+            abilities.add(this as IAbility)
+        }
+        obtainAbility(abilities)
+        abilities.forEach {
+            it.onPageCreate(viewModel, this, savedInstanceState)
+        }
+
         var view = when {
             getContentViewRes() > 0 -> {
                 View.inflate(this, getContentViewRes(), null)
@@ -60,6 +73,10 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
                 }
             }
         }
+        abilities.forEach {
+            it.onPageCreateView(view, true, savedInstanceState)
+        }
+
         setContentView(view)
 
         toolBar?.let {
@@ -80,7 +97,13 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
         refreshDelegate?.run {
             init(viewModel, this@BaseActivity, view)
         }
+
+        abilities.forEach {
+            it.onPageViewCreated(view, savedInstanceState)
+        }
     }
+
+    open fun obtainAbility(abilities: ArrayList<IAbility>) {}
 
     override fun getUiDelegate(action: (M) -> Unit): UiDelegate<M> {
         return UiDelegate(this, action)
@@ -121,6 +144,30 @@ abstract class BaseActivity<M : BaseViewModel<out BaseModel>> : AppCompatActivit
     override fun onDestroy() {
         super.onDestroy()
         delegate.destroy()
+        abilities.forEach {
+            it.onPageDestroy()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        abilities.forEach {
+            it.onPageBackPressed()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        abilities.forEach {
+            it.onPageResume()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        abilities.forEach {
+            it.onPagePause()
+        }
     }
 
     override fun showDialog() {

@@ -22,6 +22,7 @@ import kotlin.concurrent.thread
  * 支持下拉刷新ViewModel，维护上拉和加载更多数据请求及ui业务
  *
  */
+@Deprecated("use BaseListViewModel ")
 abstract class BaseRefreshViewModel<T, M : BaseModel> : BaseViewModel<M>() {
     /**
      * 请求页码
