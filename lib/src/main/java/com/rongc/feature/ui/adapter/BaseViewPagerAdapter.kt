@@ -44,12 +44,15 @@ abstract class BaseViewPagerAdapter<T>(val fragmentManager: FragmentManager, lif
     override fun createFragment(position: Int): Fragment {
         if (getItem(position) is RefreshEmptyViewModel) {
             val fragment = generateEmptyFragment()
+            @Suppress("UNCHECKED_CAST")
+            (fragment as IPagerItem<T>).attachAdapter(this)
             fragment.lifecycleScope.launchWhenStarted {
                 fragment.convert(position, mEmptyData!!, null)
             }
             return fragment
         }
         val fragment = createItemFragment(position)
+        fragment.attachAdapter(this)
         fragment as Fragment
         fragment.lifecycleScope.launchWhenStarted {
             fragment.convert(position, getItem(position)!!, null)

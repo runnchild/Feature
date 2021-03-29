@@ -19,7 +19,7 @@ import com.rongc.feature.widget.IEmptyView
  * @date 2021/3/28
  * @since 2.1.4
  */
-class EmptyListFragment: Fragment(), IPagerItem<RefreshEmptyViewModel> {
+class EmptyListFragment : Fragment(), IPagerItem<RefreshEmptyViewModel> {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

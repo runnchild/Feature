@@ -1,7 +1,11 @@
 package com.rongc.feature.ui.ability
 
+import com.rongc.feature.ui.adapter.BaseViewPagerAdapter
+
 interface IPagerItem<T> {
     fun convert(position: Int, item: T, payloads: MutableList<Any>?)
+
+    fun attachAdapter(adapter: BaseViewPagerAdapter<T>) {}
 
 //    val adapter get() = ((this as Fragment).parentFragment as BaseViewPagerFragment<*, *>).mAdapter
 //
