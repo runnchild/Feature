@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.reflect.ParameterizedType
 import java.net.ConnectException
+import java.net.UnknownHostException
 
 /**
  * 含有生命周期感知能力的ViewModel， 继承者也需要感知生命周期方法，重写对应方法即可
@@ -103,7 +104,7 @@ abstract class BaseViewModel<M : BaseModel> : ViewModel(), LifecycleObserver {
                     handleServiceError(e)
                     e
                 }
-                is ConnectException -> {
+                is ConnectException, is UnknownHostException -> {
                     ServicesException(ServicesException.CODE_CONNECTED, "网络连接失败", error = e)
                 }
                 else -> {
