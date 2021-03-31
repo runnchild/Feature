@@ -14,6 +14,7 @@ import com.rongc.feature.refresh.PageIndicator
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
@@ -73,6 +74,8 @@ abstract class BaseListViewModel<T, M : BaseModel> : BaseViewModel<M>() {
     var enableRefreshWhenEmpty = true
 
     private val dataRequestCall = RequestCallback()
+
+    var primaryJob: Job? = null
 
     inner class RequestCallback : DataRequestCallback<List<T>> {
         var refreshByUser = false
@@ -159,7 +162,8 @@ abstract class BaseListViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      * @param dataRequestCall 结果回调
      */
     fun loadData(page: Int, dataRequestCall: DataRequestCallback<List<T>>) {
-        launch({
+        primaryJob?.cancel()
+        primaryJob = launch({
             val data = fetchListData(page)
             dataRequestCall.onSuccess(page, data)
             dataLiveData.value = data

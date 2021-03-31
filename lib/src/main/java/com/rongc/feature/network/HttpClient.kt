@@ -2,6 +2,7 @@ package com.rongc.feature.network
 
 import com.blankj.utilcode.util.Utils
 import okhttp3.Cache
+import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,6 +29,7 @@ object HttpClient {
             .connectTimeout(DEFAULT_CONNECT_TIME, TimeUnit.SECONDS)//连接超时时间
             .writeTimeout(DEFAULT_WRITE_TIME, TimeUnit.SECONDS)//设置写操作超时时间
             .readTimeout(DEFAULT_READ_TIME, TimeUnit.SECONDS)//设置读操作超时时间
+            .connectionPool(ConnectionPool(32, 5L, TimeUnit.SECONDS))
             .apply {
                 provider.providerInterceptors()?.forEach {
                     addInterceptor(it)
