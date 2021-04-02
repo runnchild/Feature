@@ -181,4 +181,6 @@ abstract class BaseListViewModel<T, M : BaseModel> : BaseViewModel<M>() {
     }
 
     abstract suspend fun fetchListData(page: Int): List<T>
+
+    fun getCurPage() = pageIndicator.page
 }

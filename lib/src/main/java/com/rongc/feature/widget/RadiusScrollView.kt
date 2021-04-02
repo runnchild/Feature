@@ -9,7 +9,7 @@ class RadiusScrollView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : NestedScrollView(context, attrs) {
 
-    val radiusHelper by lazy { RadiusMaskHelper() }
+    val radiusHelper by lazy { RadiusMaskHelper(this) }
 
     override fun dispatchDraw(canvas: Canvas?) {
         super.dispatchDraw(canvas)
