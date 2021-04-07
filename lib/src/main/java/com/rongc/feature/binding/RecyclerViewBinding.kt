@@ -125,7 +125,9 @@ fun RecyclerView.items(items: Collection<Any>?) {
 @BindingAdapter("itemDecoration")
 fun RecyclerView.itemDecoration(decorator: ItemDecoration?) {
     decorator?.let {
-        removeItemDecoration(decorator)
+        while (this.itemDecorationCount > 0) {
+            removeItemDecorationAt(0)
+        }
         addItemDecoration(decorator)
     }
 }
