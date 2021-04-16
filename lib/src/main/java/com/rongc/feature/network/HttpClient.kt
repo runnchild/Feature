@@ -25,7 +25,8 @@ object HttpClient {
         //为了打印日志，需要配置OkHttpClient
         val client = OkHttpClient.Builder()
             //配置SSlSocketFactory
-//            .sslSocketFactory(SSLSocketFactoryUtils.createSSLSocketFactory())
+            .sslSocketFactory(SocketFactory.get(), SocketFactory.getTrustManager())
+            .hostnameVerifier { hostname, session -> true }
             .connectTimeout(DEFAULT_CONNECT_TIME, TimeUnit.SECONDS)//连接超时时间
             .writeTimeout(DEFAULT_WRITE_TIME, TimeUnit.SECONDS)//设置写操作超时时间
             .readTimeout(DEFAULT_READ_TIME, TimeUnit.SECONDS)//设置读操作超时时间
