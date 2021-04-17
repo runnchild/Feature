@@ -1,12 +1,15 @@
 package com.rongc.feature.widget
 
 import android.graphics.*
+import android.os.Build
 import android.view.View
 
 class RadiusMaskHelper(val view: View) {
 
     init {
-        view.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        if (Build.VERSION.SDK_INT < 28) {
+            view.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        }
     }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -52,6 +55,7 @@ class RadiusMaskHelper(val view: View) {
         )
         val save = canvas.saveLayer(rectF, null)
 
+        paint.isAntiAlias = true
         paint.color = roundColor
         paint.style = Paint.Style.FILL
         canvas.drawRect(rectF, paint)
