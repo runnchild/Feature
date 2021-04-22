@@ -44,9 +44,9 @@ open class RecyclerListAbility : IRecyclerListAbility {
         if (firstCreate) {
             val recyclerView =
                 host.returnRecyclerView() ?: view.findViewById(R.id.base_recyclerView)
+            recyclerView.layoutManager = host.providerLayoutManager(view.context)
             recyclerView.adapter = host.providerAdapter()
             val binders = arrayListOf<BaseRecyclerItemBinder<out Any>>()
-            recyclerView.layoutManager = host.providerLayoutManager(view.context)
             host.registerItemBinders(binders)
             val decoration = ItemDecoration.Builder().apply(host.decorationBuilder()).build()
             recyclerView.itemDecoration(decoration)
