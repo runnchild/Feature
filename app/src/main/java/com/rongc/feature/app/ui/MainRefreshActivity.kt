@@ -1,5 +1,6 @@
 package com.rongc.feature.app.ui
 
+import android.content.Context
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.feature.app.ui.binders.MainItemHolder
@@ -14,6 +15,7 @@ import com.rongc.feature.ui.toolbar.BarConfig
 import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.singleClick
 import com.rongc.feature.viewmodel.EmptyBuilder
+import com.rongc.feature.widget.IEmptyView
 import com.rongc.feature.widget.ItemDecoration
 
 class MainRefreshActivity :
@@ -78,5 +80,9 @@ class MainRefreshActivity :
                 }
             }
         }
+    }
+
+    override fun providerEmptyView(context: Context): IEmptyView? {
+        return super.providerEmptyView(context)
     }
 }

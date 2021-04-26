@@ -10,6 +10,7 @@ import com.rongc.feature.refresh.BaseItemBindingBinder
 
 class MainOtherItemHolder : BaseItemBindingBinder<MainOtherBindingItemBinding, Int>() {
     override fun convert(binding: MainOtherBindingItemBinding, holder: BaseViewHolder, data: Int) {
+        binding.executePendingBindings()
     }
 
     override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean {
