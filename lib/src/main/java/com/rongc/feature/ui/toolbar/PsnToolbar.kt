@@ -11,7 +11,7 @@ import androidx.core.graphics.drawable.toDrawable
 import com.rongc.feature.R
 import com.rongc.feature.databinding.PsnToolbarBinding
 import com.rongc.feature.utils.Compat.color
-import com.rongc.feature.utils.Compat.idp
+import com.rongc.feature.utils.idp
 import com.rongc.feature.viewmodel.ToolBarViewModel
 
 /**
@@ -59,7 +59,7 @@ class PsnToolbar @JvmOverloads constructor(
     private fun addImageMenu(item: ImageView.() -> Unit) {
         val menu = ImageView(context).apply {
 
-            setPadding(15.idp(), 0, 15.idp(), 0)
+            setPadding(15.idp, 0, 15.idp, 0)
         }.apply(item)
 
         binding.menuParent.addView(menu, LayoutParams(-2, -1))

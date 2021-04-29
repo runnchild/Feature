@@ -7,21 +7,17 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
-import android.text.Html
-import android.util.Half.toFloat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rongc.feature.R
-import com.rongc.feature.utils.Compat.dp
 import org.json.JSONObject
 
 /**
@@ -37,6 +33,7 @@ import org.json.JSONObject
  * @author: QiuRongCai
  */
 
+// -------------------dimension--------------------------------------------
 val Float.dp: Float
     get() {
         val it = Utils.getApp()
@@ -65,31 +62,9 @@ val Float.sp: Float
     }
 val Int.sp get() = toFloat().sp
 val Int.isp get() = toFloat().sp.toInt()
+// -------------------dimension end-----------------------------------------
 
 object Compat {
-    // -------------------dimension--------------------------------------------
-    @Deprecated("", ReplaceWith("dp"))
-    fun Float.dp() = dp
-
-    @Deprecated("", ReplaceWith("dp"))
-    fun Int.dp() = dp
-
-    @Deprecated("", ReplaceWith("idp"))
-    fun Float.idp() = idp
-
-    @Deprecated("", ReplaceWith("idp"))
-    fun Int.idp() = idp
-
-    @Deprecated("", ReplaceWith("sp"))
-    fun Float.sp() = sp
-
-    @Deprecated("", ReplaceWith("sp"))
-    fun Int.sp() = sp
-
-    @Deprecated("", ReplaceWith("isp"))
-    fun Int.isp() = isp
-
-// -------------------dimension end-----------------------------------------
 
     fun Int.color() = ContextCompat.getColor(Utils.getApp(), this)
 
@@ -135,12 +110,10 @@ object Compat {
         }
     }
 
-    private val toastInstance by lazy {
-        ToastUtils.make()
-            .setBgColor(R.color.black_70.color())
-            .setTextColor(Color.WHITE)
-            .setGravity(Gravity.CENTER, 0, 0)
-    }
+    var toastInstance = ToastUtils.make()
+        .setBgColor(R.color.black_70.color())
+        .setTextColor(Color.WHITE)
+        .setGravity(Gravity.CENTER, 0, 0)
 
     fun String?.toast() {
         if (!isNullOrEmpty()) {

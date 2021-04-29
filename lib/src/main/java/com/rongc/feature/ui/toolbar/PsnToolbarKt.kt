@@ -14,7 +14,7 @@ import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.R
 import com.rongc.feature.utils.Compat.color
-import com.rongc.feature.utils.Compat.idp
+import com.rongc.feature.utils.idp
 
 @BindingAdapter("addStatusBarHeight")
 fun View?.addPaddingTopEqualStatusBar(add: Boolean) {
@@ -45,11 +45,11 @@ private fun ViewGroup.addItemMenu(item: TextView.() -> Unit) {
         setTextColor(R.color.gray_353535.color())
         gravity = Gravity.CENTER
         val padding = if (childCount > 0) {
-            7.idp()
+            7.idp
         } else {
-            15.idp()
+            15.idp
         }
-        setPadding(7.idp(), 0, padding, 0)
+        setPadding(7.idp, 0, padding, 0)
     }.apply(item)
 
     addView(
