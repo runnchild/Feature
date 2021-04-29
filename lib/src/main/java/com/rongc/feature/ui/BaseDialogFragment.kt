@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rongc.feature.BR
 import com.rongc.feature.model.BaseModel
 import com.rongc.feature.viewmodel.BaseViewModel
+import java.lang.reflect.ParameterizedType
 
 /**
  * <p>
@@ -72,7 +73,19 @@ abstract class BaseDialogFragment<B : ViewDataBinding, M : BaseViewModel<out Bas
         (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    abstract fun binding(inflater: LayoutInflater, container: ViewGroup?): B
+    open fun binding(inflater: LayoutInflater, container: ViewGroup?): B {
+        val bindingClass =
+            (this::class.java.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>
+        val method = bindingClass.getDeclaredMethod(
+            "inflate",
+            LayoutInflater::class.java,
+            ViewGroup::class.java,
+            Boolean::class.java
+        )
+        method.isAccessible = true
+        @Suppress("UNCHECKED_CAST")
+        return (method.invoke(null, inflater, container, false) as B)
+    }
 
     override fun dismissDialog() {
         delegate.dismissDialog()
