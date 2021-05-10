@@ -11,9 +11,9 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 object HttpClient {
-    private const val DEFAULT_CONNECT_TIME = 5L
-    private const val DEFAULT_WRITE_TIME = 5L
-    private const val DEFAULT_READ_TIME = 5L
+    private const val DEFAULT_CONNECT_TIME = 15L
+    private const val DEFAULT_WRITE_TIME = 15L
+    private const val DEFAULT_READ_TIME = 15L
 
     fun getRetrofit(provider: HttpProvider): Retrofit {
         //打印网络请求相关日志
@@ -30,7 +30,7 @@ object HttpClient {
             .connectTimeout(DEFAULT_CONNECT_TIME, TimeUnit.SECONDS)//连接超时时间
             .writeTimeout(DEFAULT_WRITE_TIME, TimeUnit.SECONDS)//设置写操作超时时间
             .readTimeout(DEFAULT_READ_TIME, TimeUnit.SECONDS)//设置读操作超时时间
-            .connectionPool(ConnectionPool(32, 5L, TimeUnit.SECONDS))
+            .connectionPool(ConnectionPool(32, 5L, TimeUnit.MINUTES))
             .apply {
                 provider.providerInterceptors()?.forEach {
                     addInterceptor(it)

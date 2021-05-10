@@ -24,11 +24,11 @@ class MainItemHolder : BaseRecyclerItemBinder<String>() {
     }
 
     override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-        return false
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-        return false
+        return oldItem == newItem
     }
 
     override fun onClick(holder: BaseViewHolder, view: View, data: String, position: Int) {

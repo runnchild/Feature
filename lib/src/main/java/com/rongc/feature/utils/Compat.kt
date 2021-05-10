@@ -1,6 +1,7 @@
 package com.rongc.feature.utils
 
 import android.app.Activity
+import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -218,8 +219,10 @@ object Compat {
         setRoundBg(color, r, r, r, r)
     }
 
-    fun View.activity(): Activity? {
-        var context = this.context
+    fun View.activity() = context.activity()
+
+    fun Context.activity(): Activity? {
+        var context = this
         if (context is Activity) {
             //context本身是Activity的实例
             return context

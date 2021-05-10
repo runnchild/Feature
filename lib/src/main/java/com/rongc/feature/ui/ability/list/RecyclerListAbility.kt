@@ -3,9 +3,13 @@ package com.rongc.feature.ui.ability.list
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.databinding.ObservableList
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.diff.BrvahListUpdateCallback
 import com.rongc.feature.R
+import com.rongc.feature.binding.doOnAdapter
 import com.rongc.feature.binding.itemBinders
 import com.rongc.feature.binding.itemDecoration
 import com.rongc.feature.binding.setupEmptyView
@@ -45,7 +49,8 @@ open class RecyclerListAbility : IRecyclerListAbility {
             val recyclerView =
                 host.returnRecyclerView() ?: view.findViewById(R.id.base_recyclerView)
             recyclerView.layoutManager = host.providerLayoutManager(view.context)
-            recyclerView.adapter = host.providerAdapter()
+            val providerAdapter = host.providerAdapter()
+            recyclerView.adapter = providerAdapter
             val binders = arrayListOf<BaseRecyclerItemBinder<out Any>>()
             host.registerItemBinders(binders)
             val decoration = ItemDecoration.Builder().apply(host.decorationBuilder()).build()
@@ -54,6 +59,49 @@ open class RecyclerListAbility : IRecyclerListAbility {
             recyclerView.itemBinders(binders as MutableList<BaseRecyclerItemBinder<Any>>)
 
             setEmptyView(recyclerView, view.context)
+
+//            recyclerView.doOnAdapter {
+//                val call = BrvahListUpdateCallback(it)
+//                viewModel.items.addOnListChangedCallback(object :
+//                    ObservableList.OnListChangedCallback<ObservableList<Any>>() {
+//                    override fun onChanged(sender: ObservableList<Any>?) {
+//                        it.notifyDataSetChanged()
+//                    }
+//
+//                    override fun onItemRangeChanged(
+//                        sender: ObservableList<Any>?,
+//                        positionStart: Int,
+//                        itemCount: Int
+//                    ) {
+//                        call.onChanged(positionStart, itemCount, null)
+//                    }
+//
+//                    override fun onItemRangeInserted(
+//                        sender: ObservableList<Any>?,
+//                        positionStart: Int,
+//                        itemCount: Int
+//                    ) {
+//                        call.onInserted(positionStart, itemCount)
+//                    }
+//
+//                    override fun onItemRangeMoved(
+//                        sender: ObservableList<Any>?,
+//                        fromPosition: Int,
+//                        toPosition: Int,
+//                        itemCount: Int
+//                    ) {
+//                        call.onMoved(fromPosition, toPosition)
+//                    }
+//
+//                    override fun onItemRangeRemoved(
+//                        sender: ObservableList<Any>,
+//                        positionStart: Int,
+//                        itemCount: Int
+//                    ) {
+//                        call.onRemoved(positionStart, itemCount)
+//                    }
+//                })
+//            }
         }
     }
 

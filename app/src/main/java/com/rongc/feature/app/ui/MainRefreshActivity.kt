@@ -1,6 +1,7 @@
 package com.rongc.feature.app.ui
 
 import android.content.Context
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.feature.app.ui.binders.MainItemHolder
@@ -21,6 +22,16 @@ import com.rongc.feature.widget.ItemDecoration
 class MainRefreshActivity :
     BaseBindingActivity<BaseRefreshListLayoutBinding, RefreshListViewModel>(),
     IRecyclerListAbility by RecyclerListAbility() {
+
+    override fun initView(view: View) {
+        super.initView(view)
+        binding.btnAdd.singleClick {
+            viewModel.items[1] = ""
+        }
+        binding.btnRemove.singleClick {
+            viewModel.items.removeAt(viewModel.items.size - 1)
+        }
+    }
 
     override fun returnRecyclerView(): RecyclerView {
         return binding.includeRecycler.baseRecyclerView

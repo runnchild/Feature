@@ -110,16 +110,12 @@ fun <T> RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<T>) {
 fun RecyclerView.items(items: Collection<Any>?) {
     val adapter = setup(adapter) as BaseBinderAdapter
     adapter.setList(items)
-//    if (items is ObservableArrayList<Any>) {
-//        adapter.setList(items)
-//        return
-//    }
 //    val data = if (items is MutableList<Any>) {
 //        items
 //    } else {
 //        items?.toMutableList()
 //    }
-//    adapter.setDiffNewData(data)
+//    adapter.setDiffNewData( items?.toMutableList())
 }
 
 @BindingAdapter("itemDecoration")

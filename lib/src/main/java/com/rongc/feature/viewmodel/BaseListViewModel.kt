@@ -3,7 +3,9 @@ package com.rongc.feature.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.DiffUtil
 import com.blankj.utilcode.util.NetworkUtils
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.binding.LoadStatus
@@ -66,7 +68,7 @@ abstract class BaseListViewModel<T, M : BaseModel> : BaseViewModel<M>() {
 
     val setupEmptyView = SingleLiveData<Int>()
 
-    val dataLiveData = SingleLiveData<List<T>>()
+    val dataLiveData = MutableLiveData<List<T>>()
 
     /**
      * 没有数据时是否允许刷新
@@ -161,7 +163,7 @@ abstract class BaseListViewModel<T, M : BaseModel> : BaseViewModel<M>() {
      * @param page 请求页码
      * @param dataRequestCall 结果回调
      */
-    fun loadData(page: Int, dataRequestCall: DataRequestCallback<List<T>>) {
+    open fun loadData(page: Int, dataRequestCall: DataRequestCallback<List<T>>) {
         primaryJob?.cancel()
         primaryJob = launch({
             val data = fetchListData(page)

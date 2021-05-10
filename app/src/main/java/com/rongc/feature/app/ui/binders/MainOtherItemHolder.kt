@@ -14,11 +14,11 @@ class MainOtherItemHolder : BaseItemBindingBinder<MainOtherBindingItemBinding, I
     }
 
     override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean {
-        return false
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean {
-        return false
+        return oldItem == newItem
     }
 
     override fun getViewBinding(inflater: LayoutInflater, parent: ViewGroup) =

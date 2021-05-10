@@ -66,6 +66,7 @@ abstract class BaseDialogFragment<B : ViewDataBinding, M : BaseViewModel<out Bas
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
+        delegate.initObserver(this, viewModel)
         initObserver()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             onBackPressed()

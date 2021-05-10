@@ -23,9 +23,9 @@ class RefreshListViewModel : BaseListViewModel<Any, BaseModel>() {
         }
         repeat(10) {
             if (it % 2 == 0) {
-                items.add("$it")
+                items.add("${this.items.size + it}")
             } else {
-                items.add(1)
+                items.add(this.items.size + it)
             }
         }
         return items
