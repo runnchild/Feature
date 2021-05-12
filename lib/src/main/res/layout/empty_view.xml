@@ -52,7 +52,7 @@
             android:visibility="gone"
             app:textBuilder="@{viewModel.refreshBuilder}"
             app:round_radius="@{@dimen/dp35}"
-            android:background="#404080"
+            android:background="#FC485B"
             tools:text="刷新" />
     </LinearLayout>
 </layout>

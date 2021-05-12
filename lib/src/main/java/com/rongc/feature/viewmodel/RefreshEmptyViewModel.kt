@@ -17,6 +17,24 @@ class RefreshEmptyViewModel {
         const val EMPTY_NET_DISCONNECT = -2
         const val EMPTY_NET_UNAVAILABLE = -1
         const val EMPTY_EMPTY = 0
+
+        var noNetBuilder: EmptyBuilder = EmptyBuilder().apply {
+            tip = "网络未连接"
+            tipColor = R.color.gray_353535.color()
+            subTip = "请检查你的网络设置后刷新"
+            btnVisible = true
+            btnText = "刷新"
+            iconDrawable = R.mipmap.empty_no_net_work.drawable()
+        }
+
+        var netUnavailableBuilder: EmptyBuilder = EmptyBuilder().apply {
+            tip = "网络异常"
+            tipColor = R.color.gray_353535.color()
+            subTip = "请检查你的网络设置后刷新"
+            btnVisible = true
+            btnText = "刷新"
+            iconDrawable = R.mipmap.empty_no_net_work.drawable()
+        }
     }
 
     val tip = ObservableField<String>()
@@ -32,27 +50,13 @@ class RefreshEmptyViewModel {
     var refreshClick = ObservableField {}
 
     fun showNoNet(refresh: () -> Unit) {
-        emptyBuilder {
-            tip = "网络未连接"
-            tipColor = R.color.gray_353535.color()
-            subTip = "请检查你的网络设置后刷新"
-            btnVisible = true
-            btnText = "刷新"
-            iconDrawable = R.mipmap.empty_no_net_work.drawable()
-            refreshClick = refresh
-        }
+        noNetBuilder.refreshClick = refresh
+        builder(noNetBuilder)
     }
 
     fun showNetUnavailable(refresh: () -> Unit) {
-        emptyBuilder {
-            tip = "网络异常"
-            tipColor = R.color.gray_353535.color()
-            subTip = "请检查你的网络设置后刷新"
-            btnVisible = true
-            btnText = "刷新"
-            iconDrawable = R.mipmap.empty_no_net_work.drawable()
-            refreshClick = refresh
-        }
+        netUnavailableBuilder.refreshClick = refresh
+        builder(netUnavailableBuilder)
     }
 
     fun emptyBuilder(builder: EmptyBuilder.() -> Unit) {
