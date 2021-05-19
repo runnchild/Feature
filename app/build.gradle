@@ -1,17 +1,4 @@
 plugins { id 'com.rongc.app' }
-android {
-    signingConfigs {
-        release {
-            storeFile file("${file(rootProject.rootDir).parent}/keystore.jks")
-            storePassword "qwe123"
-            keyAlias "signal"
-            keyPassword "qwe123"
-        }
-    }
-    defaultConfig {
-        signingConfig signingConfigs.release
-    }
-}
 dependencies {
     implementation project(':lib')
     implementation 'com.github.xiaofeidev:shadow:1.0.0'
