@@ -1,0 +1,21 @@
+ext {
+    kotlin_version = "1.4.31"
+    gradle_version = "7.0.0-alpha13"
+    aspect_version = "2.0.10"
+    config_version = 'v2.0.3'
+
+    gradlePlugin = "com.android.tools.build:gradle:$gradle_version"
+    kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    buildConfig = "com.github.runnchild:BuildConfig:$config_version"
+
+    classpaths = [
+            "com.android.tools.build:gradle:$gradle_version",
+            "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version",
+            buildConfig
+    ]
+
+    apiPlugin = "com.blankj:api-gradle-plugin:1.5"
+    aspectPlugin = "com.hujiang.aspectjx:gradle-android-plugin-aspectjx:$aspect_version"
+    bintrayPlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5"
+}

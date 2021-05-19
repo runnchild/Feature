@@ -25,12 +25,12 @@ class MainRefreshActivity :
 
     override fun initView(view: View) {
         super.initView(view)
-        binding.btnAdd.singleClick {
-            viewModel.items[1] = ""
-        }
-        binding.btnRemove.singleClick {
-            viewModel.items.removeAt(viewModel.items.size - 1)
-        }
+//        binding.btnAdd.singleClick {
+//            viewModel.items[1] = ""
+//        }
+//        binding.btnRemove.singleClick {
+//            viewModel.items.removeAt(viewModel.items.size - 1)
+//        }
     }
 
     override fun returnRecyclerView(): RecyclerView {

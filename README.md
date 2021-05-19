@@ -1,4 +1,4 @@
-# Feature
+# Feature [![](https://jitpack.io/v/runnchild/Feature.svg)](https://jitpack.io/#runnchild/Feature)
 
 ## 一、简介
 超轻量级，简单上手的框架，集成少量必要的优秀开源库, 旨在加快平时开发效率，减少不必要的bug。
@@ -11,7 +11,17 @@
 
 ## 二、使用
 > 1.依赖
-implementation 'com.rongc:feature:$latest_version'
+添加jitpack仓库
+```
+buildscript {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+implementation 'com.github.runnchild:Feature:$latest_version'
+```
 
 > 2.接入
 1.使用或继承CoreApplication，或者在自己的Application attachBaseContext()中初始化Utils.init(this)。
