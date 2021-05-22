@@ -1,0 +1,20 @@
+plugins { id 'com.rongc.app' }
+ext {
+    navigationVersion = '2.3.2'
+}
+
+android {
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+dependencies {
+    implementation project(':feature')
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion") {
+        exclude group: 'androidx.fragment'
+    }
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    implementation 'com.github.xiaofeidev:shadow:1.0.0'
+}
