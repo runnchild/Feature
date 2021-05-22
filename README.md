@@ -1,5 +1,7 @@
 # Feature [![](https://jitpack.io/v/runnchild/Feature.svg)](https://jitpack.io/#runnchild/Feature)
 
+#废弃啦！准备重构
+
 ## 一、简介
 超轻量级，简单上手的框架，集成少量必要的优秀开源库, 旨在加快平时开发效率，减少不必要的bug。
 
