@@ -1,4 +1,4 @@
-package com.rongc.feature.ui
+package com.rongc.feature.ui.host
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -31,7 +31,7 @@ interface IHost<M : BaseViewModel> {
         return ViewModelProvider(this as ViewModelStoreOwner, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return viewModelCreator(modelClass as Class<M>) as T
+                return viewModelCreator(modelClass as Class<M>)() as T
             }
         }).get(modelClass)
     }

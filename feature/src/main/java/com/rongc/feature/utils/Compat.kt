@@ -24,14 +24,12 @@ import org.json.JSONObject
  *
  * Date: 2020/5/19
  * Copyright: Copyright (c) 2019-2020
- * Company: @微微科技有限公司
  * Updater:
  * Update Time:
  * Update Comments:
  *
  * @author: QiuRongCai
  */
-
 // -------------------dimension--------------------------------------------
 val Float.dp: Float
     get() {

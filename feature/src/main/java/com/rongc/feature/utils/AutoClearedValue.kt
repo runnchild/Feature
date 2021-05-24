@@ -20,8 +20,8 @@ import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.rongc.feature.ui.ActivityHost
-import com.rongc.feature.ui.IHost
+import com.rongc.feature.ui.host.ActivityHost
+import com.rongc.feature.ui.host.IHost
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

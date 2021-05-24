@@ -6,7 +6,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.rongc.feature.BR
-import com.rongc.feature.ui.IHost
+import com.rongc.feature.ui.host.IHost
 import java.lang.reflect.ParameterizedType
 
 class BindingAbility<B : ViewBinding> : IAbility {
@@ -22,7 +22,7 @@ class BindingAbility<B : ViewBinding> : IAbility {
         if (binding is ViewDataBinding) {
             binding.lifecycleOwner = host.lifecycleOwner
             try {
-                // 如果xml中定义viewModel, 赋值
+                // 如果xml中定义了viewModel, 赋值
                 this::class.java.superclass?.getDeclaredField("mViewModel")
                 binding.setVariable(BR.viewModel, host.viewModel)
             } catch (e: Exception) {
