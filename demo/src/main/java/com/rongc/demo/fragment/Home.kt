@@ -1,8 +1,9 @@
-package com.rongc.demo
+package com.rongc.demo.fragment
 
 import android.os.Bundle
 import android.view.View
 import com.rongc.demo.databinding.FragmentHomeBinding
+import com.rongc.demo.viewmodel.HomeViewModel
 import com.rongc.feature.ui.fragment.BaseFragment
 import com.rongc.feature.utils.autoCleared
 
@@ -12,14 +13,24 @@ class Home : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        autoField = "345"
-    }
+        autoField = "try to rotate screen, times = ${viewModel.count}"
 
-    override fun viewModelCreator(cls: Class<HomeViewModel>): () -> HomeViewModel {
-        return {
-            HomeViewModel()
+        mBinding.tvField.text = autoField
+        viewModel.setCount(viewModel.count + 1)
+
+        mBinding.btnList.setOnClickListener {
+
         }
     }
+
+    /**
+     * 以自己的方式创建ViewModel
+     */
+//    override fun viewModelCreator(cls: Class<HomeViewModel>): () -> HomeViewModel {
+//        return {
+//            HomeViewModel(...)
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -2,6 +2,7 @@ package com.rongc.demo
 
 import android.os.Bundle
 import com.rongc.demo.databinding.ActivityMainBinding
+import com.rongc.demo.viewmodel.HomeViewModel
 import com.rongc.feature.ui.BaseActivity
 import com.rongc.feature.utils.autoCleared
 
