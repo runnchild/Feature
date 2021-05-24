@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.rongc.feature">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rongc.feature">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+        </intent>
+    </queries>
+
+    <application
+        android:networkSecurityConfig="@xml/network"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true">
+    </application>
 </manifest>
