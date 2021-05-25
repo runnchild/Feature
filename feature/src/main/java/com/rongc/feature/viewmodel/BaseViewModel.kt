@@ -1,12 +1,10 @@
 package com.rongc.feature.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
-import com.blankj.utilcode.util.Utils
+import androidx.lifecycle.ViewModel
 
-abstract class BaseViewModel(application: Application = Utils.getApp()) : AndroidViewModel(application) {
+abstract class BaseViewModel() : ViewModel() {
 
     // 如果需要savedStateHandle， 使用此构造
-    constructor(application: Application, savedStateHandle: SavedStateHandle) : this(application)
+    constructor(savedStateHandle: SavedStateHandle) : this()
 }

@@ -23,7 +23,7 @@ class BindingAbility<B : ViewBinding> : IAbility {
             binding.lifecycleOwner = host.lifecycleOwner
             try {
                 // 如果xml中定义了viewModel, 赋值
-                this::class.java.superclass?.getDeclaredField("mViewModel")
+                binding::class.java.superclass?.getDeclaredField("mViewModel")
                 binding.setVariable(BR.viewModel, host.viewModel)
             } catch (e: Exception) {
             }
