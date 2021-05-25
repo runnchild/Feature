@@ -4,9 +4,12 @@ import android.content.Context
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleOwner
+import com.rongc.feature.vo.Resource
+import com.rongc.feature.vo.Status
 import kotlinx.coroutines.*
 
 abstract class AbsProgressAbility(context: Context) : IAbility {
+    var delay = 400L
 
     open val dialog: AlertDialog by lazy {
         AlertDialog.Builder(context)
@@ -19,9 +22,9 @@ abstract class AbsProgressAbility(context: Context) : IAbility {
     fun showDialog() {
         dialogJob?.cancel()
         dialogJob = GlobalScope.launch(Dispatchers.Main) {
-            // 延迟500ms，如果期间页面响应并关闭了弹窗，则不会弹出
+            // 延迟400ms，如果期间页面响应并关闭了弹窗，则不会弹出
             withContext(Dispatchers.IO) {
-                delay(500)
+                delay(delay)
             }
             if (!dialog.isShowing) {
                 dialog.show()
@@ -37,6 +40,14 @@ abstract class AbsProgressAbility(context: Context) : IAbility {
     }
 
     override fun onPause(owner: LifecycleOwner) {
+        dismissDialog()
+    }
+}
+
+fun AbsProgressAbility.showIfLoading(it: Resource<*>?) {
+    if (it?.status == Status.LOADING) {
+        showDialog()
+    } else {
         dismissDialog()
     }
 }

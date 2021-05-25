@@ -36,7 +36,7 @@ import com.rongc.feature.vo.Resource
  * @param <ResultType>
  * @param <RequestType>
 </RequestType></ResultType> */
-abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constructor(private val appExecutors: AppExecutors) {
+abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constructor(private val appExecutors: AppExecutors = AppExecutors) {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
 
