@@ -1,9 +1,13 @@
 package com.rongc.feature.ability
 
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 
 interface IAbility : DefaultLifecycleObserver {
-    override fun onCreate(owner: LifecycleOwner) {
-    }
+    /**
+     * 注册时立即执行
+     * 注册时#onCrete()并不一定
+     */
+//    fun onCreateImmediately(
+//        host: IHost<*>, inflater: LayoutInflater, container: ViewGroup? = null
+//    )
 }

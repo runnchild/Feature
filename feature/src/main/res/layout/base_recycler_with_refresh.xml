@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.feature.viewmodel.BaseListViewModel" />
+    </data>
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+<!--        app:enableLoadMore="@{viewModel.enableLoadMore}"-->
+<!--        app:enableRefresh="@{viewModel.enableRefresh}"-->
+<!--        app:loadMoreListener="@{viewModel.onLoadMoreListener}"-->
+<!--        app:refreshListener="@{viewModel.onRefreshListener}"-->
+<!--        app:loadStatus="@{viewModel.loadStatus}"-->
+
+        <com.rongc.feature.widget.InterceptRecyclerView
+            android:id="@+id/base_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+</layout>

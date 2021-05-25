@@ -17,8 +17,8 @@
             android:id="@+id/edt_query"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.query}"
             android:hint="search repositories"
+            android:text="@{viewModel.query}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,13 +30,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <include
             android:id="@+id/recyclerView"
+            layout="@layout/base_recycler_with_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edt_query" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
