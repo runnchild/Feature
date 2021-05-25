@@ -10,4 +10,11 @@
         android:name="com.rongc.demo.fragment.Home"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/list"
+        android:name="com.rongc.demo.fragment.ListFragment"
+        android:label="List"
+        tools:layout="@layout/fragment_list" />
+
 </navigation>

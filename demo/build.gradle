@@ -17,4 +17,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation 'com.github.xiaofeidev:shadow:1.0.0'
+    implementation deps.room.runtime
+    kapt deps.room.compiler
 }

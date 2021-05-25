@@ -2,6 +2,8 @@ package com.rongc.demo.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
+import com.rongc.demo.R
 import com.rongc.demo.databinding.FragmentHomeBinding
 import com.rongc.demo.viewmodel.HomeViewModel
 import com.rongc.feature.ui.fragment.BaseFragment
@@ -19,18 +21,9 @@ class Home : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.setCount(viewModel.count + 1)
 
         mBinding.btnList.setOnClickListener {
-
+            findNavController().navigate(R.id.list)
         }
     }
-
-    /**
-     * 以自己的方式创建ViewModel
-     */
-//    override fun viewModelCreator(cls: Class<HomeViewModel>): () -> HomeViewModel {
-//        return {
-//            HomeViewModel(...)
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
