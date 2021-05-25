@@ -44,7 +44,7 @@ abstract class AbsProgressAbility(context: Context) : IAbility {
     }
 }
 
-fun AbsProgressAbility.showIfLoading(it: Resource<*>?) {
+fun AbsProgressAbility.showProgressIfLoading(it: Resource<*>?) {
     if (it?.status == Status.LOADING) {
         showDialog()
     } else {

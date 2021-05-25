@@ -4,17 +4,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.rongc.feature.ability.IAbility
 import com.rongc.feature.viewmodel.BaseViewModel
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-interface IHost<M : BaseViewModel> {
+interface IHost<M : BaseViewModel>: IAbilityHost {
     val host: Host
     val viewModel: M
     val lifecycleOwner: LifecycleOwner
-
-    fun registerAbility(ability: IAbility)
 
     fun viewModelProvider(): M {
         var cls: Class<*> = this.javaClass

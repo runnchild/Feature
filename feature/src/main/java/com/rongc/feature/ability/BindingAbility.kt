@@ -18,7 +18,7 @@ class BindingAbility<B : ViewBinding> : IAbility {
         inflater: LayoutInflater,
         container: ViewGroup? = null
     ) {
-        val binding = binding(host.lifecycleOwner, inflater, container)
+        val binding = binding(host, inflater, container)
         if (binding is ViewDataBinding) {
             binding.lifecycleOwner = host.lifecycleOwner
             try {
@@ -31,7 +31,7 @@ class BindingAbility<B : ViewBinding> : IAbility {
         mBinding = binding
     }
 
-    private fun binding(owner: LifecycleOwner, inflater: LayoutInflater, container: ViewGroup?): B {
+    private fun binding(owner: IHost<*>, inflater: LayoutInflater, container: ViewGroup?): B {
         val bindingClass =
             (owner::class.java.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>
         val method = bindingClass.getDeclaredMethod(

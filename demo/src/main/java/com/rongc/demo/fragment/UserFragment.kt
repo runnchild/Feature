@@ -7,8 +7,8 @@ import com.rongc.demo.ProgressAbility
 import com.rongc.demo.adapter.RepoListAdapter
 import com.rongc.demo.databinding.FragmentUserBinding
 import com.rongc.demo.viewmodel.UserViewModel
-import com.rongc.feature.ability.showIfLoading
-import com.rongc.feature.ui.fragment.BaseFragment
+import com.rongc.feature.ability.showProgressIfLoading
+import com.rongc.feature.ui.BaseFragment
 
 class UserFragment : BaseFragment<FragmentUserBinding, UserViewModel>() {
 
@@ -23,8 +23,8 @@ class UserFragment : BaseFragment<FragmentUserBinding, UserViewModel>() {
         val adapter = RepoListAdapter {}
         mBinding.repoList.adapter = adapter
 
-        viewModel.repositories.observe(lifecycleOwner) {
-            progress.showIfLoading(it)
+        viewModel.repositories.observe(viewLifecycleOwner) {
+            progress.showProgressIfLoading(it)
             adapter.submitList(it.data)
         }
     }

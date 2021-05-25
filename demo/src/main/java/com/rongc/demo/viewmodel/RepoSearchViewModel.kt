@@ -13,6 +13,10 @@ class RepoSearchViewModel(private val repository: RepoRepository) : BaseViewMode
 
     val query = MutableLiveData<String>()
 
+    init {
+        query.value = "runnchild/Navigation"
+    }
+
     val result: LiveData<Resource<List<Repo>>> = query.switchMap {
         if (it.isBlank()) {
             AbsentLiveData.create()
@@ -27,5 +31,4 @@ class RepoSearchViewModel(private val repository: RepoRepository) : BaseViewMode
         }
         query.value = queryInput
     }
-
 }

@@ -1,4 +1,4 @@
-package com.rongc.feature.ui.fragment
+package com.rongc.feature.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,9 +25,11 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IH
         viewModelProvider()
     }
 
-    override val lifecycleOwner: LifecycleOwner get() = this
+    final override val lifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
 
-    override val host: Host get() = FragmentHost
+    final override val host: Host get() = FragmentHost
+
+    final override val abilities: ArrayList<IAbility> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +46,8 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IH
         return super.viewModelProvider()
     }
 
-    override fun registerAbility(ability: IAbility) {
+    final override fun registerAbility(ability: IAbility) {
+        super.registerAbility(ability)
         viewLifecycleOwner.lifecycle.addObserver(ability)
     }
 
@@ -52,5 +55,10 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IH
         return {
             defaultViewModelProviderFactory.create(cls)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        onHostDestroy()
     }
 }

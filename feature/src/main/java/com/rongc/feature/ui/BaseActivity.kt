@@ -17,6 +17,8 @@ abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActiv
 
     private var bindingAbility by autoCleared<BindingAbility<B>>()
 
+    override val abilities: ArrayList<IAbility> = ArrayList()
+
     protected val mBinding: B get() = bindingAbility.mBinding!!
 
     override val viewModel by lazy {
@@ -36,7 +38,8 @@ abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActiv
         setContentView(mBinding.root)
     }
 
-    override fun registerAbility(ability: IAbility) {
+    final override fun registerAbility(ability: IAbility) {
+        super.registerAbility(ability)
         lifecycle.addObserver(ability)
     }
 
@@ -48,5 +51,10 @@ abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActiv
         return {
             defaultViewModelProviderFactory.create(cls)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        onHostDestroy()
     }
 }

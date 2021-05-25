@@ -6,7 +6,7 @@ import androidx.navigation.fragment.findNavController
 import com.rongc.demo.R
 import com.rongc.demo.databinding.FragmentHomeBinding
 import com.rongc.demo.viewmodel.HomeViewModel
-import com.rongc.feature.ui.fragment.BaseFragment
+import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.autoCleared
 
 class Home : BaseFragment<FragmentHomeBinding, HomeViewModel>() {

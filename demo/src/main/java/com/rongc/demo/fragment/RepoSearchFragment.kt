@@ -9,15 +9,13 @@ import com.rongc.demo.adapter.RepoListAdapter
 import com.rongc.demo.api.RepoServiceProvider
 import com.rongc.demo.databinding.FragmentListBinding
 import com.rongc.demo.viewmodel.RepoSearchViewModel
-import com.rongc.feature.ability.showIfLoading
-import com.rongc.feature.ui.fragment.BaseFragment
+import com.rongc.feature.ui.BaseFragment
+import com.rongc.feature.ui.kt.showProgressIfLoading
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>() {
 
-    private val progress by lazy { ProgressAbility(requireContext()) }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        registerAbility(progress)
+        registerAbility(ProgressAbility(requireContext()))
 
         val adapter = RepoListAdapter {
             findNavController().navigate(RepoSearchFragmentDirections.showUser(it.owner.login, it.owner.url))
@@ -25,7 +23,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         mBinding.recyclerView.adapter = adapter
 
         viewModel.result.observe(viewLifecycleOwner) {
-            progress.showIfLoading(it)
+            showProgressIfLoading(it)
 
             if (it?.data != null) {
                 adapter.submitList(it.data)
@@ -33,8 +31,6 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
 
             KeyboardUtils.hideSoftInput(mBinding.edtQuery)
         }
-
-        viewModel.setQuery("runnchild/navigation")
 
         mBinding.btnQuery.setOnClickListener {
             viewModel.setQuery(mBinding.edtQuery.text.toString())
