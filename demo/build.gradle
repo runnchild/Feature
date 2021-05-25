@@ -1,14 +1,12 @@
 plugins { id 'com.rongc.app' }
-ext {
-    navigationVersion = '2.3.2'
-}
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
-
     buildFeatures {
         viewBinding true
     }
 }
+
 dependencies {
     implementation project(':feature')
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion") {

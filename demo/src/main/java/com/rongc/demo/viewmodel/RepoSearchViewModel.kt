@@ -9,9 +9,9 @@ import com.rongc.feature.utils.AbsentLiveData
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.Resource
 
-class ListViewModel(private val repository: RepoRepository) : BaseViewModel() {
+class RepoSearchViewModel(private val repository: RepoRepository) : BaseViewModel() {
 
-    private val query = MutableLiveData<String>()
+    val query = MutableLiveData<String>()
 
     val result: LiveData<Resource<List<Repo>>> = query.switchMap {
         if (it.isBlank()) {

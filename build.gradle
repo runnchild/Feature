@@ -14,6 +14,7 @@ buildscript {
     dependencies {
         classpath classpaths
         classpath bintrayPlugin
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
     }
 }
 

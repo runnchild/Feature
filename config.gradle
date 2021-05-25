@@ -3,6 +3,7 @@ ext {
     gradle_version = "4.2.0"
     aspect_version = "2.0.10"
     config_version = '2.0.1'
+    navigationVersion = '2.3.2'
 
     gradlePlugin = "com.android.tools.build:gradle:$gradle_version"
     kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

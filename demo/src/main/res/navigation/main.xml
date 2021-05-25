@@ -13,8 +13,29 @@
 
     <fragment
         android:id="@+id/list"
-        android:name="com.rongc.demo.fragment.ListFragment"
+        android:name="com.rongc.demo.fragment.RepoSearchFragment"
         android:label="List"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/show_user"
+            app:destination="@id/user" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user"
+        android:name="com.rongc.demo.fragment.UserFragment"
+        android:label="User"
+        tools:layout="@layout/fragment_user">
+
+        <argument
+            android:name="login"
+            app:argType="string" />
+
+        <argument
+            android:name="avatarUrl"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

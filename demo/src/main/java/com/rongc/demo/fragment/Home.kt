@@ -15,7 +15,7 @@ class Home : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        autoField = "try to rotate screen, times = ${viewModel.count}"
+        autoField = "try to create view, times = ${viewModel.count + 1}"
 
         mBinding.tvField.text = autoField
         viewModel.setCount(viewModel.count + 1)
