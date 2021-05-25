@@ -25,7 +25,7 @@ class UserFragment : BaseFragment<FragmentUserBinding, UserViewModel>() {
 
         viewModel.repositories.observe(viewLifecycleOwner) {
             progress.showProgressIfLoading(it)
-            adapter.submitList(it.data)
+            adapter.getDiffer().submitList(it.data?.toMutableList())
         }
     }
 }

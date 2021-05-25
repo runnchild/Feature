@@ -22,7 +22,7 @@ class RepoRepository {
     // 发起同一条件的查询时，距离上次请求超过一定时间后重新发起网络请求
     private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.SECONDS)
 
-    fun searchRepo(query: String): LiveData<Resource<List<Repo>>> {
+    fun searchRepo(query: String, page: Int): LiveData<Resource<List<Repo>>> {
         return object: NetworkBoundResource<List<Repo>, RepoSearchResponse>() {
             // 缓存请求数据
             override fun saveCallResult(item: RepoSearchResponse) {
@@ -57,7 +57,7 @@ class RepoRepository {
 
             // 发起网络请求
             override fun createCall(): LiveData<ApiResponse<RepoSearchResponse>> {
-                return repoApi.searchRepos(query, 0)
+                return repoApi.searchRepos(query, page)
             }
 
             // 请求拉去失败

@@ -3,6 +3,7 @@ package com.rongc.feature.ability
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.rongc.feature.refresh.ItemDecoration
 
 /**
  * <p>
@@ -37,9 +38,9 @@ interface IListAbility : IAbility {
     /**
      * 配置列表分割线
      */
-//    fun decorationBuilder(): ItemDecoration.Builder.() -> Unit {
-//        return { }
-//    }
+    fun decorationBuilder(): ItemDecoration.Builder.() -> Unit {
+        return { }
+    }
 
     /**
      * 添加列表item样式

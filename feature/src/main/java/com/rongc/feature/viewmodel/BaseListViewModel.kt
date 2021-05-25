@@ -2,9 +2,14 @@ package com.rongc.feature.viewmodel
 
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.MutableLiveData
+import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import com.rongc.feature.binding.LoadStatus
 import com.rongc.feature.bus.SingleLiveData
 import com.rongc.feature.refresh.PageIndicator
+import com.rongc.feature.vo.Resource
+import com.rongc.feature.vo.Status
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import kotlinx.coroutines.Job
@@ -46,7 +51,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     /**
      * 刷新和加载状态
      */
-//    val loadStatus = ObservableField<LoadStatus>()
+    val loadStatus = ObservableField<LoadStatus>()
 
     /**
      * 是否自动刷新
@@ -57,7 +62,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
     val setupEmptyView = SingleLiveData<Int>()
 
-    val dataLiveData = MutableLiveData<List<T>>()
+    val result = MediatorLiveData<Resource<List<T>>>()
 
     /**
      * 没有数据时是否允许刷新
@@ -113,7 +118,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
 //    override fun onCreate() {
 //        super.onCreate()
-        // 刷新时机延后，到UI的initView，initData方法后
+    // 刷新时机延后，到UI的initView，initData方法后
 //        viewModelScope.launch(Dispatchers.Main) {
 //            if (autoRefresh) {
 //                refresh()
@@ -121,49 +126,73 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 //        }
 //    }
 
-//    private fun setStatus(status: LoadStatus) {
-//        val same = loadStatus.get() == status
-//        loadStatus.set(status)
-//        if (same) {
-//            loadStatus.notifyChange()
-//        }
-//    }
+    fun setStatus(status: LoadStatus) {
+        val same = loadStatus.get() == status
+        loadStatus.set(status)
+        if (same) {
+            loadStatus.notifyChange()
+        }
+    }
 
     /**
      * 列表item数据， 由页面监听数组变化， 继承类不应直接操作
      */
     val items = ObservableArrayList<T>()
+
     /**
      * 刷新
      * @param byPull 是否通过下拉的刷新
      */
     fun refresh(byPull: Boolean = false) {
 //        dataRequestCall.refreshByUser = byPull
-//        loadData(PageIndicator.PAGE_START, dataRequestCall)
+        loadData(PageIndicator.PAGE_START)
     }
 
     fun loadMore() {
 //        dataRequestCall.refreshByUser = true
-//        loadData(pageIndicator.page + 1, dataRequestCall)
+        loadData(pageIndicator.page + 1)
     }
 
     /**
      * 数据请求方法
      * @param page 请求页码
-     * @param dataRequestCall 结果回调
      */
-//    open fun loadData(page: Int, dataRequestCall: DataRequestCallback<List<T>>) {
-//        primaryJob?.cancel()
-//        primaryJob = launch({
-//            val data = fetchListData(page)
-//            dataRequestCall.onSuccess(page, data)
-//            dataLiveData.value = data
-//            loadDataSuccess(page, data)
-//        }, {
-//            dataRequestCall.onFailed(page)
-//            loadDataFailed(page, it)
-//        }, showDialog = false)
-//    }
+    open fun loadData(page: Int) {
+        val source = loadListData(page)
+        result.addSource(source) {
+            result.removeSource(source)
+            loadStatus(it)?.let { status ->
+                loadStatus.set(status)
+            }
+        }
+    }
+
+    private fun <T> loadStatus(resource: Resource<List<T>>?): LoadStatus? {
+        val isRefresh = getPage() == PageIndicator.PAGE_START
+        resource ?: return if (isRefresh) {
+            LoadStatus.FINISH_REFRESH_FAILED
+        } else {
+            LoadStatus.FINISH_LOAD_FAILED
+        }
+
+        return if (resource.status == Status.SUCCESS) {
+            if (isRefresh) {
+                LoadStatus.FINISH_REFRESH_SUCCESS
+            } else {
+                if (resource.data.isNullOrEmpty()) {
+                    LoadStatus.FINISH_LOAD_NO_MORE
+                } else {
+                    LoadStatus.FINISH_LOAD_SUCCESS
+                }
+            }
+        } else if (resource.status == Status.ERROR) {
+            if (isRefresh) {
+                LoadStatus.FINISH_REFRESH_FAILED
+            } else {
+                LoadStatus.FINISH_LOAD_FAILED
+            }
+        } else null
+    }
 
     open fun loadDataSuccess(page: Int, data: List<T>) {
     }
@@ -171,7 +200,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 //    open fun loadDataFailed(page: Int, error: ServicesException) {
 //    }
 
-    abstract suspend fun fetchListData(page: Int): List<T>
+    abstract fun loadListData(page: Int): LiveData<Resource<List<T>>>
 
-    fun getCurPage() = pageIndicator.page
+    fun getPage() = pageIndicator.page
 }
