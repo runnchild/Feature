@@ -14,6 +14,7 @@ import com.rongc.feature.refresh.ItemDecoration
  * @date 2021/3/26
  */
 interface IListAbility : IAbility {
+    val recyclerView: RecyclerView
 
     /**
      * 默认使用BaseBinderAdapter，如果需要提供新Adapter, 重写此方法返回需要设置的Adapter

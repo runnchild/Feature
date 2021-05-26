@@ -33,6 +33,7 @@
         <include
             android:id="@+id/recyclerView"
             layout="@layout/base_recycler_with_refresh"
+            app:viewModel="@{viewModel}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

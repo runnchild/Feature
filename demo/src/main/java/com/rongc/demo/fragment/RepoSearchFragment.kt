@@ -13,20 +13,19 @@ import com.rongc.demo.databinding.FragmentListBinding
 import com.rongc.demo.viewmodel.RepoSearchViewModel
 import com.rongc.feature.ability.IListAbility
 import com.rongc.feature.ability.ListAbility
-import com.rongc.feature.ability.observeResource
 import com.rongc.feature.ui.BaseFragment
-import com.rongc.feature.ui.kt.showProgressIfLoading
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(), IListAbility {
 
+    override val recyclerView: RecyclerView
+        get() = mBinding.recyclerView.baseRecyclerView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(ProgressAbility(requireContext()))
-        registerAbility(ListAbility(this, mBinding.recyclerView.baseRecyclerView))
-
-        observeResource(viewModel)
+        registerAbility(ListAbility(this, this))
         
         viewModel.result.observe(viewLifecycleOwner) {
-            showProgressIfLoading(it)
+//            showProgressIfLoading(it)
             KeyboardUtils.hideSoftInput(mBinding.edtQuery)
         }
 

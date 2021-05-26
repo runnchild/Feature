@@ -13,13 +13,13 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:enableLoadMore="@{viewModel.enableLoadMore}"
+        app:enableRefresh="@{viewModel.enableRefresh}"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-<!--        app:enableLoadMore="@{viewModel.enableLoadMore}"-->
-<!--        app:enableRefresh="@{viewModel.enableRefresh}"-->
-<!--        app:loadMoreListener="@{viewModel.onLoadMoreListener}"-->
-<!--        app:refreshListener="@{viewModel.onRefreshListener}"-->
-<!--        app:loadStatus="@{viewModel.loadStatus}"-->
+        app:layout_constraintTop_toTopOf="parent"
+        app:loadMoreListener="@{viewModel.onLoadMoreListener}"
+        app:loadStatus="@{viewModel.loadStatus}"
+        app:refreshListener="@{viewModel.onRefreshListener}">
 
         <com.rongc.feature.widget.InterceptRecyclerView
             android:id="@+id/base_recyclerView"

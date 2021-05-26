@@ -2,6 +2,7 @@ package com.rongc.demo.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.rongc.demo.repository.RepoRepository
 import com.rongc.demo.vo.Repo
 import com.rongc.feature.utils.AbsentLiveData
@@ -10,22 +11,26 @@ import com.rongc.feature.vo.Resource
 
 class RepoSearchViewModel(private val repository: RepoRepository) : BaseListViewModel<Repo>() {
 
-    val query = MutableLiveData<String>()
+    private val _query = MutableLiveData<String>()
+
+    val query = _query.map {
+        refresh()
+        it
+    }
 
     init {
-        query.value = "runnchild/Navigation"
+        this._query.value = "runnchild/Navigation"
     }
 
     fun setQuery(queryInput: String) {
-        if (queryInput.trim() == query.value) {
+        if (queryInput.trim() == this._query.value) {
             return
         }
-        query.value = queryInput
-        refresh()
+        this._query.value = queryInput
     }
 
     override fun loadListData(page: Int): LiveData<Resource<List<Repo>>> {
-        val it = query.value
+        val it = this._query.value
         return  if (it.isNullOrEmpty()) {
             AbsentLiveData.create()
         } else {
