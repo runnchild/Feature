@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.KeyboardUtils
@@ -20,6 +22,8 @@ import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.logd
+import com.rongc.feature.viewmodel.EmptyBuilder
+import com.rongc.feature.widget.IEmptyView
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(), IListAbility {
 
@@ -61,6 +65,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
     }
 
     override fun providerLayoutManager(context: Context): RecyclerView.LayoutManager {
+        // default is LinearLayoutManager
         return super.providerLayoutManager(context)
     }
 
@@ -68,6 +73,28 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         return {
             setVerticalLineWidth(1.idp)
             setLineColor(Color.GRAY)
+        }
+    }
+
+    override fun providerEmptyView(context: Context): IEmptyView? {
+        // default is EmptyView
+        return super.providerEmptyView(context)
+    }
+
+    override fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit {
+        return {
+            iconDrawable = Color.BLUE.toDrawable()
+
+            tip {
+                text = "no data found"
+            }
+            subTip {
+                text = "try again"
+            }
+            refreshBtn {
+                text = "retry"
+                isVisible = true
+            }
         }
     }
 }
