@@ -13,7 +13,7 @@ import com.rongc.feature.refresh.ItemDecoration
  * @author qiurong
  * @date 2021/3/26
  */
-interface IListAbility : IAbility {
+interface IListAbility {
     val recyclerView: RecyclerView
 
     /**

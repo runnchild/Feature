@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_10"
     android:paddingStart="15dp">
 
     <TextView
@@ -20,10 +21,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="des" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/black_20" />
 </androidx.appcompat.widget.LinearLayoutCompat>

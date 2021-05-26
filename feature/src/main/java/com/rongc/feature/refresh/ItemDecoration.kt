@@ -1,8 +1,10 @@
 package com.rongc.feature.refresh
 
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,6 @@ import com.rongc.feature.utils.color
  * <p>
  * Date: 2020/3/11
  * Copyright: Copyright (c) 2010-2020
- * Company: @微微科技有限公司
  * Updater:
  * Update Time:
  * Update Comments:
@@ -73,6 +74,27 @@ class ItemDecoration(builder: Builder) : RecyclerView.ItemDecoration() {
         val right = getRightOffsets(view, parent, state)
         val bottom = getBottomOffsets(view, parent, state)
         outRect.set(left, top, right, bottom)
+    }
+
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        parent.forEach {
+            val pos = parent.getChildAdapterPosition(it)
+            if (pos > 0) {
+                if (parent.layoutManager is LinearLayoutManager) {
+                    drawLinearDivider(c, parent, it)
+                }
+            }
+        }
+    }
+
+    private fun drawLinearDivider(c: Canvas, parent: RecyclerView, it: View) {
+        c.drawRect(
+            parent.paddingLeft.toFloat(),
+            it.top - verticalLineWidth.toFloat(),
+            it.width - parent.paddingRight.toFloat(),
+            it.top.toFloat(),
+            mPaint
+        )
     }
 
     /**
