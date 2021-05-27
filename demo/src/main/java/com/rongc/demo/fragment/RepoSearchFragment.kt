@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.KeyboardUtils
 import com.rongc.demo.ProgressAbility
+import com.rongc.demo.R
 import com.rongc.demo.adapter.RepoListAdapter
 import com.rongc.demo.api.RepoServiceProvider
 import com.rongc.demo.databinding.FragmentListBinding
@@ -23,6 +22,7 @@ import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.logd
 import com.rongc.feature.viewmodel.EmptyBuilder
+import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.widget.IEmptyView
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(), IListAbility {
@@ -38,7 +38,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
             // 有设置adapter时立即回调
             it.logd()
         }
-        
+
         viewModel.result.observe(viewLifecycleOwner) {
 //            showProgressIfLoading(it)
             KeyboardUtils.hideSoftInput(mBinding.edtQuery)
@@ -60,7 +60,12 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
 
     override fun providerAdapter(): RecyclerView.Adapter<*> {
         return RepoListAdapter {
-            findNavController().navigate(RepoSearchFragmentDirections.showUser(it.owner.login, it.owner.url))
+            findNavController().navigate(
+                RepoSearchFragmentDirections.showUser(
+                    it.owner.login,
+                    it.owner.url
+                )
+            )
         }
     }
 
@@ -81,10 +86,12 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         return super.providerEmptyView(context)
     }
 
-    override fun setupEmptyView(state: Int): EmptyBuilder.() -> Unit {
-        return {
-            iconDrawable = Color.BLUE.toDrawable()
-
+    override fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit {
+        // 只设置空数据，其他情况使用默认配置
+        return onlySetupEmptyData(state) {
+            icon {
+                setImageResource(R.mipmap.ic_launcher)
+            }
             tip {
                 text = "no data found"
             }
@@ -93,7 +100,6 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
             }
             refreshBtn {
                 text = "retry"
-                isVisible = true
             }
         }
     }

@@ -13,6 +13,8 @@ import com.rongc.feature.binding.itemDecoration
 import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.viewmodel.BaseListViewModel
+import com.rongc.feature.viewmodel.DefaultEmptyConfig
+import com.rongc.feature.viewmodel.EmptyBuilder
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.widget.EmptyView
@@ -31,8 +33,17 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
             host.observeResource(vm.result)
             vm.autoRefresh = listHost.autoRefresh()
 
-            vm.setupEmptyView.observe(owner) {
-                emptyView.getViewModel()?.emptyBuilder(listHost.setupEmptyView(it))
+            vm.setupEmptyView.observe(owner) { state ->
+                val defaultBuilder = when (state) {
+                    RefreshEmptyViewModel.State.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
+                    RefreshEmptyViewModel.State.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
+                    else -> DefaultEmptyConfig.emptyDataBuilder
+                }
+                // 替换默认配置
+                val emptyBuilder = EmptyBuilder().apply(defaultBuilder)
+                    .apply(listHost.setupEmptyView(state))
+                emptyBuilder.btnClick = { vm.refresh() }
+                emptyView.getViewModel()?.builder(emptyBuilder)
             }
         }
 

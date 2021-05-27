@@ -51,7 +51,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     var autoRefresh = false
 
     //    var emptyRefreshViewModel: RefreshEmptyViewModel? = null
-    val setupEmptyView = MutableLiveData<Int>()
+    val setupEmptyView = MutableLiveData<RefreshEmptyViewModel.State>()
 
     private val _request = MutableLiveData<Int>()
 
@@ -77,9 +77,9 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             Status.ERROR -> {
                 AppExecutors.diskIO().execute {
                     if (!NetworkUtils.isConnected()) {
-                        setupEmptyView.postValue(RefreshEmptyViewModel.EMPTY_NET_DISCONNECT)
+                        setupEmptyView.postValue(RefreshEmptyViewModel.State.EMPTY_NET_DISCONNECT)
                     } else if (!NetworkUtils.isAvailable()) {
-                        setupEmptyView.postValue(RefreshEmptyViewModel.EMPTY_NET_UNAVAILABLE)
+                        setupEmptyView.postValue(RefreshEmptyViewModel.State.EMPTY_NET_UNAVAILABLE)
                     }
                 }
             }
@@ -89,7 +89,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         liveData {
             if (it.status != Status.LOADING) {
                 if (resource.data.isNullOrEmpty()) {
-                    setupEmptyView.value = RefreshEmptyViewModel.EMPTY_EMPTY
+                    setupEmptyView.value = RefreshEmptyViewModel.State.EMPTY_DATA
                 }
                 emit(resource)
             }

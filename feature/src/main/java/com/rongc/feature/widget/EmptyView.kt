@@ -4,13 +4,26 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.rongc.feature.databinding.EmptyViewBinding
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 
-@BindingAdapter("textBuilder")
-fun TextView.refreshBuilder(builder: (TextView.() -> Unit)? = null) {
+@BindingAdapter("textBuilder", "defaultClick", requireAll = false)
+fun TextView.textBuilder(builder: (TextView.() -> Unit)? = null, defaultClick: (()->Unit)?) {
+    builder?.let {
+        apply(builder)
+        if (!hasOnClickListeners()) {
+            setOnClickListener {
+                defaultClick?.invoke()
+            }
+        }
+    }
+}
+
+@BindingAdapter("imageBuilder")
+fun ImageView.imageBuilder(builder: (ImageView.() -> Unit)? = null) {
     builder?.let {
         apply(builder)
     }

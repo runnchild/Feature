@@ -18,15 +18,16 @@
 
         <ImageView
             android:layout_width="140dp"
-            android:src="@{viewModel.icon}"
-            android:layout_height="140dp" />
+            android:layout_height="140dp"
+            app:imageBuilder="@{viewModel.iconBuilder}"
+            tools:src="@color/black_30" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:textBuilder="@{viewModel.tipBuilder}"
             android:textSize="17sp"
+            app:textBuilder="@{viewModel.tipBuilder}"
             tools:text="网络未连接" />
 
         <TextView
@@ -43,15 +44,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:background="#FC485B"
             android:gravity="center"
             android:minWidth="112dp"
             android:minHeight="35dp"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:visibility="gone"
+            app:defaultClick="@{viewModel.refreshClick}"
             app:textBuilder="@{viewModel.refreshBuilder}"
-            app:round_radius="@{70}"
-            android:background="#FC485B"
             tools:text="刷新" />
     </LinearLayout>
 </layout>
