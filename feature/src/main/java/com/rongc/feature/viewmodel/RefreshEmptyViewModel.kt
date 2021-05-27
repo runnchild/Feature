@@ -34,10 +34,17 @@ class RefreshEmptyViewModel {
 
     fun builder(builder: EmptyBuilder) {
         builder.let {
+            tip.set(it.tip)
+            subTip.set(it.subTip)
+            btnVisible.set(it.btnVisible)
+            btnText.set(it.btnText)
+            icon.set(it.iconDrawable)
             refreshClick.set(it.btnClick)
+
             tipBuilder.set(it.tipBuilder)
             subTipBuilder.set(it.subTipBuilder)
             iconBuilder.set(it.iconBuilder)
+            refreshBuilder.set(it.refreshBuilder)
         }
     }
 }
@@ -56,7 +63,6 @@ class EmptyBuilder {
     var iconBuilder: (ImageView.() -> Unit)? = null
 
     fun refreshBtn(build: TextView.() -> Unit) {
-        btnVisible = true
         refreshBuilder = build
     }
 

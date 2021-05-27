@@ -34,7 +34,8 @@ interface IListAbility {
     /**
      * 配置空页面UI
      */
-    fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit = {}
+    fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit = {
+    }
 
     /**
      * 如果需要，重写并返回其他空页面

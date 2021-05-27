@@ -5,11 +5,14 @@ import com.rongc.demo.databinding.ActivityMainBinding
 import com.rongc.demo.viewmodel.HomeViewModel
 import com.rongc.feature.ui.BaseActivity
 import com.rongc.feature.utils.autoCleared
+import com.rongc.feature.utils.dp
+import com.rongc.feature.utils.setRoundBg
+import com.rongc.feature.viewmodel.DefaultEmptyConfig
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
-class MainActivity: BaseActivity<ActivityMainBinding, HomeViewModel>() {
+class MainActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     var autoField by autoCleared<String>()
 
@@ -23,6 +26,11 @@ class MainActivity: BaseActivity<ActivityMainBinding, HomeViewModel>() {
         }
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ ->
             ClassicsFooter(context)
+        }
+        DefaultEmptyConfig.configEmptyDataBuilder {
+            refreshBtn {
+                setRoundBg(0, 15.dp)
+            }
         }
     }
 }

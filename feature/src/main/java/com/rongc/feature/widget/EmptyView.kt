@@ -11,12 +11,12 @@ import com.rongc.feature.databinding.EmptyViewBinding
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 
 @BindingAdapter("textBuilder", "defaultClick", requireAll = false)
-fun TextView.textBuilder(builder: (TextView.() -> Unit)? = null, defaultClick: (()->Unit)?) {
+fun TextView.textBuilder(builder: (TextView.() -> Unit)? = null, defaultClick: (() -> Unit)?) {
     builder?.let {
         apply(builder)
-        if (!hasOnClickListeners()) {
+        if (!hasOnClickListeners() && defaultClick != null) {
             setOnClickListener {
-                defaultClick?.invoke()
+                defaultClick.invoke()
             }
         }
     }

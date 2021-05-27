@@ -92,15 +92,19 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
             icon {
                 setImageResource(R.mipmap.ic_launcher)
             }
+//          or  iconDrawable = Color.GREEN.toDrawable()
             tip {
                 text = "no data found"
             }
+//          or  tip = "no data found"
             subTip {
                 text = "try again"
             }
+//          or  subTip = "try again"
             refreshBtn {
                 text = "retry"
             }
+//          or  btnText = "retry"
         }
     }
 }
