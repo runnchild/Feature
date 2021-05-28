@@ -48,9 +48,7 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
                 emptyView.getViewModel()?.builder(emptyBuilder)
             }
 
-            if (listHost.autoRefresh()) {
-                vm.refresh()
-            }
+            vm.autoRefresh = listHost.autoRefresh()
         }
 
         val recyclerView = listHost.recyclerView

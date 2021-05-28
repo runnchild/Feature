@@ -48,6 +48,15 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         loadMore()
     }
 
+    var autoRefresh: Boolean = false
+        set(value) {
+            // 页面设置了自动刷新，并且之前没刷新过时自动刷新
+            if (!autoRefresh && value) {
+                refresh()
+            }
+            field = value
+        }
+
     //    var emptyRefreshViewModel: RefreshEmptyViewModel? = null
     val setupEmptyView = MutableLiveData<RefreshEmptyViewModel.State>()
 
