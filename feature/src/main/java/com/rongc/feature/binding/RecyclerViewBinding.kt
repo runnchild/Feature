@@ -18,7 +18,7 @@ import java.lang.reflect.ParameterizedType
  * @param binders  binders的大小代表不同布局的数量， 数据内容的类型不可一样
  */
 @BindingAdapter("itemBinders")
-fun  RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<out Any>>) {
+fun RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<out Any>>) {
     if (binders.isNullOrEmpty()) {
         return
     }
@@ -109,9 +109,10 @@ fun RecyclerView.divider(
     )
 }
 
-fun RecyclerView.baseAdapter() = adapter as? BaseQuickAdapter<*, *>
-
-
+/**
+ * 如果此时还未设置adapter，将在设置了adapter后立即回调adapter。
+ * 如果此时设置了adapter，则立即回调
+ */
 fun <T : RecyclerView.Adapter<*>> RecyclerView.doOnAdapter(block: (T) -> Unit) {
     if (adapter != null) {
         @Suppress("UNCHECKED_CAST")
@@ -121,6 +122,10 @@ fun <T : RecyclerView.Adapter<*>> RecyclerView.doOnAdapter(block: (T) -> Unit) {
     }
 }
 
+/**
+ * 如果此时还未设置adapter，将在设置了adapter后立即回调BaseQuickAdapter。
+ * 如果此时设置了adapter，则立即回调BaseQuickAdapter
+ */
 fun <T> RecyclerView.doOnDefaultAdapter(block: (BaseQuickAdapter<T, *>) -> Unit) {
     return doOnAdapter(block)
 }

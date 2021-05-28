@@ -5,11 +5,21 @@ import com.rongc.feature.ability.showProgressIfLoading
 import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.vo.Resource
 
-fun IHost<*>.showProgressIfLoading(resource: Resource<*>?) {
-    findAbility {
+private fun IHost<*>.findProgressAbility(): AbsProgressAbility {
+    return findAbility {
         it is AbsProgressAbility
-    }?.let {
-        it as AbsProgressAbility
-        it.showProgressIfLoading(resource)
-    } ?: throw IllegalArgumentException("need to register ProgressAbility first!!!")
+    } as? AbsProgressAbility
+        ?: throw IllegalArgumentException("need to register ProgressAbility first!!!")
+}
+
+fun IHost<*>.showProgressIfLoading(resource: Resource<*>?) {
+    findProgressAbility().showProgressIfLoading(resource)
+}
+
+fun IHost<*>.showProgress() {
+    findProgressAbility().showDialog()
+}
+
+fun IHost<*>.dismissProgress() {
+    findProgressAbility().dismissDialog()
 }

@@ -8,6 +8,12 @@ import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
 import kotlinx.coroutines.*
 
+/**
+ * 显示进度弹窗能力
+ * 先在Activity/Fragment中registerAbility(AbsProgressAbility(context)),
+ * 在网络请求或者耗时操作时可调用#showDialog()显示弹窗, #dismissDialog()关闭弹窗。
+ * 当showDialog后会延时delay毫秒后显示，如果期间被关闭了则此次不会显示弹窗。
+ */
 abstract class AbsProgressAbility(context: Context) : IAbility {
     var delay = 400L
 

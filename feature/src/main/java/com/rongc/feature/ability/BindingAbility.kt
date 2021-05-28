@@ -14,9 +14,7 @@ class BindingAbility<B : ViewBinding> : IAbility {
     var mBinding: B? = null
 
     fun onCreateImmediately(
-        host: IHost<*>,
-        inflater: LayoutInflater,
-        container: ViewGroup? = null
+        host: IHost<*>, inflater: LayoutInflater, container: ViewGroup? = null
     ) {
         val binding = binding(host, inflater, container)
         if (binding is ViewDataBinding) {
