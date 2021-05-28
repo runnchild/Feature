@@ -34,6 +34,7 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
 
     override fun autoRefresh(): Boolean {
         viewModel.login.value = args.login
+        viewModel.avatar = args.avatarUrl
         return super.autoRefresh()
     }
 

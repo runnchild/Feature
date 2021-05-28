@@ -10,6 +10,7 @@ import com.rongc.demo.vo.RepoSearchResult
 import com.rongc.feature.api.ApiResponse
 import com.rongc.feature.api.ApiSuccessResponse
 import com.rongc.feature.repository.NetworkBoundResource
+import com.rongc.feature.repository.netResource
 import com.rongc.feature.utils.AbsentLiveData
 import com.rongc.feature.utils.RateLimiter
 import com.rongc.feature.vo.Resource
@@ -19,7 +20,8 @@ class RepoRepository {
 
     private val repoApi = RepoServiceProvider.apiService
 
-    // 发起同一条件的查询时，距离上次请求超过一定时间后重新发起网络请求
+    // 发起同一条件的查询时，距离上次请求超过$timeout时间后将重新发起网络请求
+    // 因此RepoRepository应该单实例
     private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.SECONDS)
 
     fun searchRepo(query: String, page: Int): LiveData<Resource<List<Repo>>> {
@@ -60,7 +62,7 @@ class RepoRepository {
                 return repoApi.searchRepos(query, page)
             }
 
-            // 请求拉去失败
+            // 请求失败
             override fun onFetchFailed() {
                 repoListRateLimit.reset(query)
             }
@@ -73,26 +75,7 @@ class RepoRepository {
     }
     
     fun getRepos(owner: String): LiveData<Resource<List<Repo>>> {
-        return object : NetworkBoundResource<List<Repo>, List<Repo>>() {
-            override fun saveCallResult(item: List<Repo>) {
-                repoDao.insertRepos(item)
-            }
-
-            override fun shouldFetch(data: List<Repo>?): Boolean {
-                return data == null || repoListRateLimit.shouldFetch(owner)
-            }
-
-            override fun loadFromDb(): LiveData<List<Repo>> {
-                return repoDao.loadRepositories(owner)
-            }
-
-            override fun createCall(): LiveData<ApiResponse<List<Repo>>> {
-                return repoApi.getRepos(owner)
-            }
-
-            override fun onFetchFailed() {
-                repoListRateLimit.reset(owner)
-            }
-        }.asLiveData()
+        // 只发起网络请求，不做缓存
+        return repoApi.getRepos(owner).netResource()
     }
 }
