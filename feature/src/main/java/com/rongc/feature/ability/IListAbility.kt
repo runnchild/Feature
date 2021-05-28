@@ -3,6 +3,7 @@ package com.rongc.feature.ability
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.viewmodel.DefaultEmptyConfig
 import com.rongc.feature.viewmodel.EmptyBuilder
@@ -66,8 +67,8 @@ interface IListAbility {
     /**
      * 添加列表item样式
      */
-//    fun registerItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>) {
-//    }
+    fun registerItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>) {
+    }
 
     /**
      * 默认返回LinearLayoutManager

@@ -1,7 +1,10 @@
 package com.rongc.feature.viewmodel
 
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.blankj.utilcode.util.NetworkUtils
 import com.rongc.feature.AppExecutors
 import com.rongc.feature.binding.LoadStatus
@@ -37,18 +40,13 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
     val onRefreshListener = OnRefreshListener {
         // 开启了自动刷新的首次判断为非用户操作
-        refresh(!(autoRefresh && firstRefresh))
+        refresh(!firstRefresh)
         firstRefresh = false
     }
 
     val onLoadMoreListener = OnLoadMoreListener {
         loadMore()
     }
-
-    /**
-     * 是否自动刷新
-     */
-    var autoRefresh = false
 
     //    var emptyRefreshViewModel: RefreshEmptyViewModel? = null
     val setupEmptyView = MutableLiveData<RefreshEmptyViewModel.State>()
@@ -59,7 +57,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         loadListData(it)
     }
 
-    val result = _result.switchMap {
+    val result = _result.map {
         var resource = it
         val isRefresh = _request.value == PageIndicator.PAGE_START
 
@@ -86,14 +84,13 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             else -> {
             }
         }
-        liveData {
-            if (it.status != Status.LOADING) {
-                if (resource.data.isNullOrEmpty()) {
-                    setupEmptyView.value = RefreshEmptyViewModel.State.EMPTY_DATA
-                }
-                emit(resource)
+        if (it.status != Status.LOADING) {
+            if (resource.data.isNullOrEmpty()) {
+                setupEmptyView.value = RefreshEmptyViewModel.State.EMPTY_DATA
             }
         }
+
+        resource
     }
 
     private fun convertMoreData(source: List<T>?): List<T> {
@@ -144,12 +141,6 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
      * 没有数据时是否允许刷新
      */
     var enableRefreshWhenEmpty = true
-
-    init {
-        if (autoRefresh) {
-            refresh()
-        }
-    }
 
     /**
      * 刷新

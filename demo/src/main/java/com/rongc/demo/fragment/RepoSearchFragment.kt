@@ -19,6 +19,7 @@ import com.rongc.feature.ability.ListAbility
 import com.rongc.feature.binding.doOnDefaultAdapter
 import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.BaseFragment
+import com.rongc.feature.ui.kt.showProgressIfLoading
 import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.logd
 import com.rongc.feature.viewmodel.EmptyBuilder
@@ -40,7 +41,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         }
 
         viewModel.result.observe(viewLifecycleOwner) {
-//            showProgressIfLoading(it)
+            showProgressIfLoading(it)
             KeyboardUtils.hideSoftInput(mBinding.edtQuery)
         }
 
