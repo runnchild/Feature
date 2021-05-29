@@ -20,7 +20,7 @@ interface IHost<M : BaseViewModel>: IAbilityHost {
         while (modelClass == null) {
             @Suppress("UNCHECKED_CAST")
             modelClass = hasViewModelType(cls) as? Class<M>
-            modelClass?.let {
+            modelClass?:let {
                 cls = cls.superclass as Class<*>
             }
         }

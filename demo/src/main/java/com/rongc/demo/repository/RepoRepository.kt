@@ -10,7 +10,7 @@ import com.rongc.demo.vo.RepoSearchResult
 import com.rongc.feature.api.ApiResponse
 import com.rongc.feature.api.ApiSuccessResponse
 import com.rongc.feature.repository.NetworkBoundResource
-import com.rongc.feature.repository.netResource
+import com.rongc.feature.repository.networkOnly
 import com.rongc.feature.utils.AbsentLiveData
 import com.rongc.feature.utils.RateLimiter
 import com.rongc.feature.vo.Resource
@@ -76,6 +76,6 @@ class RepoRepository {
     
     fun getRepos(owner: String): LiveData<Resource<List<Repo>>> {
         // 只发起网络请求，不做缓存
-        return repoApi.getRepos(owner).netResource()
+        return repoApi.getRepos(owner).networkOnly()
     }
 }

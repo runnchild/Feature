@@ -26,9 +26,7 @@ import java.lang.reflect.Type
 
 class LiveDataCallAdapterFactory : Factory() {
     override fun get(
-        returnType: Type,
-        annotations: Array<Annotation>,
-        retrofit: Retrofit
+        returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit
     ): CallAdapter<*, *>? {
         if (getRawType(returnType) != LiveData::class.java) {
             return null

@@ -38,13 +38,13 @@ abstract class NetOnlyResource<T> : NetworkBoundResource<T, T>() {
 /**
  * 只发起网络请求，不缓存
  */
-fun <T> LiveData<ApiResponse<T>>.netResource(
+fun <T> LiveData<ApiResponse<T>>.networkOnly(
     process: ((ApiSuccessResponse<T>) -> T)? = null,
     failed: (() -> Unit)? = null
 ): LiveData<Resource<T>> {
     return object : NetOnlyResource<T>() {
         override fun createCall(): LiveData<ApiResponse<T>> {
-            return this@netResource
+            return this@networkOnly
         }
 
         override fun processResponse(response: ApiSuccessResponse<T>): T {
