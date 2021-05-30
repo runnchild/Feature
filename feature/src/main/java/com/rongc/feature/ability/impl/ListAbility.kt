@@ -1,13 +1,12 @@
-package com.rongc.feature.ability
+package com.rongc.feature.ability.impl
 
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.R
+import com.rongc.feature.ability.IAbility
+import com.rongc.feature.ability.IListAbility
 import com.rongc.feature.binding.itemBinders
 import com.rongc.feature.binding.itemDecoration
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
@@ -18,8 +17,6 @@ import com.rongc.feature.viewmodel.BaseListViewModel
 import com.rongc.feature.viewmodel.DefaultEmptyConfig
 import com.rongc.feature.viewmodel.EmptyBuilder
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
-import com.rongc.feature.vo.Resource
-import com.rongc.feature.vo.Status
 import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.IEmptyView
 
@@ -48,7 +45,7 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
                 emptyView.getViewModel()?.builder(emptyBuilder)
             }
 
-            vm.autoRefresh = listHost.autoRefresh()
+            vm._autoRefresh = listHost.autoLoad()
         }
 
         val recyclerView = listHost.recyclerView
@@ -78,37 +75,5 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
             providerAdapter.headerWithEmptyEnable = true
             providerAdapter.footerWithEmptyEnable = true
         }
-    }
-}
-
-/**
- * 订阅列表数据结果返回监听，当结果返回时刷新列表
- * 订阅前应先注册{@link ListAbility}，如果ViewModel继承的是BaseListViewModel,则在注册后会自动订阅。
- * 否则需手动调用
- */
-@Suppress("UNCHECKED_CAST")
-fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
-    findAbility { it is ListAbility }?.let {
-        it as ListAbility
-        result.observe(lifecycleOwner) { resource ->
-            if (resource.status != Status.LOADING) {
-                val adapter = it.adapter
-                if (adapter is BaseQuickAdapter<*, *>) {
-                    adapter as BaseQuickAdapter<T, BaseViewHolder>
-                    adapter.setDiffNewData(resource.data?.toMutableList())
-                } else if (adapter is ListAdapter<*, *>) {
-                    adapter as ListAdapter<T, *>
-                    adapter.submitList(resource.data)
-                }
-            }
-        }
-    }
-}
-
-private fun <T> List<T>.toMutableList(): ArrayList<T> {
-    return if (this is ArrayList<*>) {
-        this as ArrayList<T>
-    } else {
-        ArrayList(this)
     }
 }

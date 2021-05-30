@@ -1,4 +1,4 @@
-package com.rongc.feature.ability
+package com.rongc.feature.ability.impl
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,14 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.rongc.feature.BR
+import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ui.host.IHost
 import java.lang.reflect.ParameterizedType
 
+/**
+ * 自动创建ViewBinding/DataBinding的能力
+ * 如果layout中定义了viewModel属性，则会自动为他赋值
+ */
 class BindingAbility<B : ViewBinding> : IAbility {
 
     var mBinding: B? = null

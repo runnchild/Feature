@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.rongc.feature.ability.BindingAbility
 import com.rongc.feature.ability.IAbility
+import com.rongc.feature.ability.impl.BindingAbility
 import com.rongc.feature.ui.host.ActivityHost
 import com.rongc.feature.ui.host.Host
 import com.rongc.feature.ui.host.IHost

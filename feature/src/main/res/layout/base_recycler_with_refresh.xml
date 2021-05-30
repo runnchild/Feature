@@ -9,23 +9,36 @@
             type="com.rongc.feature.viewmodel.BaseListViewModel" />
     </data>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:enableLoadMore="@{viewModel.enableLoadMore}"
-        app:enableRefresh="@{viewModel.enableRefresh}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:loadMoreListener="@{viewModel.onLoadMoreListener}"
-        app:loadStatus="@{viewModel.loadStatus}"
-        app:refreshListener="@{viewModel.onRefreshListener}">
+        android:orientation="vertical">
 
-        <com.rongc.feature.widget.InterceptRecyclerView
-            android:id="@+id/recyclerView"
+        <ViewStub
+            android:id="@+id/psn_toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/include_psn_toolbar" />
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+            app:autoRefresh="@{viewModel.autoRefresh}"
+            app:enableLoadMore="@{viewModel.enableLoadMore}"
+            app:enableRefresh="@{viewModel.enableRefresh}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadMoreListener="@{viewModel.onLoadMoreListener}"
+            app:loadStatus="@{viewModel.loadStatus}"
+            app:refreshListener="@{viewModel.onRefreshListener}">
+
+            <com.rongc.feature.widget.InterceptRecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

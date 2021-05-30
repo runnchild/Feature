@@ -6,7 +6,7 @@ import com.blankj.utilcode.util.ToastUtils
 
 
 var toastInstance = ToastUtils.make()
-//    .setBgColor(R.color.black_70.color())
+    .setBgColor(Color.parseColor("#80000000"))
     .setTextColor(Color.WHITE)
     .setGravity(Gravity.CENTER, 0, 0)
 

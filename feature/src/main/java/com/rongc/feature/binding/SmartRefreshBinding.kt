@@ -46,6 +46,10 @@ fun SmartRefreshLayout.status(status: LoadStatus?) {
 @BindingAdapter("autoRefresh")
 fun SmartRefreshLayout.autoRefresh(autoRefresh: Boolean) {
     if (autoRefresh) {
+//        if (!false) {
+//            autoRefresh(0,0,0f,false)
+//        } else {
+//        }
         autoRefresh()
     }
 }

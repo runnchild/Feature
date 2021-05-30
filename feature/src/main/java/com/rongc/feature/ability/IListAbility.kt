@@ -28,9 +28,9 @@ interface IListAbility {
     fun providerAdapter(): RecyclerView.Adapter<*>? = null
 
     /**
-     * 是否进入页面自动刷新
+     * 是否进入页面立即获取数据
      */
-    fun autoRefresh() = true
+    fun autoLoad() = true
 
     /**
      * 配置空页面UI
@@ -39,12 +39,13 @@ interface IListAbility {
     }
 
     /**
-     * 如果需要，重写并返回其他空页面
+     * 如果不使用默认的空页面，重写并返回其他空页面
      */
     fun providerEmptyView(context: Context): IEmptyView? = EmptyView(context)
 
     /**
      * 只设置空数据配置，无网等其他情况使用默认配置
+     * @see {@link com.rongc.feature.viewmodel.DefaultEmptyConfig}
      */
     fun onlySetupEmptyData(
         state: RefreshEmptyViewModel.State,

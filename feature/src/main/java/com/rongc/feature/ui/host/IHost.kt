@@ -13,6 +13,9 @@ interface IHost<M : BaseViewModel>: IAbilityHost {
     val viewModel: M
     val lifecycleOwner: LifecycleOwner
 
+    /**
+     * 提供ViewModel
+     */
     fun viewModelProvider(): M {
         var cls: Class<*> = this.javaClass
 
@@ -42,6 +45,9 @@ interface IHost<M : BaseViewModel>: IAbilityHost {
         } else null
     }
 
+    /**
+     * 首次创建时提供ViewModel
+     */
     fun viewModelCreator(cls: Class<M>): () -> M
 
 }

@@ -48,11 +48,16 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         loadMore()
     }
 
-    var autoRefresh: Boolean = false
+    val autoRefresh = ObservableBoolean(false)
+    var _autoRefresh: Boolean = false
         set(value) {
             // 页面设置了自动刷新，并且之前没刷新过时自动刷新
-            if (!autoRefresh && value) {
-                refresh()
+            if (!field && value) {
+                if (enableRefresh.get()) {
+                    autoRefresh.set(true)
+                } else {
+                    refresh()
+                }
             }
             field = value
         }

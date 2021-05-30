@@ -9,12 +9,14 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ClickUtils
 
 /**
- * View点击事件，默认不传递参数。如果需要传递参数可定义方法
+ * View点击事件，默认添加防抖动
+ * 默认不传递参数。如果需要传递参数可定义方法
  * <code>
  *     fun click(params: Any): () -> Unit = {
  *          log(params)
  *     }
  * </code>
+ * @param disableDebounce 是否关闭去抖动
  */
 @BindingAdapter("android:onClick", "disableDebounce", requireAll = false)
 fun View.onClick(call: (() -> Unit)?, disableDebounce: Boolean = false) {
@@ -23,7 +25,7 @@ fun View.onClick(call: (() -> Unit)?, disableDebounce: Boolean = false) {
 }
 
 /**
- * View点击时间，传递View本身
+ * View点击时间，传递View本身，默认添加防抖动
  * @param disableDebounce 是否关闭去抖动
  */
 @BindingAdapter("android:onClick", "disableDebounce", requireAll = false)

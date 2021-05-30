@@ -1,9 +1,10 @@
-package com.rongc.feature.ability
+package com.rongc.feature.ability.impl
 
 import android.content.Context
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleOwner
+import com.rongc.feature.ability.IAbility
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
 import kotlinx.coroutines.*
