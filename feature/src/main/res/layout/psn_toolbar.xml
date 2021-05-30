@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.feature.toolbar.ToolBarViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:psn_background="@{viewModel.background}"
+        app:visible="@{viewModel.toolbarVisible}"
+        tools:background="@color/white"
+        tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{viewModel.backClick}"
+            android:paddingStart="15dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="14dp"
+            android:scaleType="centerInside"
+            android:src="@{viewModel.backIcon}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:orInvisible="@{viewModel.backVisible}"
+            tools:src="@mipmap/common_icon_back"
+            tools:tint="@color/black" />
+
+        <LinearLayout
+            android:id="@+id/menu_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/tv_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menus="@{viewModel.menuItems}" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@{viewModel.title}"
+            android:textColor="#353535"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_back"
+            app:orInvisible="@{viewModel.titleVisible}"
+            tools:text="标题" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@{viewModel.dividerColor}"
+            app:layout_constraintTop_toBottomOf="@id/iv_back" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

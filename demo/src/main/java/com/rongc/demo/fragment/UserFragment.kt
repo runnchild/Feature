@@ -26,6 +26,15 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(ProgressAbility(requireContext()))
         registerAbility(ListAbility(this, this))
+        registerAbility(ToolbarAbility(this) {
+            title = "UserRepository"
+            menu {
+                text = "menu"
+                setOnClickListener {
+                    "menu click".toast()
+                }
+            }
+        })
 
         viewModel.result.observe(viewLifecycleOwner) {
             showProgressIfLoading(it)
