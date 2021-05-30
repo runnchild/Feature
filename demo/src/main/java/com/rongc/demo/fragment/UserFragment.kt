@@ -3,9 +3,11 @@ package com.rongc.demo.fragment
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.demo.ProgressAbility
+import com.rongc.demo.R
 import com.rongc.demo.viewmodel.UserViewModel
 import com.rongc.feature.ability.IListAbility
 import com.rongc.feature.ability.impl.ListAbility
@@ -16,7 +18,6 @@ import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
-import com.rongc.feature.utils.toast
 
 class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(), IListAbility {
 
@@ -31,9 +32,9 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
         registerAbility(ToolbarAbility(this) {
             title = "UserRepository"
             menu {
-                text = "menu"
+                text = "more"
                 setOnClickListener {
-                    "menu click".toast()
+                    findNavController().navigate(R.id.demo_dialog)
                 }
             }
         })

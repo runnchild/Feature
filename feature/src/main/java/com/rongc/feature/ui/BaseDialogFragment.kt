@@ -4,41 +4,48 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ability.impl.BindingAbility
-import com.rongc.feature.ui.host.FragmentHost
-import com.rongc.feature.ui.host.Host
+import com.rongc.feature.ui.host.DialogFragmentHost
 import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
-abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IHost<M> {
+/**
+ * <p>
+ * describe:
+ *
+ * </p>
+ * @author qiurong
+ * @date 2021/5/30
+ */
+abstract class BaseDialogFragment<B : ViewBinding, M : BaseViewModel> : BottomSheetDialogFragment(), IHost<M> {
 
     private var bindingAbility by autoCleared<BindingAbility<B>>()
-
     protected val mBinding: B get() = bindingAbility.mBinding!!
 
-    override val viewModel: M by lazy {
-        viewModelProvider()
+    override val abilities = ArrayList<IAbility>()
+    override val host = DialogFragmentHost()
+    override val viewModel: M by lazy { viewModelProvider() }
+    override val lifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
+
+    final override fun viewModelCreator(cls: Class<M>): () -> M {
+        return { defaultViewModelProviderFactory.create(cls) }
     }
 
-    final override val lifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
-
-    final override val host: Host get() = FragmentHost()
-
-    final override val abilities: ArrayList<IAbility> = ArrayList()
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         bindingAbility = BindingAbility()
         registerAbility(bindingAbility)
         bindingAbility.onCreateImmediately(this, inflater, container)
+
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
         return mBinding.root
     }
 
@@ -49,12 +56,6 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IH
     final override fun registerAbility(ability: IAbility) {
         super.registerAbility(ability)
         viewLifecycleOwner.lifecycle.addObserver(ability)
-    }
-
-    override fun viewModelCreator(cls: Class<M>): () -> M {
-        return {
-            defaultViewModelProviderFactory.create(cls)
-        }
     }
 
     override fun onDestroyView() {

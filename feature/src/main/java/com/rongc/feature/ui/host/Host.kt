@@ -1,5 +1,6 @@
 package com.rongc.feature.ui.host
 
 sealed class Host
-object FragmentHost : Host()
+open class FragmentHost : Host()
 object ActivityHost : Host()
+class DialogFragmentHost : FragmentHost()

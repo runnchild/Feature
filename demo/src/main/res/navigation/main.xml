@@ -38,4 +38,9 @@
             app:nullable="true" />
     </fragment>
 
+    <dialog
+        android:id="@+id/demo_dialog"
+        android:name="com.rongc.demo.fragment.DemoDialogFragment"
+        tools:layout="@layout/dialog_demo_fragment" />
+
 </navigation>
