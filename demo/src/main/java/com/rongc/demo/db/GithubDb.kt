@@ -1,4 +1,4 @@
-package com.rongc.demo.dp
+package com.rongc.demo.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -17,4 +17,5 @@ dependencies {
     implementation 'com.github.xiaofeidev:shadow:1.0.0'
     implementation deps.room.runtime
     kapt deps.room.compiler
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 }

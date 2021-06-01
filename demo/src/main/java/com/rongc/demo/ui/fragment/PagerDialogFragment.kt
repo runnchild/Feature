@@ -1,4 +1,4 @@
-package com.rongc.demo.fragment
+package com.rongc.demo.ui.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -14,7 +14,8 @@ import com.rongc.feature.ui.BaseDialogFragment
  * @author qiurong
  * @date 2021/5/30
  */
-class DemoDialogFragment : BaseDialogFragment<DialogDemoFragmentBinding, DemoDialogViewModel>() {
+class PagerDialogFragment : BaseDialogFragment<DialogDemoFragmentBinding, DemoDialogViewModel>() {
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }

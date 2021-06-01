@@ -30,7 +30,7 @@ interface IListAbility {
     /**
      * 是否进入页面立即获取数据
      */
-    fun autoLoad() = true
+    fun autoRefresh() = true
 
     /**
      * 配置空页面UI

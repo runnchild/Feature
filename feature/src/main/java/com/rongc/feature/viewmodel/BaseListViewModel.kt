@@ -1,5 +1,6 @@
 package com.rongc.feature.viewmodel
 
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -95,7 +96,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                     }
                 }
             }
-            else -> {
+            Status.LOADING -> {
             }
         }
         if (it.status != Status.LOADING) {
@@ -104,7 +105,15 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             }
         }
 
-        resource
+        resource.run {
+            if (data !is ObservableArrayList<*>) {
+                val list = ObservableArrayList<T>()
+                list.addAll(data?: emptyList())
+                Resource(status, list, message)
+            } else {
+                this
+            }
+        }
     }
 
     private fun convertMoreData(source: List<T>?): List<T> {
@@ -112,11 +121,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         if (source.isNullOrEmpty()) {
             return data
         }
-        val list = if (source is ArrayList<T>) {
-            source
-        } else {
-            source.toMutableList()
-        }
+        val list = ObservableArrayList<T>()
         list.addAll(0, data)
         return list
     }
@@ -138,15 +143,15 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                     }
                 }
             }
-            Status.LOADING -> {
-                LoadStatus.LOADING
-            }
-            else -> {
+            Status.ERROR -> {
                 if (isRefresh) {
                     LoadStatus.FINISH_REFRESH_FAILED
                 } else {
                     LoadStatus.FINISH_LOAD_FAILED
                 }
+            }
+            Status.LOADING -> {
+                LoadStatus.LOADING
             }
         }
     }
@@ -177,4 +182,6 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     abstract fun loadListData(page: Int): LiveData<Resource<List<T>>>
+
+    val items get() = result.value?.data
 }

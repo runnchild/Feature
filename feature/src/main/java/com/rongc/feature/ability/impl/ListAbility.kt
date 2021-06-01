@@ -1,9 +1,12 @@
 package com.rongc.feature.ability.impl
 
 import android.view.View
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.diff.BrvahListUpdateCallback
 import com.rongc.feature.R
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ability.IListAbility
@@ -45,7 +48,7 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
                 emptyView.getViewModel()?.builder(emptyBuilder)
             }
 
-            vm._autoRefresh = listHost.autoLoad()
+            vm._autoRefresh = listHost.autoRefresh()
         }
 
         val recyclerView = listHost.recyclerView
@@ -75,5 +78,46 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
             providerAdapter.headerWithEmptyEnable = true
             providerAdapter.footerWithEmptyEnable = true
         }
+
+//        val callback = BrvahListUpdateCallback(providerAdapter)
+//        (vm?.items as? ObservableArrayList<Any>)?.addOnListChangedCallback(object :
+//            ObservableList.OnListChangedCallback<ObservableList<Any>>() {
+//            override fun onChanged(sender: ObservableList<Any>?) {
+//                providerAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onItemRangeChanged(
+//                sender: ObservableList<Any>?,
+//                positionStart: Int,
+//                itemCount: Int
+//            ) {
+//                callback.onChanged(positionStart, itemCount, null)
+//            }
+//
+//            override fun onItemRangeInserted(
+//                sender: ObservableList<Any>?,
+//                positionStart: Int,
+//                itemCount: Int
+//            ) {
+//                callback.onInserted(positionStart, itemCount)
+//            }
+//
+//            override fun onItemRangeMoved(
+//                sender: ObservableList<Any>?,
+//                fromPosition: Int,
+//                toPosition: Int,
+//                itemCount: Int
+//            ) {
+//                callback.onMoved(fromPosition, toPosition)
+//            }
+//
+//            override fun onItemRangeRemoved(
+//                sender: ObservableList<Any>,
+//                positionStart: Int,
+//                itemCount: Int
+//            ) {
+//                callback.onRemoved(positionStart, itemCount)
+//            }
+//        })
     }
 }

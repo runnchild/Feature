@@ -1,4 +1,4 @@
-package com.rongc.demo.fragment
+package com.rongc.demo.ui.fragment
 
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +8,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.demo.ProgressAbility
 import com.rongc.demo.R
+import com.rongc.demo.ui.fragment.binders.UserItemBinder
+import com.rongc.demo.ui.fragment.binders.UserRepoItemBinder
 import com.rongc.demo.viewmodel.UserViewModel
 import com.rongc.feature.ability.IListAbility
 import com.rongc.feature.ability.impl.ListAbility
@@ -35,6 +37,7 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
                 text = "more"
                 setOnClickListener {
                     findNavController().navigate(R.id.demo_dialog)
+//                    viewModel.result.value.data
                 }
             }
         })
@@ -44,10 +47,10 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
         }
     }
 
-    override fun autoLoad(): Boolean {
+    override fun autoRefresh(): Boolean {
         viewModel.login.value = args.login
         viewModel.avatar = args.avatarUrl
-        return super.autoLoad()
+        return super.autoRefresh()
     }
 
     override fun registerItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>) {

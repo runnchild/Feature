@@ -1,6 +1,8 @@
-package com.rongc.demo
+package com.rongc.demo.ui
 
 import android.os.Bundle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
 import com.rongc.demo.databinding.ActivityMainBinding
 import com.rongc.demo.viewmodel.HomeViewModel
 import com.rongc.feature.ui.BaseActivity
@@ -20,7 +22,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         super.onCreate(savedInstanceState)
         autoField = "this field gets cleaned up when the activity is destroyed"
 
-        // 建议放在Application
+        // 建议放在Application+
+        Glide.init(this.application, GlideBuilder())
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ ->
             ClassicsHeader(context)
         }

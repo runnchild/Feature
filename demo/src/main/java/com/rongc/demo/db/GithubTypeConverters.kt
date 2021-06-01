@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rongc.demo.dp
+package com.rongc.demo.db
 
 import androidx.room.TypeConverter
 import com.rongc.feature.utils.logd

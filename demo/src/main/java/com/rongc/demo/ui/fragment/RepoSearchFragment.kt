@@ -1,4 +1,4 @@
-package com.rongc.demo.fragment
+package com.rongc.demo.ui.fragment
 
 import android.content.Context
 import android.graphics.Color

@@ -18,7 +18,7 @@ package com.rongc.demo.vo
 
 import androidx.room.Entity
 import androidx.room.TypeConverters
-import com.rongc.demo.dp.GithubTypeConverters
+import com.rongc.demo.db.GithubTypeConverters
 
 @Entity(primaryKeys = ["query"])
 @TypeConverters(GithubTypeConverters::class)

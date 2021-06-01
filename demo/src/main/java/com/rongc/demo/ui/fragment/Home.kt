@@ -1,4 +1,4 @@
-package com.rongc.demo.fragment
+package com.rongc.demo.ui.fragment
 
 import android.os.Bundle
 import android.view.View

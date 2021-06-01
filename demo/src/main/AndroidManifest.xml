@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Feature" >
         <activity
-            android:name="com.rongc.demo.MainActivity"
+            android:name="com.rongc.demo.ui.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

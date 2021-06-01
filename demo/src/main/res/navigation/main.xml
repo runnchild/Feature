@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.rongc.demo.fragment.Home"
+        android:name="com.rongc.demo.ui.fragment.Home"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/list"
-        android:name="com.rongc.demo.fragment.RepoSearchFragment"
+        android:name="com.rongc.demo.ui.fragment.RepoSearchFragment"
         android:label="List"
         tools:layout="@layout/fragment_list">
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/user"
-        android:name="com.rongc.demo.fragment.UserFragment"
+        android:name="com.rongc.demo.ui.fragment.UserFragment"
         android:label="User"
         tools:layout="@layout/fragment_user">
 
@@ -40,7 +40,7 @@
 
     <dialog
         android:id="@+id/demo_dialog"
-        android:name="com.rongc.demo.fragment.DemoDialogFragment"
+        android:name="com.rongc.demo.ui.fragment.PagerDialogFragment"
         tools:layout="@layout/dialog_demo_fragment" />
 
 </navigation>

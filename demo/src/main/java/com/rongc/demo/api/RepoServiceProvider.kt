@@ -2,8 +2,8 @@ package com.rongc.demo.api
 
 import androidx.room.Room
 import com.blankj.utilcode.util.Utils
-import com.rongc.demo.dp.GithubDb
-import com.rongc.demo.dp.RepoDao
+import com.rongc.demo.db.GithubDb
+import com.rongc.demo.db.RepoDao
 import com.rongc.demo.repository.RepoRepository
 import com.rongc.feature.network.getService
 
