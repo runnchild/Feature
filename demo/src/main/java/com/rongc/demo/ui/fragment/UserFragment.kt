@@ -8,8 +8,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.demo.ProgressAbility
 import com.rongc.demo.R
-import com.rongc.demo.ui.fragment.binders.UserItemBinder
-import com.rongc.demo.ui.fragment.binders.UserRepoItemBinder
+import com.rongc.demo.ui.binders.UserItemBinder
+import com.rongc.demo.ui.binders.UserRepoItemBinder
 import com.rongc.demo.viewmodel.UserViewModel
 import com.rongc.feature.ability.IListAbility
 import com.rongc.feature.ability.impl.ListAbility

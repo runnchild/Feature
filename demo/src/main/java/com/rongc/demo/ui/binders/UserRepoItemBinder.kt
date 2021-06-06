@@ -1,4 +1,4 @@
-package com.rongc.demo.ui.fragment.binders
+package com.rongc.demo.ui.binders
 
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.demo.databinding.RepoItemBinding

@@ -17,6 +17,6 @@ import com.rongc.feature.ui.BaseDialogFragment
 class PagerDialogFragment : BaseDialogFragment<DialogDemoFragmentBinding, DemoDialogViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.requestBanners()
     }
 }

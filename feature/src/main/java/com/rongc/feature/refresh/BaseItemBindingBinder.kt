@@ -21,7 +21,7 @@ abstract class BaseItemBindingBinder<B : ViewBinding, T> : BaseRecyclerItemBinde
         if (binding is ViewDataBinding) {
             try {
                 // 如果xml中没定义mBean
-                this::class.java.superclass?.getDeclaredField("mBean")
+                binding::class.java.superclass?.getDeclaredField("mBean")
                 binding.setVariable(BR.bean, data)
             } catch (e: Exception) {
             }

@@ -3,23 +3,20 @@ package com.rongc.feature.binding
 import android.view.View
 import androidx.core.view.doOnDetach
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
-import com.rongc.feature.refresh.ItemDecoration
-import com.rongc.feature.viewpager2.BaseViewPagerAdapter
 import com.rongc.feature.refresh.BinderAdapter
+import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.utils.removeFromParent
 import com.rongc.feature.viewmodel.RefreshEmptyViewModel
+import com.rongc.feature.viewpager2.BaseViewPagerAdapter
 import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.IEmptyView
 import kotlinx.coroutines.*
-import java.lang.reflect.ParameterizedType
 
 /**
  * 添加布局绑定Binder
@@ -27,23 +24,34 @@ import java.lang.reflect.ParameterizedType
  * @param binders  binders的大小代表不同布局的数量， 数据内容的类型不可一样
  */
 @BindingAdapter("itemBinders")
-fun ViewPager2.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<Any>>) {
+fun ViewPager2.itemBinders(binders: List<BaseRecyclerItemBinder<out Any>>) {
     if (binders.isNullOrEmpty()) {
         return
     }
-    val adapter = setup(adapter) as BaseBinderAdapter
     binders.forEach { item ->
-        val arguments =
-            (item::class.java.genericSuperclass as ParameterizedType).actualTypeArguments
-        val actualClz = arguments.lastOrNull() ?: return@forEach
-        val method = BaseBinderAdapter::class.java.getDeclaredMethod(
-            "addItemBinder",
-            Class::class.java,
-            BaseItemBinder::class.java,
-            DiffUtil.ItemCallback::class.java
-        )
-        method.isAccessible = true
-        method.invoke(adapter, actualClz, item, item.callback)
+        itemBinder(item)
+    }
+}
+
+@BindingAdapter("itemBinder")
+fun ViewPager2.itemBinder(binder: BaseRecyclerItemBinder<out Any>) {
+    val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
+    val adapter = setup(adapter) as BaseBinderAdapter
+    @Suppress("UNCHECKED_CAST")
+    val bin = binder as BaseRecyclerItemBinder<Any>
+    adapter.addItemBinder(actualClz as Class<*>, bin, bin.callback)
+}
+
+@BindingAdapter("itemBinderName")
+fun ViewPager2.itemBinder(binderClz: String) {
+    try {
+        val instance = Class.forName(binderClz).newInstance()
+        if (instance is BaseRecyclerItemBinder<*>) {
+            @Suppress("UNCHECKED_CAST")
+            itemBinder(instance as BaseRecyclerItemBinder<Any>)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }
 

@@ -1,4 +1,4 @@
-package com.rongc.demo.ui.fragment.binders
+package com.rongc.demo.ui.binders
 
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.viewholder.BaseViewHolder

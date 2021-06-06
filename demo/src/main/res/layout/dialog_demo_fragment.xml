@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
-            name="bannerBinders"
-            type="java.util.List&lt;com.rongc.feature.refresh.BaseRecyclerItemBinder>" />
+            name="viewModel"
+            type="com.rongc.demo.viewmodel.DemoDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,9 +14,18 @@
         android:layout_height="match_parent">
 
         <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/banner"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            app:itemBinderName='@{"com.rongc.demo.ui.binders.BannerBinder"}'
+            app:items="@{viewModel.banners}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/banner" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,11 +1,9 @@
 package com.rongc.feature.binding
 
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.rongc.feature.R
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
 import com.rongc.feature.refresh.BinderAdapter
@@ -18,37 +16,12 @@ import java.lang.reflect.ParameterizedType
  * @param binders  binders的大小代表不同布局的数量， 数据内容的类型不可一样
  */
 @BindingAdapter("itemBinders")
-fun RecyclerView.itemBinders(binders: MutableList<out BaseRecyclerItemBinder<out Any>>) {
+fun RecyclerView.itemBinders(binders: List<BaseRecyclerItemBinder<out Any>>) {
     if (binders.isNullOrEmpty()) {
         return
     }
-
-    fun findBinderType(clazz: Class<*>?): ParameterizedType? {
-        val type = clazz?.genericSuperclass ?: return null
-        if (type is ParameterizedType) {
-            return type
-        }
-        return findBinderType(clazz.superclass as? Class<*>)
-    }
-    if (adapter == null) {
-        adapter = BinderAdapter()
-    }
     binders.forEach { item ->
-        val arguments = findBinderType(item::class.java)!!.actualTypeArguments
-        var actualClz = arguments.lastOrNull() ?: return@forEach
-
-        while (actualClz is ParameterizedType) {
-            actualClz = actualClz.rawType
-        }
-
-        val method = BaseBinderAdapter::class.java.getDeclaredMethod(
-            "addItemBinder",
-            Class::class.java,
-            BaseItemBinder::class.java,
-            DiffUtil.ItemCallback::class.java
-        )
-        method.isAccessible = true
-        method.invoke(adapter, actualClz, item, item.callback)
+        itemBinder(item)
     }
 }
 
@@ -66,8 +39,23 @@ fun RecyclerView.itemBinder(binderClz: String) {
 }
 
 @BindingAdapter("itemBinder")
-fun RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<Any>) {
-    itemBinders(arrayListOf(binder))
+fun RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<out Any>) {
+    val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
+    if (adapter == null) {
+        adapter = BinderAdapter()
+    }
+    val adapter = adapter as BaseBinderAdapter
+    @Suppress("UNCHECKED_CAST")
+    val bin = binder as BaseRecyclerItemBinder<Any>
+    adapter.addItemBinder(actualClz as Class<*>, bin, bin.callback)
+}
+
+fun findBinderType(clazz: Class<*>?): ParameterizedType? {
+    val type = clazz?.genericSuperclass ?: return null
+    if (type is ParameterizedType) {
+        return type
+    }
+    return findBinderType(clazz.superclass as? Class<*>)
 }
 
 @BindingAdapter("itemDecoration")
