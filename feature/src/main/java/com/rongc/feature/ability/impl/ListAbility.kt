@@ -1,15 +1,12 @@
 package com.rongc.feature.ability.impl
 
 import android.view.View
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.diff.BrvahListUpdateCallback
 import com.rongc.feature.R
 import com.rongc.feature.ability.IAbility
-import com.rongc.feature.ability.IListAbility
+import com.rongc.feature.ability.IRecyclerList
 import com.rongc.feature.binding.itemBinders
 import com.rongc.feature.binding.itemDecoration
 import com.rongc.feature.refresh.BaseRecyclerItemBinder
@@ -23,7 +20,7 @@ import com.rongc.feature.viewmodel.RefreshEmptyViewModel
 import com.rongc.feature.widget.EmptyView
 import com.rongc.feature.widget.IEmptyView
 
-class ListAbility(private val host: IHost<*>, private val listHost: IListAbility) : IAbility {
+class ListAbility(private val host: IHost<*>, private val listHost: IRecyclerList) : IAbility {
 
     lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var emptyView: IEmptyView

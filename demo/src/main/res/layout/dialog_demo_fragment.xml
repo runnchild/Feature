@@ -19,10 +19,14 @@
             android:layout_height="100dp"
             app:itemBinderName='@{"com.rongc.demo.ui.binders.BannerBinder"}'
             app:items="@{viewModel.banners}"
+            app:loop="@{true}"
+            app:auto_scroll="@{true}"
+            app:scroll_interval="@{2000}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -11,7 +11,7 @@ import com.rongc.demo.R
 import com.rongc.demo.ui.binders.UserItemBinder
 import com.rongc.demo.ui.binders.UserRepoItemBinder
 import com.rongc.demo.viewmodel.UserViewModel
-import com.rongc.feature.ability.IListAbility
+import com.rongc.feature.ability.IRecyclerList
 import com.rongc.feature.ability.impl.ListAbility
 import com.rongc.feature.ability.impl.ToolbarAbility
 import com.rongc.feature.ability.impl.showProgressIfLoading
@@ -21,7 +21,7 @@ import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 
-class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(), IListAbility {
+class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(), IRecyclerList {
 
     private val args by navArgs<UserFragmentArgs>()
 

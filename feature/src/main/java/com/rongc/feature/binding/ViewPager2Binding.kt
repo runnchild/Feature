@@ -37,6 +37,7 @@ fun ViewPager2.itemBinders(binders: List<BaseRecyclerItemBinder<out Any>>) {
 fun ViewPager2.itemBinder(binder: BaseRecyclerItemBinder<out Any>) {
     val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
     val adapter = setup(adapter) as BaseBinderAdapter
+
     @Suppress("UNCHECKED_CAST")
     val bin = binder as BaseRecyclerItemBinder<Any>
     adapter.addItemBinder(actualClz as Class<*>, bin, bin.callback)
@@ -142,41 +143,21 @@ fun <T : RecyclerView.Adapter<*>> ViewPager2.doOnAdapter(block: (T) -> Unit) {
 
 @BindingAdapter("auto_scroll", "scroll_interval", "loop", requireAll = false)
 fun ViewPager2.loop(autoScroll: Boolean, interval: Long = 3000, loop: Boolean = false) {
-    (getTag(R.id.tag_job) as? Job)?.cancel()
-
-    doOnDetach {
-        (getTag(R.id.tag_job) as? Job)?.cancel()
-        val callbackTag = getTag(R.id.srl_tag)
-        if (callbackTag is ViewPager2.OnPageChangeCallback) {
-            unregisterOnPageChangeCallback(callbackTag)
-        }
-    }
-
-    fun loop(): Job {
-        (getTag(R.id.tag_job) as? Job)?.cancel()
-        return GlobalScope.launch(Dispatchers.IO) {
-            delay(interval)
-            withContext(Dispatchers.Main) {
-                val count = adapter?.itemCount ?: 0
-                if (count > 0) {
-                    if (currentItem + 1 == count) {
-                        if (loop) {
-                            currentItem = 0
-                            loop(autoScroll, interval, loop)
-                        }
-                    } else {
-                        currentItem += 1
-                        loop(autoScroll, interval, loop)
-                    }
-                }
+    val jobTag = getTag(R.id.tag_job)
+    if (jobTag == null) {
+        doOnDetach {
+            (getTag(R.id.tag_job) as? Job)?.cancel()
+            val callbackTag = getTag(R.id.srl_tag)
+            if (callbackTag is ViewPager2.OnPageChangeCallback) {
+                unregisterOnPageChangeCallback(callbackTag)
             }
+            setTag(R.id.tag_job, null)
         }
     }
 
     val callbackTag = getTag(R.id.srl_tag)
     if (autoScroll) {
-        (getTag(R.id.tag_job) as? Job)?.cancel()
-        setTag(R.id.tag_job, loop())
+        scroll(interval, loop)
 
         if (callbackTag !is ViewPager2.OnPageChangeCallback) {
             val value = object : ViewPager2.OnPageChangeCallback() {
@@ -184,7 +165,7 @@ fun ViewPager2.loop(autoScroll: Boolean, interval: Long = 3000, loop: Boolean = 
                     if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
                         (getTag(R.id.tag_job) as? Job)?.cancel()
                     } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                        loop(autoScroll, interval, loop)
+                        scroll(interval, loop)
                     }
                 }
             }
@@ -198,6 +179,26 @@ fun ViewPager2.loop(autoScroll: Boolean, interval: Long = 3000, loop: Boolean = 
             setTag(R.id.srl_tag, null)
         }
     }
+}
+
+private fun ViewPager2.scroll(interval: Long, loop: Boolean) {
+    (getTag(R.id.tag_job) as? Job)?.cancel()
+    val job = GlobalScope.launch(Dispatchers.Main) {
+        while (true) {
+            delay(interval)
+            val count = adapter?.itemCount ?: -1
+            if (currentItem in 0 until count) {
+                if (currentItem + 1 == count) {
+                    if (loop) {
+                        currentItem = 0
+                    }
+                } else {
+                    currentItem += 1
+                }
+            }
+        }
+    }
+    setTag(R.id.tag_job, job)
 }
 
 @BindingAdapter("emptyView", "enableEmptyView", requireAll = false)
