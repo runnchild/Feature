@@ -1,4 +1,4 @@
-package com.rongc.feature.ability
+package com.rongc.list.ability
 
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager

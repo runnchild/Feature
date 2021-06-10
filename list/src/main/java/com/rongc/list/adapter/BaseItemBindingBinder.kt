@@ -1,4 +1,4 @@
-package com.rongc.list
+package com.rongc.list.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.viewbinding.ViewBinding
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.BR
+import com.rongc.list.R
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -19,7 +20,7 @@ abstract class BaseItemBindingBinder<B : ViewBinding, T> : BaseRecyclerItemBinde
         val binding = holder.itemView.binding
         if (binding is ViewDataBinding) {
             try {
-                // 如果xml中没定义mBean
+                // 如果xml中有定义mBean，赋值
                 binding::class.java.superclass?.getDeclaredField("mBean")
                 binding.setVariable(BR.bean, data)
             } catch (e: Exception) {

@@ -19,8 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class com.rongc.list.adapter.BaseRecyclerItemBinder
--keep class * extends com.rongc.list.adapter.BaseRecyclerItemBinder {}
--keepclasseswithmembers class com.chad.library.adapter.base.BaseBinderAdapter {
-    com.chad.library.adapter.base.BaseBinderAdapter addItemBinder(java.lang.Class,com.chad.library.adapter.base.binder.BaseItemBinder,androidx.recyclerview.widget.DiffUtil$ItemCallback);
-}

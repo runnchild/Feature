@@ -1,0 +1,12 @@
+plugins {
+    id 'com.rongc.lib'
+}
+
+dependencies {
+    compileOnly 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.49'
+}
+
+afterEvaluate {
+    generateReleaseBuildConfig.enabled = false
+    generateDebugBuildConfig.enabled = false
+}

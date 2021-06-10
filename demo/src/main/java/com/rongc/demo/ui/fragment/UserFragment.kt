@@ -15,12 +15,13 @@ import com.rongc.feature.ability.impl.ToolbarAbility
 import com.rongc.feature.ability.impl.showProgressIfLoading
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
-import com.rongc.list.BaseRecyclerItemBinder
 import com.rongc.list.ItemDecoration
+import com.rongc.list.ability.IRecyclerList
+import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.databinding.BaseRecyclerWithRefreshBinding
 
 class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(),
-    com.rongc.list.ability.IListAbility {
+    IRecyclerList {
 
     private val args by navArgs<UserFragmentArgs>()
 

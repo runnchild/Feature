@@ -1,4 +1,4 @@
-package com.rongc.list
+package com.rongc.list.adapter
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

@@ -8,12 +8,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.rongc.feature.utils.removeFromParent
-import com.rongc.list.BaseRecyclerItemBinder
-import com.rongc.list.BinderAdapter
 import com.rongc.list.ItemDecoration
 import com.rongc.list.R
+import com.rongc.list.adapter.BaseRecyclerItemBinder
+import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.viewmodel.RefreshEmptyViewModel
-import com.rongc.list.viewpager2.BaseViewPagerAdapter
+import com.rongc.list.viewpager2.BaseFragemntPagerAdapter
 import com.rongc.list.widget.EmptyView
 import com.rongc.list.widget.IEmptyView
 import kotlinx.coroutines.*
@@ -60,10 +60,10 @@ fun ViewPager2.itemBinder(binderClz: String) {
  * 绑定列表数据， 如果没设置adapter会默认设置BaseBinderAdapter
  */
 @BindingAdapter("items")
-fun ViewPager2.items(items: Collection<Any>?) {
+fun ViewPager2.items(items: List<Any>?) {
     val adapter1 = adapter
     @Suppress("UNCHECKED_CAST")
-    if (adapter1 as? BaseViewPagerAdapter<Any> != null) {
+    if (adapter1 as? BaseFragemntPagerAdapter<Any> != null) {
         if (items != null && items.isEmpty() && adapter1.emptyData() != null) {
             val emptyList = items.toMutableList()
             emptyList.add(adapter1.emptyData()!!)
@@ -73,8 +73,15 @@ fun ViewPager2.items(items: Collection<Any>?) {
         }
     } else {
         @Suppress("UNCHECKED_CAST")
-        val adapter = setup(adapter) as? BaseQuickAdapter<Any, *>
-        adapter?.setList(items)
+        val adapter = setup(adapter) as? BaseBinderAdapter ?:return
+        try {
+            adapter.setList(items)
+        } catch (e: NoSuchMethodError) {
+            // for lower version adapter
+            val method = adapter::class.java.getMethod("setList", List::class.java)
+            method.isAccessible = true
+            method.invoke(adapter, items)
+        }
     }
 }
 
@@ -227,7 +234,7 @@ fun ViewPager2.setupEmptyView(
                     iEmpty.removeFromParent()
                     iEmpty.getViewModel()
                 }
-                is BaseViewPagerAdapter<*> -> {
+                is BaseFragemntPagerAdapter<*> -> {
                     val emptyView1 = getEmptyView()
                     it.setEmptyData(emptyView1.getViewModel()!!)
                     emptyView1.getViewModel()

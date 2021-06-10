@@ -11,10 +11,10 @@ import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
-import com.rongc.list.BaseRecyclerItemBinder
-import com.rongc.list.BinderAdapter
 import com.rongc.list.ItemDecoration
 import com.rongc.list.R
+import com.rongc.list.adapter.BaseRecyclerItemBinder
+import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
 import com.rongc.list.viewmodel.BaseListViewModel
@@ -24,7 +24,7 @@ import com.rongc.list.viewmodel.RefreshEmptyViewModel
 import com.rongc.list.widget.EmptyView
 import com.rongc.list.widget.IEmptyView
 
-class ListAbility(private val host: IHost<*>, private val listHost: IListAbility) : IAbility {
+class ListAbility(private val host: IHost<*>, private val listHost: IRecyclerList) : IAbility {
 
     lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var emptyView: IEmptyView
@@ -76,8 +76,8 @@ class ListAbility(private val host: IHost<*>, private val listHost: IListAbility
             emptyView.setViewModel(RefreshEmptyViewModel())
 
             providerAdapter.setEmptyView(emptyView as View)
-            providerAdapter.headerWithEmptyEnable = true
-            providerAdapter.footerWithEmptyEnable = true
+//            providerAdapter.headerWithEmptyEnable = true
+//            providerAdapter.footerWithEmptyEnable = true
         }
 
 //        val callback = BrvahListUpdateCallback(providerAdapter)
@@ -137,7 +137,11 @@ fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
                 val adapter = it.adapter
                 if (adapter is BaseQuickAdapter<*, *>) {
                     adapter as BaseQuickAdapter<T, BaseViewHolder>
-                    adapter.setDiffNewData(resource.data?.toMutableList())
+                    try {
+                        adapter.setDiffNewData(resource.data?.toMutableList())
+                    } catch (e: NoSuchMethodError) {
+                        invokeForLower(adapter, resource.data)
+                    }
                 } else if (adapter is ListAdapter<*, *>) {
                     adapter as ListAdapter<T, *>
                     adapter.submitList(resource.data)
@@ -145,6 +149,14 @@ fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
             }
         }
     }
+}
+
+private fun <T> invokeForLower(
+    adapter: RecyclerView.Adapter<*>, data: List<T>?
+) {
+    val method = adapter::class.java.getMethod("setDiffNewData", List::class.java)
+    method.isAccessible = true
+    method.invoke(adapter, data)
 }
 
 private fun <T> List<T>.toMutableList(): ArrayList<T> {

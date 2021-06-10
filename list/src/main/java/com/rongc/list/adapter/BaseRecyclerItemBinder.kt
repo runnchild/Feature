@@ -1,4 +1,4 @@
-package com.rongc.list
+package com.rongc.list.adapter
 
 import android.view.View
 import android.view.ViewGroup
@@ -33,9 +33,9 @@ abstract class BaseRecyclerItemBinder<T> : BaseItemBinder<T, BaseViewHolder>() {
         return null
     }
 
-    open fun areItemsTheSame(oldItem: T, newItem: T): Boolean = false
+    open fun areItemsTheSame(oldItem: T, newItem: T): Boolean = oldItem == newItem
 
-    open fun areContentsTheSame(oldItem: T, newItem: T): Boolean = false
+    open fun areContentsTheSame(oldItem: T, newItem: T): Boolean = oldItem == newItem
 
     /**
      * item内容设置

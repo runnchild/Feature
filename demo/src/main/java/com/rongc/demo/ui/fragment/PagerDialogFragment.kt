@@ -5,9 +5,9 @@ import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.rongc.demo.databinding.DialogDemoFragmentBinding
 import com.rongc.demo.viewmodel.DemoDialogViewModel
-import com.rongc.feature.ability.IPagerList
-import com.rongc.feature.ability.impl.PagerAbility
 import com.rongc.feature.ui.BaseDialogFragment
+import com.rongc.list.ability.IPagerList
+import com.rongc.list.ability.PagerAbility
 
 /**
  * <p>

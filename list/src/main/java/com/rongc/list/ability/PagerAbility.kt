@@ -1,8 +1,7 @@
-package com.rongc.feature.ability.impl
+package com.rongc.list.ability
 
 import androidx.lifecycle.LifecycleOwner
 import com.rongc.feature.ability.IAbility
-import com.rongc.feature.ability.IPagerList
 
 /**
  * <p>

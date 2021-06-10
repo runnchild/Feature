@@ -4,10 +4,10 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.rongc.list.BaseRecyclerItemBinder
-import com.rongc.list.BinderAdapter
 import com.rongc.list.ItemDecoration
 import com.rongc.list.R
+import com.rongc.list.adapter.BaseRecyclerItemBinder
+import com.rongc.list.adapter.BinderAdapter
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -56,6 +56,26 @@ fun findBinderType(clazz: Class<*>?): ParameterizedType? {
         return type
     }
     return findBinderType(clazz.superclass as? Class<*>)
+}
+
+/**
+ * 绑定列表数据， 如果没设置adapter会默认设置BaseBinderAdapter
+ */
+@BindingAdapter("items")
+fun RecyclerView.items(items: List<Any>?) {
+    if (adapter == null) {
+        adapter = BaseBinderAdapter()
+    }
+    @Suppress("UNCHECKED_CAST")
+    val adapter = adapter as? BaseQuickAdapter<Any, *> ?: return
+    try {
+        adapter.setList(items)
+    } catch (e: NoSuchMethodError) {
+        // for lower version adapter
+        val method = adapter::class.java.getMethod("setList", List::class.java)
+        method.isAccessible = true
+        method.invoke(adapter, items)
+    }
 }
 
 @BindingAdapter("itemDecoration")

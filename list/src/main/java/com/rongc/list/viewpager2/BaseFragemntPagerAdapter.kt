@@ -20,7 +20,7 @@ import com.rongc.list.viewmodel.RefreshEmptyViewModel
  * @author qiurong
  * @date 2021/3/21
  */
-abstract class BaseViewPagerAdapter<T>(private val fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+abstract class BaseFragemntPagerAdapter<T>(private val fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     constructor(fragmentActivity: FragmentActivity) : this(
