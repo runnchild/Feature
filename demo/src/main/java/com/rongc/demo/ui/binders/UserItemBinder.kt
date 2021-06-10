@@ -4,7 +4,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.demo.databinding.UserHeaderBinding
 import com.rongc.demo.vo.Owner
-import com.rongc.feature.refresh.BaseItemBindingBinder
+import com.rongc.list.BaseItemBindingBinder
 
 class UserItemBinder : BaseItemBindingBinder<UserHeaderBinding, Owner>() {
     override fun convert(binding: UserHeaderBinding, holder: BaseViewHolder, data: Owner) {

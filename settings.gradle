@@ -3,3 +3,4 @@ rootProject.name = "Feature"
 //include ':lib'
 include ':feature'
 include ':demo'
+include ':list'

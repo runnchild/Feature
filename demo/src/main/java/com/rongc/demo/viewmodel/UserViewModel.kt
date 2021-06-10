@@ -6,8 +6,8 @@ import androidx.lifecycle.map
 import com.rongc.demo.api.RepoServiceProvider
 import com.rongc.demo.vo.Owner
 import com.rongc.feature.utils.AbsentLiveData
-import com.rongc.feature.viewmodel.BaseListViewModel
 import com.rongc.feature.vo.Resource
+import com.rongc.list.viewmodel.BaseListViewModel
 
 class UserViewModel : BaseListViewModel<Any>() {
     var avatar: String? = null

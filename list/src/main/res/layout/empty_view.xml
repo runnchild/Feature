@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.rongc.list.viewmodel.RefreshEmptyViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@{viewModel.icon}"
+            app:imageBuilder="@{viewModel.iconBuilder}"
+            tools:src="@color/black_30" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{viewModel.tip}"
+            android:textSize="17sp"
+            app:textBuilder="@{viewModel.tipBuilder}"
+            tools:text="网络未连接" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@{viewModel.subTip}"
+            android:textColor="#b2b2b2"
+            android:textSize="13sp"
+            app:textBuilder="@{viewModel.subTipBuilder}"
+            tools:text="请检查你的网络设置后刷新" />
+
+        <TextView
+            android:id="@+id/tv_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:background="#FC485B"
+            android:gravity="center"
+            android:minWidth="112dp"
+            android:minHeight="35dp"
+            android:text="@{viewModel.btnText}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:defaultClick="@{viewModel.refreshClick}"
+            app:textBuilder="@{viewModel.refreshBuilder}"
+            app:visible="@{viewModel.btnVisible}"
+            tools:text="刷新" />
+    </LinearLayout>
+</layout>

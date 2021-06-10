@@ -14,25 +14,24 @@ import com.rongc.demo.api.RepoServiceProvider
 import com.rongc.demo.databinding.FragmentListBinding
 import com.rongc.demo.viewmodel.RepoSearchViewModel
 import com.rongc.demo.vo.Repo
-import com.rongc.feature.ability.IRecyclerList
-import com.rongc.feature.ability.impl.ListAbility
-import com.rongc.feature.binding.doOnDefaultAdapter
-import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.logd
-import com.rongc.feature.viewmodel.EmptyBuilder
-import com.rongc.feature.viewmodel.RefreshEmptyViewModel
-import com.rongc.feature.widget.IEmptyView
+import com.rongc.list.ItemDecoration
+import com.rongc.list.binding.doOnDefaultAdapter
+import com.rongc.list.viewmodel.EmptyBuilder
+import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.widget.IEmptyView
 
-class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(), IRecyclerList {
+class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(),
+    com.rongc.list.ability.IListAbility {
 
     override val recyclerView: RecyclerView
         get() = mBinding.refreshGroup.recyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(ProgressAbility(requireContext()))
-        registerAbility(ListAbility(this, this))
+        registerAbility(com.rongc.list.ability.ListAbility(this, this))
 
         recyclerView.doOnDefaultAdapter<Repo> {
             // 有设置adapter时立即回调

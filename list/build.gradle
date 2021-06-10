@@ -1,0 +1,15 @@
+plugins { id 'com.rongc.lib' }
+
+ext {
+    refresh = '2.0.1'
+}
+
+dependencies {
+    api "com.scwang.smart:refresh-layout-kernel:$refresh"
+    api "com.scwang.smart:refresh-header-classics:$refresh"
+    api "com.scwang.smart:refresh-footer-classics:$refresh"
+    api('com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    compileOnly project(path: ':feature')
+}

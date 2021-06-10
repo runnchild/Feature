@@ -9,6 +9,8 @@ android {
 
 dependencies {
     implementation project(':feature')
+    implementation project(':list')
+
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion") {
         exclude group: 'androidx.fragment'
     }

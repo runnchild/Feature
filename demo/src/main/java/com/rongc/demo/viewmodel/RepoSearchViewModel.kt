@@ -6,8 +6,8 @@ import androidx.lifecycle.map
 import com.rongc.demo.repository.RepoRepository
 import com.rongc.demo.vo.Repo
 import com.rongc.feature.utils.AbsentLiveData
-import com.rongc.feature.viewmodel.BaseListViewModel
 import com.rongc.feature.vo.Resource
+import com.rongc.list.viewmodel.BaseListViewModel
 
 class RepoSearchViewModel(private val repository: RepoRepository) : BaseListViewModel<Repo>() {
 

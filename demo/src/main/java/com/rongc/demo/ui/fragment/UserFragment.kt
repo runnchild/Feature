@@ -11,17 +11,16 @@ import com.rongc.demo.R
 import com.rongc.demo.ui.binders.UserItemBinder
 import com.rongc.demo.ui.binders.UserRepoItemBinder
 import com.rongc.demo.viewmodel.UserViewModel
-import com.rongc.feature.ability.IRecyclerList
-import com.rongc.feature.ability.impl.ListAbility
 import com.rongc.feature.ability.impl.ToolbarAbility
 import com.rongc.feature.ability.impl.showProgressIfLoading
-import com.rongc.feature.databinding.BaseRecyclerWithRefreshBinding
-import com.rongc.feature.refresh.BaseRecyclerItemBinder
-import com.rongc.feature.refresh.ItemDecoration
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
+import com.rongc.list.BaseRecyclerItemBinder
+import com.rongc.list.ItemDecoration
+import com.rongc.list.databinding.BaseRecyclerWithRefreshBinding
 
-class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(), IRecyclerList {
+class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(),
+    com.rongc.list.ability.IListAbility {
 
     private val args by navArgs<UserFragmentArgs>()
 
@@ -30,7 +29,7 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(ProgressAbility(requireContext()))
-        registerAbility(ListAbility(this, this))
+        registerAbility(com.rongc.list.ability.ListAbility(this, this))
         registerAbility(ToolbarAbility(this) {
             title = "UserRepository"
             menu {

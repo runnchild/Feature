@@ -4,7 +4,7 @@
     <item name="layout_isBinding" type="id" />
     <item name="tag_time_mills" type="id" />
     <item name="tag_binding" type="id" />
-    <item name="tag_adapter_callback" type="id" />
     <item name="tag_job" type="id" />
     <item name="toolbar_parent" type="id" />
+    <item name="psn_toolBar" type="id" />
 </resources>

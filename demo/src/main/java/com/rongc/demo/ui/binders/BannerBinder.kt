@@ -3,7 +3,7 @@ package com.rongc.demo.ui.binders
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.demo.databinding.PagerItemBinding
 import com.rongc.demo.vo.Banner
-import com.rongc.feature.refresh.BaseItemBindingBinder
+import com.rongc.list.BaseItemBindingBinder
 
 /**
  * <p>

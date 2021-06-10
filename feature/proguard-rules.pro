@@ -40,16 +40,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepclasseswithmembers class com.chad.library.adapter.base.BaseBinderAdapter {
-    com.chad.library.adapter.base.BaseBinderAdapter addItemBinder(java.lang.Class,com.chad.library.adapter.base.binder.BaseItemBinder,androidx.recyclerview.widget.DiffUtil$ItemCallback);
-}
 -keep class * implements java.io.Serializable {
     static final long serialVersionUID;
 }
--keep class com.rongc.feature.model.BaseModel
--keep class * extends com.rongc.feature.model.BaseModel
--keep class com.rongc.feature.refresh.BaseRecyclerItemBinder
--keep class * extends com.rongc.feature.refresh.BaseRecyclerItemBinder {}
+
 -keep class * extends androidx.databinding.ViewDataBinding {
     ** mBean;
     ** mBinder;
