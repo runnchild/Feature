@@ -4,4 +4,4 @@ rootProject.name = "Feature"
 include ':feature'
 include ':demo'
 include ':list'
-include ':forloweradapter'
+include ':adaptercompat'
