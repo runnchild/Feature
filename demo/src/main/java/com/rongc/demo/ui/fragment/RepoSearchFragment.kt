@@ -19,6 +19,7 @@ import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.logd
 import com.rongc.list.ItemDecoration
 import com.rongc.list.ability.IRecyclerList
+import com.rongc.list.ability.ListAbility
 import com.rongc.list.binding.doOnDefaultAdapter
 import com.rongc.list.viewmodel.EmptyBuilder
 import com.rongc.list.viewmodel.RefreshEmptyViewModel
@@ -32,7 +33,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(ProgressAbility(requireContext()))
-        registerAbility(com.rongc.list.ability.ListAbility(this, this))
+        registerAbility(ListAbility(viewModel, this))
 
         recyclerView.doOnDefaultAdapter<Repo> {
             // 有设置adapter时立即回调
@@ -81,7 +82,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         }
     }
 
-    override fun providerEmptyView(context: Context): IEmptyView? {
+    override fun providerEmptyView(context: Context): IEmptyView {
         // default is EmptyView
         return super.providerEmptyView(context)
     }

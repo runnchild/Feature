@@ -21,4 +21,12 @@
         android:text="open List"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_field" />
+
+    <Button
+        android:id="@+id/btn_wan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="wan home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,11 @@
 package com.rongc.demo.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.ColorUtils
 import com.rongc.demo.vo.Banner
-import com.rongc.feature.viewmodel.BaseViewModel
+import com.rongc.feature.vo.Resource
+import com.rongc.list.viewmodel.BaseListViewModel
 
 /**
  * <p>
@@ -13,7 +15,7 @@ import com.rongc.feature.viewmodel.BaseViewModel
  * @author qiurong
  * @date 2021/5/30
  */
-class DemoDialogViewModel: BaseViewModel() {
+class DemoDialogViewModel: BaseListViewModel<String>() {
     val banners = MutableLiveData<List<Banner>>()
 
     fun requestBanners() {
@@ -22,5 +24,9 @@ class DemoDialogViewModel: BaseViewModel() {
             list.add(Banner(ColorUtils.getRandomColor(), "item: $it"))
         }
         banners.value = list
+    }
+
+    override fun loadListData(page: Int): LiveData<Resource<List<String>>> {
+        return MutableLiveData(Resource.success(arrayListOf("")))
     }
 }

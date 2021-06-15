@@ -13,6 +13,7 @@ import com.rongc.demo.viewmodel.HomeViewModel
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.utils.logd
+import com.rongc.feature.utils.singleClick
 
 class Home : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -48,6 +49,9 @@ class Home : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             que.value = toInt
 
             findNavController().navigate(R.id.list)
+        }
+        mBinding.btnWan.singleClick {
+            findNavController().navigate(R.id.wan_home)
         }
         result.observe(viewLifecycleOwner) {
             "result observe: $it".logd()

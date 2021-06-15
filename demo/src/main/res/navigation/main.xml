@@ -43,4 +43,11 @@
         android:name="com.rongc.demo.ui.fragment.PagerDialogFragment"
         tools:layout="@layout/dialog_demo_fragment" />
 
+    <fragment
+        android:id="@+id/wan_home"
+        android:name="com.rongc.demo.ui.wan.WanHomeFragment"
+        android:label="Wan"
+        tools:layout="@layout/fragment_wan_home">
+    </fragment>
+
 </navigation>

@@ -17,6 +17,7 @@ import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 import com.rongc.list.ItemDecoration
 import com.rongc.list.ability.IRecyclerList
+import com.rongc.list.ability.ListAbility
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.databinding.BaseRecyclerWithRefreshBinding
 
@@ -30,14 +31,13 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(ProgressAbility(requireContext()))
-        registerAbility(com.rongc.list.ability.ListAbility(this, this))
+        registerAbility(ListAbility(viewModel, this))
         registerAbility(ToolbarAbility(this) {
             title = "UserRepository"
             menu {
                 text = "more"
                 setOnClickListener {
                     findNavController().navigate(R.id.demo_dialog)
-//                    viewModel.result.value.data
                 }
             }
         })

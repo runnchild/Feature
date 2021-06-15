@@ -7,7 +7,7 @@
 
         <variable
             name="bean"
-            type="com.rongc.demo.vo.Banner" />
+            type="com.rongc.demo.ui.wan.WanBanner" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@{bean.background}"
+            app:url="@{bean.imagePath}"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@color/purple_200" />
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginTop="50dp"
-            android:text="@{bean.content}"
+            android:text="@{bean.desc}"
             android:textSize="17sp"
             android:paddingStart="15dp"
             android:gravity="center_vertical"
