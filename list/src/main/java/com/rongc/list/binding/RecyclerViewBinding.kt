@@ -8,6 +8,7 @@ import com.rongc.list.ItemDecoration
 import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
+import com.rongc.list.setCompatList
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -45,6 +46,7 @@ fun RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<out Any>) {
         adapter = BinderAdapter()
     }
     val adapter = adapter as BaseBinderAdapter
+
     @Suppress("UNCHECKED_CAST")
     val bin = binder as BaseRecyclerItemBinder<Any>
     adapter.addItemBinder(actualClz as Class<*>, bin, bin.callback)
@@ -68,14 +70,7 @@ fun RecyclerView.items(items: List<Any>?) {
     }
     @Suppress("UNCHECKED_CAST")
     val adapter = adapter as? BaseQuickAdapter<Any, *> ?: return
-    try {
-        adapter.setList(items)
-    } catch (e: NoSuchMethodError) {
-        // for lower version adapter
-        val method = adapter::class.java.getMethod("setList", List::class.java)
-        method.isAccessible = true
-        method.invoke(adapter, items)
-    }
+    adapter.setCompatList(items)
 }
 
 @BindingAdapter("itemDecoration")

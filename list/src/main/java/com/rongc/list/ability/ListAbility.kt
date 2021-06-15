@@ -17,6 +17,7 @@ import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
+import com.rongc.list.setCompatDiffNewData
 import com.rongc.list.viewmodel.BaseListViewModel
 import com.rongc.list.viewmodel.DefaultEmptyConfig
 import com.rongc.list.viewmodel.EmptyBuilder
@@ -127,6 +128,7 @@ class ListAbility(private val host: IHost<*>, private val listHost: IRecyclerLis
  * 订阅列表数据结果返回监听，当结果返回时刷新列表
  * 订阅前应先注册{@link ListAbility}，如果ViewModel继承的是BaseListViewModel,则在注册后会自动订阅。
  * 否则需手动调用
+ * 否则需手动调用
  */
 @Suppress("UNCHECKED_CAST")
 fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
@@ -137,32 +139,12 @@ fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
                 val adapter = it.adapter
                 if (adapter is BaseQuickAdapter<*, *>) {
                     adapter as BaseQuickAdapter<T, BaseViewHolder>
-                    try {
-                        adapter.setDiffNewData(resource.data?.toMutableList())
-                    } catch (e: NoSuchMethodError) {
-                        invokeForLower(adapter, resource.data)
-                    }
+                    adapter.setCompatDiffNewData(resource.data)
                 } else if (adapter is ListAdapter<*, *>) {
                     adapter as ListAdapter<T, *>
                     adapter.submitList(resource.data)
                 }
             }
         }
-    }
-}
-
-private fun <T> invokeForLower(
-    adapter: RecyclerView.Adapter<*>, data: List<T>?
-) {
-    val method = adapter::class.java.getMethod("setDiffNewData", List::class.java)
-    method.isAccessible = true
-    method.invoke(adapter, data)
-}
-
-private fun <T> List<T>.toMutableList(): ArrayList<T> {
-    return if (this is ArrayList<*>) {
-        this as ArrayList<T>
-    } else {
-        ArrayList(this)
     }
 }

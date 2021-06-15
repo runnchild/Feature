@@ -12,6 +12,7 @@ import com.rongc.list.ItemDecoration
 import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
+import com.rongc.list.setCompatList
 import com.rongc.list.viewmodel.RefreshEmptyViewModel
 import com.rongc.list.viewpager2.BaseFragemntPagerAdapter
 import com.rongc.list.widget.EmptyView
@@ -73,15 +74,8 @@ fun ViewPager2.items(items: List<Any>?) {
         }
     } else {
         @Suppress("UNCHECKED_CAST")
-        val adapter = setup(adapter) as? BaseBinderAdapter ?:return
-        try {
-            adapter.setList(items)
-        } catch (e: NoSuchMethodError) {
-            // for lower version adapter
-            val method = adapter::class.java.getMethod("setList", List::class.java)
-            method.isAccessible = true
-            method.invoke(adapter, items)
-        }
+        val adapter = setup(adapter) as? BaseBinderAdapter ?: return
+        adapter.setCompatList(items)
     }
 }
 
