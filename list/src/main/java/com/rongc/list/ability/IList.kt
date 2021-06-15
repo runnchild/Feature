@@ -39,7 +39,7 @@ interface IList {
     /**
      * 如果不使用默认的空页面，重写并返回其他空页面
      */
-    fun providerEmptyView(context: Context): IEmptyView? = EmptyView(context)
+    fun providerEmptyView(context: Context): IEmptyView = EmptyView(context)
 
     /**
      * 只设置空数据配置，无网等其他情况使用默认配置
