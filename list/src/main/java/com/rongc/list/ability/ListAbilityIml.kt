@@ -2,7 +2,6 @@ package com.rongc.list.ability
 
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.viewmodel.BaseViewModel
-import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
@@ -23,7 +21,8 @@ import com.rongc.list.viewmodel.RefreshEmptyViewModel
 import com.rongc.list.widget.IEmptyView
 import java.util.*
 
-abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost: IList): IAbility {
+abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost: IList) :
+    IAbility {
 
     val adapter: RecyclerView.Adapter<*> by lazy {
         listHost.providerAdapter() ?: BinderAdapter()
@@ -35,7 +34,7 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
         val vm = viewModel as? BaseListViewModel<Any>
         // 如果非BaseListViewModel则需要手动调用observeResource
         if (vm != null) {
-            owner.observeResource(adapter, vm.result)
+            owner.observeResource(adapter, vm)
 
             vm.setupEmptyView.observe(owner) { state ->
                 val defaultBuilder = when (state) {
@@ -63,10 +62,10 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
         val providerAdapter = adapter
         if (providerAdapter is BaseQuickAdapter<*, *>) {
             owner.lifecycleScope.launchWhenResumed {
-            emptyView = listHost.providerEmptyView(providerAdapter.recyclerView.context)
-            emptyView.setViewModel(RefreshEmptyViewModel())
+                emptyView = listHost.providerEmptyView(providerAdapter.recyclerView.context)
+                emptyView.setViewModel(RefreshEmptyViewModel())
 
-            providerAdapter.setEmptyView(emptyView as View)
+                providerAdapter.setEmptyView(emptyView as View)
 //            providerAdapter.headerWithEmptyEnable = true
 //            providerAdapter.footerWithEmptyEnable = true
             }
@@ -86,13 +85,19 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
  */
 @Suppress("UNCHECKED_CAST")
 fun <T> LifecycleOwner.observeResource(
-    adapter: RecyclerView.Adapter<*>, result: LiveData<Resource<List<T>>>
+    adapter: RecyclerView.Adapter<*>, viewModel: BaseListViewModel<T>
 ) {
-    result.observe(this) { resource ->
+    viewModel.result.observe(this) { resource ->
         if (resource.status != Status.LOADING || resource.data != null) {
             if (adapter is BaseQuickAdapter<*, *>) {
                 adapter as BaseQuickAdapter<T, BaseViewHolder>
-                adapter.setCompatDiffNewData(resource.data)
+                if (viewModel.isRefresh) {
+                    adapter.setCompatDiffNewData(resource.data)
+                } else {
+                    resource.data?.let {
+                        adapter.addData(it)
+                    }
+                }
             } else if (adapter is ListAdapter<*, *>) {
                 adapter as ListAdapter<T, *>
                 adapter.submitList(resource.data)

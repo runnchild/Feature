@@ -1,7 +1,7 @@
 package com.rongc.list.viewpager2
 
 interface IPagerItem<T> {
-    fun convert(position: Int, item: T, payloads: MutableList<Any>?)
+    fun convert(position: Int, item: T, payloads: MutableList<Any>?) {}
 
     fun attachAdapter(adapter: BaseFragmentPagerAdapter<T>) {}
 }

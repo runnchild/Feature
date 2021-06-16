@@ -1,6 +1,5 @@
 package com.rongc.list.viewmodel
 
-import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -64,7 +63,6 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             field = value
         }
 
-    //    var emptyRefreshViewModel: RefreshEmptyViewModel? = null
     val setupEmptyView = MutableLiveData<RefreshEmptyViewModel.State>()
 
     private val _request = MutableLiveData<Int>()
@@ -73,9 +71,10 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         loadListData(it)
     }
 
+    val isRefresh get() = _request.value == PageIndicator.PAGE_START
+
     val result = _result.map {
-        var resource = it
-        val isRefresh = _request.value == PageIndicator.PAGE_START
+//        var resource = it
 
         when (it.status) {
             Status.SUCCESS -> {
@@ -85,7 +84,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                     if (!it.data.isNullOrEmpty()) {
                         pageIndicator.next()
                     }
-                    resource = Resource.success(convertMoreData(it.data))
+//                    resource = Resource.success(convertMoreData(it.data))
                 }
             }
             Status.ERROR -> {
@@ -101,37 +100,38 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             }
         }
         if (it.status != Status.LOADING) {
-            if (resource.data.isNullOrEmpty()) {
+            if (it.data.isNullOrEmpty()) {
                 setupEmptyView.value = RefreshEmptyViewModel.State.EMPTY_DATA
             }
         }
 
-        resource.run {
-            if (data !is ObservableArrayList<*>) {
-                val list = ObservableArrayList<T>()
-                list.addAll(data?: emptyList())
-                Resource(status, list, error)
-            } else {
-                this
-            }
-        }
+//        resource.run {
+//            if (it.status != Status.LOADING && data !is ObservableArrayList<*>) {
+//                val list = ObservableArrayList<T>()
+//                list.addAll(data?: emptyList())
+//                Resource(status, list, error)
+//            } else {
+//                this
+//            }
+//        }
+        it
     }
 
-    private fun convertMoreData(source: List<T>?): List<T> {
-        val data = result.value?.data ?: arrayListOf()
-        if (source.isNullOrEmpty()) {
-            return data
-        }
-        val list = ObservableArrayList<T>()
-        list.addAll(0, data)
-        return list
-    }
+//    private fun convertMoreData(source: List<T>?): List<T> {
+//        val data = result.value?.data ?: arrayListOf()
+//        if (source.isNullOrEmpty()) {
+//            return data
+//        }
+//        val list = ObservableArrayList<T>()
+//        list.addAll(0, data)
+//        list.addAll(source)
+//        return list
+//    }
 
     /**
      * 刷新和加载状态
      */
     val loadStatus = _result.map { resource ->
-        val isRefresh = _request.value == PageIndicator.PAGE_START
         when (resource.status) {
             Status.SUCCESS -> {
                 if (isRefresh) {
