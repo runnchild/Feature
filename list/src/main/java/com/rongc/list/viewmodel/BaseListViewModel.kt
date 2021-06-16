@@ -56,8 +56,8 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             // 页面设置了自动刷新，并且之前没刷新过时自动刷新
             if (!field && value) {
                 if (enableRefresh.get()) {
-                    autoRefresh.set(true)
-                } else {
+//                    autoRefresh.set(true)
+//                } else {
                     refresh()
                 }
             }

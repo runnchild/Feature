@@ -11,4 +11,12 @@ class WanRepository {
     fun fetchBanners(): LiveData<Resource<List<WanBanner>>> {
         return api.getBanner().networkOnly()
     }
+
+    fun getProjectTree(): LiveData<Resource<List<ProjectTree>>> {
+        return api.projectTree().networkOnly()
+    }
+
+    fun getProjectList(page: Int, cid: String): LiveData<Resource<List<ProjectList>>> {
+        return api.projectList(page, cid).networkOnly()
+    }
 }

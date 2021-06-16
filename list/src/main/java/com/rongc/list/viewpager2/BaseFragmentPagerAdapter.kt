@@ -20,7 +20,7 @@ import com.rongc.list.viewmodel.RefreshEmptyViewModel
  * @author qiurong
  * @date 2021/3/21
  */
-abstract class BaseFragemntPagerAdapter<T>(private val fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     constructor(fragmentActivity: FragmentActivity) : this(
@@ -48,7 +48,7 @@ abstract class BaseFragemntPagerAdapter<T>(private val fragmentManager: Fragment
             }
             return fragment
         }
-        val fragment = createItemFragment(position)
+        val fragment = createItemFragment(getItem(position)!!, position)
         fragment.attachAdapter(this)
         fragment as Fragment
         fragment.lifecycleScope.launchWhenStarted {
@@ -59,7 +59,7 @@ abstract class BaseFragemntPagerAdapter<T>(private val fragmentManager: Fragment
 
     open fun generateEmptyFragment() = EmptyListFragment()
 
-    abstract fun createItemFragment(position: Int): IPagerItem<T>
+    abstract fun createItemFragment(item: T, position: Int): IPagerItem<T>
 
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: Collection<T>?) {

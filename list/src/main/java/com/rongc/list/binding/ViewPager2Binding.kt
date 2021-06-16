@@ -14,7 +14,7 @@ import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatList
 import com.rongc.list.viewmodel.RefreshEmptyViewModel
-import com.rongc.list.viewpager2.BaseFragemntPagerAdapter
+import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.widget.EmptyView
 import com.rongc.list.widget.IEmptyView
 import kotlinx.coroutines.*
@@ -64,7 +64,7 @@ fun ViewPager2.itemBinder(binderClz: String) {
 fun ViewPager2.items(items: List<Any>?) {
     val adapter1 = adapter
     @Suppress("UNCHECKED_CAST")
-    if (adapter1 as? BaseFragemntPagerAdapter<Any> != null) {
+    if (adapter1 as? BaseFragmentPagerAdapter<Any> != null) {
         if (items != null && items.isEmpty() && adapter1.emptyData() != null) {
             val emptyList = items.toMutableList()
             emptyList.add(adapter1.emptyData()!!)
@@ -228,7 +228,7 @@ fun ViewPager2.setupEmptyView(
                     iEmpty.removeFromParent()
                     iEmpty.getViewModel()
                 }
-                is BaseFragemntPagerAdapter<*> -> {
+                is BaseFragmentPagerAdapter<*> -> {
                     val emptyView1 = getEmptyView()
                     it.setEmptyData(emptyView1.getViewModel()!!)
                     emptyView1.getViewModel()
