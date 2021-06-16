@@ -54,6 +54,9 @@ object HttpClient {
                 provider.providerConverterFactories()?.forEach {
                     addConverterFactory(it)
                 }
+                provider.providerCallAdapterFactories()?.forEach {
+                    addCallAdapterFactory(it)
+                }
             }
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())

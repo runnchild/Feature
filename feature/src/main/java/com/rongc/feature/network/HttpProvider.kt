@@ -1,6 +1,7 @@
 package com.rongc.feature.network
 
 import okhttp3.Interceptor
+import retrofit2.CallAdapter
 import retrofit2.Converter
 import java.net.Proxy
 
@@ -17,7 +18,10 @@ interface HttpProvider {
 
     fun providerConverterFactories(): Array<Converter.Factory>?
 
+    fun providerCallAdapterFactories(): Array<CallAdapter.Factory>? = null
+
     fun providerInterceptors(): Array<Interceptor>?
+
     fun providerProxy(): Proxy? = null
 }
 
