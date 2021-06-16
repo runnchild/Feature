@@ -110,7 +110,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             if (data !is ObservableArrayList<*>) {
                 val list = ObservableArrayList<T>()
                 list.addAll(data?: emptyList())
-                Resource(status, list, message)
+                Resource(status, list, error)
             } else {
                 this
             }
