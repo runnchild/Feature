@@ -7,7 +7,7 @@
 
         <variable
             name="bean"
-            type="com.rongc.demo.ui.wan.WanBanner" />
+            type="com.rongc.wan.WanBanner" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

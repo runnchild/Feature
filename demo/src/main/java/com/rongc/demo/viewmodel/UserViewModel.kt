@@ -30,7 +30,7 @@ class UserViewModel : BaseListViewModel<Any>() {
                 val list = arrayListOf<Any>()
                 list.add(Owner(login.value, avatar))
                 list.addAll(it.data ?: arrayListOf())
-                Resource(it.status, list, it.message)
+                Resource(it.status, list, it.error)
             }
         }
     }

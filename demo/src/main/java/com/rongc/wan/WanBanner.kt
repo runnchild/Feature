@@ -1,4 +1,4 @@
-package com.rongc.demo.ui.wan
+package com.rongc.wan
 
 data class WanBanner(
     val desc: String,

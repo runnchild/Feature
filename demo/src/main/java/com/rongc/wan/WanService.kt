@@ -1,4 +1,4 @@
-package com.rongc.demo.ui.wan
+package com.rongc.wan
 
 import androidx.lifecycle.LiveData
 import com.rongc.feature.api.ApiResponse

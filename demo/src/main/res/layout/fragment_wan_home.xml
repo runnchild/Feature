@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.demo.ui.wan.WanHomeViewModel" />
+            type="com.rongc.wan.ui.WanHomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,11 +18,11 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             app:auto_scroll="@{true}"
-            app:itemBinderName='@{"com.rongc.demo.ui.wan.WanBannerBinder"}'
+            app:itemBinderName='@{"com.rongc.wan.ui.WanBannerBinder"}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:loop="@{true}"
-            app:scroll_interval="@{200}" />
+            app:scroll_interval="@{5000}" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabStrip"

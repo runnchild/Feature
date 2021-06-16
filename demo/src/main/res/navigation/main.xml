@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/wan_home"
-        android:name="com.rongc.demo.ui.wan.WanHomeFragment"
+        android:name="com.rongc.wan.ui.WanHomeFragment"
         android:label="Wan"
         tools:layout="@layout/fragment_wan_home">
     </fragment>

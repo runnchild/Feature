@@ -1,4 +1,4 @@
-package com.rongc.demo.ui.wan
+package com.rongc.wan.ui
 
 import android.os.Bundle
 import android.view.View
@@ -12,4 +12,5 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
             mBinding.viewPager.items(it.data)
         }
     }
+
 }

@@ -1,8 +1,9 @@
-package com.rongc.demo.ui.wan
+package com.rongc.wan.ui
 
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.demo.databinding.WanPagerItemBinding
 import com.rongc.list.adapter.BaseItemBindingBinder
+import com.rongc.wan.WanBanner
 
 /**
  * <p>

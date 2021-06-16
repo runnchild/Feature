@@ -1,10 +1,12 @@
-package com.rongc.demo.ui.wan
+package com.rongc.wan.service
 
 import androidx.room.Room
 import com.blankj.utilcode.util.Utils
 import com.rongc.demo.db.GithubDb
 import com.rongc.demo.db.RepoDao
 import com.rongc.feature.network.getService
+import com.rongc.wan.WanRepository
+import com.rongc.wan.WanService
 
 object WanServiceProvider {
 
