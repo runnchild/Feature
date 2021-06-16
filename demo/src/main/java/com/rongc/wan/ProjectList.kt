@@ -1,8 +1,10 @@
 package com.rongc.wan
 
-data class ProjectList(
+import java.text.SimpleDateFormat
+
+data class ProjectData(
     val curPage: Int,
-    val datas: List<Data>,
+    val datas: List<ProjectList>,
     val offset: Int,
     val over: Boolean,
     val pageCount: Int,
@@ -10,7 +12,7 @@ data class ProjectList(
     val total: Int
 )
 
-data class Data(
+data class ProjectList(
     val apkLink: String,
     val audit: Int,
     val author: String,
@@ -44,7 +46,9 @@ data class Data(
     val userId: Int,
     val visible: Int,
     val zan: Int
-)
+) {
+    val publishTimeStr get() = SimpleDateFormat.getInstance().format(publishTime)
+}
 
 data class Tag(
     val name: String,

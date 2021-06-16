@@ -16,7 +16,7 @@ class WanRepository {
         return api.projectTree().networkOnly()
     }
 
-    fun getProjectList(page: Int, cid: String): LiveData<Resource<List<ProjectList>>> {
+    fun getProjectList(page: Int, cid: String): LiveData<Resource<ProjectData>> {
         return api.projectList(page, cid).networkOnly()
     }
 }

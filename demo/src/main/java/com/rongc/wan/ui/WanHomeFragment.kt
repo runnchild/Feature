@@ -41,7 +41,7 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
                 mBinding.tabStrip.addTab(tab)
             }
             val ids = it.data?.map { project ->
-                project.courseId
+                project.id.toString()
             }
             mBinding.pagerList.items(ids)
 
@@ -54,8 +54,8 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
     }
 
     override fun providerAdapter(): RecyclerView.Adapter<*> {
-        return object : BaseFragmentPagerAdapter<Int>(this) {
-            override fun createItemFragment(item: Int, position: Int): IPagerItem<Int> {
+        return object : BaseFragmentPagerAdapter<String>(this) {
+            override fun createItemFragment(item: String, position: Int): IPagerItem<String> {
                 return ProjectListFragment().apply {
                     arguments = bundleOf("cid" to item)
                 }

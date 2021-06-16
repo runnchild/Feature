@@ -15,5 +15,5 @@ interface WanService {
     fun projectTree(): LiveData<ApiResponse<List<ProjectTree>>>
 
     @GET("project/list/{page}/json")
-    fun projectList(@Path("page") page: Int, @Query("cid") cid: String): LiveData<ApiResponse<List<ProjectList>>>
+    fun projectList(@Path("page") page: Int, @Query("cid") cid: String): LiveData<ApiResponse<ProjectData>>
 }
