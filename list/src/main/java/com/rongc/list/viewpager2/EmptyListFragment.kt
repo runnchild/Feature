@@ -18,10 +18,9 @@ import com.rongc.list.widget.IEmptyView
  * @date 2021/3/28
  */
 class EmptyListFragment : Fragment(), IPagerItem<RefreshEmptyViewModel> {
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         return EmptyView(requireContext()).apply {
             layoutParams = ViewGroup.LayoutParams(-1, -1)

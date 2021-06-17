@@ -2,12 +2,15 @@ package com.rongc.list.ability
 
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.ability.IAbility
+import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.viewmodel.BaseViewModel
+import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
@@ -30,7 +33,8 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
     private lateinit var emptyView: IEmptyView
 
     override fun onCreate(owner: LifecycleOwner) {
-        setupEmptyView(owner)
+        setEmptyView()
+        observeListResource(owner)
 
         val decoration = ItemDecoration.Builder().apply(listHost.decorationBuilder()).build()
         setupItemDecoration(decoration)
@@ -40,21 +44,12 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
         setupItemBinders(itemBinders)
     }
 
-    private fun setupEmptyView(owner: LifecycleOwner) {
-        val providerAdapter = adapter
-        emptyView = providerEmptyView()
-        if (providerAdapter is BaseQuickAdapter<*, *>) {
-            emptyView.setViewModel(RefreshEmptyViewModel())
-            providerAdapter.setEmptyView(emptyView as View)
-
-            //            providerAdapter.headerWithEmptyEnable = true
-            //            providerAdapter.footerWithEmptyEnable = true
-        }
-
+    private fun observeListResource(owner: LifecycleOwner) {
         @Suppress("UNCHECKED_CAST")
         val vm = viewModel as? BaseListViewModel<Any>
         // 如果非BaseListViewModel则需要手动调用observeResource
         if (vm != null) {
+            vm._autoRefresh = listHost.autoRefresh()
             owner.observeResource(adapter, vm)
 
             vm.setupEmptyView.observe(owner) { state ->
@@ -69,8 +64,17 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
                 emptyBuilder.btnClick = { vm.refresh() }
                 emptyView.getViewModel()?.builder(emptyBuilder)
             }
+        }
+    }
 
-            vm._autoRefresh = listHost.autoRefresh()
+    open fun setEmptyView() {
+        val providerAdapter = adapter
+        if (providerAdapter is BaseQuickAdapter<*, *>) {
+            emptyView = providerEmptyView()
+            emptyView.setViewModel(RefreshEmptyViewModel())
+            providerAdapter.setEmptyView(this.emptyView as View)
+            // providerAdapter.headerWithEmptyEnable = true
+            // providerAdapter.footerWithEmptyEnable = true
         }
     }
 
@@ -84,7 +88,6 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
 /**
  * 订阅列表数据结果返回监听，当结果返回时刷新列表
  * 订阅前应先注册{@link ListAbility}，如果ViewModel继承的是BaseListViewModel,则在注册后会自动订阅。
- * 否则需手动调用
  * 否则需手动调用
  */
 @Suppress("UNCHECKED_CAST")
@@ -102,9 +105,25 @@ fun <T> LifecycleOwner.observeResource(
                         adapter.addData(it)
                     }
                 }
-            } else if (adapter is ListAdapter<*, *>) {
-                adapter as ListAdapter<T, *>
-                adapter.submitList(resource.data)
+            }
+        }
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
+    findAbility { it is ListAbility }?.let {
+        it as ListAbility
+        result.observe(lifecycleOwner) { resource ->
+            if (resource.status != Status.LOADING || resource.data != null) {
+                val adapter = it.adapter
+                if (adapter is BaseQuickAdapter<*, *>) {
+                    adapter as BaseQuickAdapter<T, BaseViewHolder>
+                    adapter.setDiffNewData(resource.data?.toMutableList())
+                } else if (adapter is ListAdapter<*, *>) {
+                    adapter as ListAdapter<T, *>
+                    adapter.submitList(resource.data)
+                }
             }
         }
     }

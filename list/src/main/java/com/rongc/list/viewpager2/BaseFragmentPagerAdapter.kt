@@ -28,7 +28,7 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
         fragmentActivity.lifecycle
     )
 
-    constructor(fragment: Fragment) : this(fragment.childFragmentManager, fragment.lifecycle)
+    constructor(parent: Fragment) : this(parent.childFragmentManager, parent.lifecycle)
 
     private var mEmptyData: RefreshEmptyViewModel? = null
 
