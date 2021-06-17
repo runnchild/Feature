@@ -1,11 +1,11 @@
 package com.rongc.feature.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.rongc.feature.api.ApiResponse
 import com.rongc.feature.api.ApiSuccessResponse
 import com.rongc.feature.utils.AbsentLiveData
 import com.rongc.feature.vo.Resource
+import com.rongc.feature.vo.isLoading
 
 /**
  * <p>
@@ -55,4 +55,14 @@ fun <T> LiveData<ApiResponse<T>>.networkOnly(
             failed?.invoke()
         }
     }.asLiveData()
+}
+
+fun <T> LiveData<Resource<T>>.ignoreLoading(): LiveData<Resource<T>> {
+    val liveData = MediatorLiveData<Resource<T>>()
+    liveData.addSource(this) {
+        if (!it.isLoading) {
+            liveData.value = it
+        }
+    }
+    return liveData
 }

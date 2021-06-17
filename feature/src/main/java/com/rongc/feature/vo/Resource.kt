@@ -35,3 +35,7 @@ data class Resource<out T>(val status: Status, val data: T?, val error: Throwabl
         }
     }
 }
+
+val Resource<*>.isSuccess get() = status == Status.SUCCESS
+val Resource<*>.isError get() = status == Status.ERROR
+val Resource<*>.isLoading get() = status == Status.LOADING
