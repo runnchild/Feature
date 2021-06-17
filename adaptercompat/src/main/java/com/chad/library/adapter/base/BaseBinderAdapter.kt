@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
+import com.chad.library.adapter.base.listener.GridSpanSizeLookup
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
@@ -34,6 +35,11 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) :
 
     private val mTypeMap = HashMap<Class<*>, Int>()
     private val mBinderArray = SparseArray<BaseItemBinder<Any, *>>()
+
+    @Keep
+    fun setGridSpanSizeLookup(spanSizeLookup: GridSpanSizeLookup) {
+       super.setSpanSizeLookup { p0, p1 -> spanSizeLookup.getSpanSize(p0, getItemViewType(p1), p1) }
+    }
 
     @Keep
     fun setList(list: List<Any>?) {
