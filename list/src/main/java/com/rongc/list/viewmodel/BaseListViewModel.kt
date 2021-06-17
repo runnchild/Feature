@@ -54,11 +54,12 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         set(value) {
             // 页面设置了自动刷新，并且之前没刷新过时自动刷新
             if (!field && value) {
-                if (enableRefresh.get()) {
+//                if (enableRefresh.get()) {
 //                    autoRefresh.set(true)
 //                } else {
-                    refresh()
-                }
+//                }
+//                autoRefresh.set(true)
+                refresh()
             }
             field = value
         }
@@ -184,5 +185,5 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
     abstract fun loadListData(page: Int): LiveData<Resource<List<T>>>
 
-    val items get() = result.value?.data
+//    val items get() = result.value?.data
 }

@@ -44,7 +44,7 @@ class RepoRepository {
             // 根据缓存数据判断是否要重新发起网络请求
             override fun shouldFetch(data:List<Repo>?): Boolean {
                 // demo未实现数据库分页加载
-                return page > 1 && (data == null || repoListRateLimit.shouldFetch(query))
+                return page > 1 || (data == null || repoListRateLimit.shouldFetch(query))
             }
 
             // 加载缓存

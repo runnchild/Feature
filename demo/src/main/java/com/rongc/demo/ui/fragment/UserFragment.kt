@@ -30,6 +30,9 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
         get() = mBinding.recyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.login.value = args.login
+        viewModel.avatar = args.avatarUrl
+
         registerAbility(ProgressAbility(requireContext()))
         registerAbility(ListAbility(viewModel, this))
         registerAbility(ToolbarAbility(this) {
@@ -48,8 +51,6 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
     }
 
     override fun autoRefresh(): Boolean {
-        viewModel.login.value = args.login
-        viewModel.avatar = args.avatarUrl
         return super.autoRefresh()
     }
 
