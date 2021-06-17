@@ -10,6 +10,6 @@ import androidx.viewpager2.widget.ViewPager2
  * @author qiurong
  * @date 2021/6/7
  */
-interface IPagerList: IList {
+interface IPagerHost: IList {
     val viewPager: ViewPager2
 }

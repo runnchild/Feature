@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @author qiurong
  * @date 2021/3/26
  */
-interface IRecyclerList: IList {
+interface IRecyclerHost: IList {
     val recyclerView: RecyclerView
 
     /**

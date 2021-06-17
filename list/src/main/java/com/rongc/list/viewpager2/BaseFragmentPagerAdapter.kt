@@ -109,7 +109,7 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
     ) {
         super.onBindViewHolder(holder, position, payloads)
         @Suppress("UNCHECKED_CAST")
-        val item = getCurrentFragment(position) as? IPagerItem<T>
+        val item = findFragment(position) as? IPagerItem<T>
         item?.convert(position, getItem(position)!!, payloads)
     }
 
@@ -125,7 +125,7 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
         return itemId != RecyclerView.NO_ID
     }
 
-    fun getCurrentFragment(position: Int): Fragment? {
+    fun findFragment(position: Int): Fragment? {
         return fragmentManager.findFragmentByTag("f${getItemId(position)}")
     }
 

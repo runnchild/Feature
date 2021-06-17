@@ -2,7 +2,6 @@ package com.rongc.list.ability
 
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -27,9 +26,31 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
     val adapter: RecyclerView.Adapter<*> by lazy {
         listHost.providerAdapter() ?: BinderAdapter()
     }
+
     private lateinit var emptyView: IEmptyView
 
     override fun onCreate(owner: LifecycleOwner) {
+        setupEmptyView(owner)
+
+        val decoration = ItemDecoration.Builder().apply(listHost.decorationBuilder()).build()
+        setupItemDecoration(decoration)
+
+        val itemBinders = arrayListOf<BaseRecyclerItemBinder<out Any>>()
+        listHost.registerItemBinders(itemBinders)
+        setupItemBinders(itemBinders)
+    }
+
+    private fun setupEmptyView(owner: LifecycleOwner) {
+        val providerAdapter = adapter
+        emptyView = providerEmptyView()
+        if (providerAdapter is BaseQuickAdapter<*, *>) {
+            emptyView.setViewModel(RefreshEmptyViewModel())
+            providerAdapter.setEmptyView(emptyView as View)
+
+            //            providerAdapter.headerWithEmptyEnable = true
+            //            providerAdapter.footerWithEmptyEnable = true
+        }
+
         @Suppress("UNCHECKED_CAST")
         val vm = viewModel as? BaseListViewModel<Any>
         // 如果非BaseListViewModel则需要手动调用observeResource
@@ -51,26 +72,9 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
 
             vm._autoRefresh = listHost.autoRefresh()
         }
-
-        val decoration = ItemDecoration.Builder().apply(listHost.decorationBuilder()).build()
-        setupItemDecoration(decoration)
-
-        val itemBinders = arrayListOf<BaseRecyclerItemBinder<out Any>>()
-        listHost.registerItemBinders(itemBinders)
-        setupItemBinders(itemBinders)
-
-        val providerAdapter = adapter
-        if (providerAdapter is BaseQuickAdapter<*, *>) {
-            owner.lifecycleScope.launchWhenResumed {
-                emptyView = listHost.providerEmptyView(providerAdapter.recyclerView.context)
-                emptyView.setViewModel(RefreshEmptyViewModel())
-
-                providerAdapter.setEmptyView(emptyView as View)
-//            providerAdapter.headerWithEmptyEnable = true
-//            providerAdapter.footerWithEmptyEnable = true
-            }
-        }
     }
+
+    abstract fun providerEmptyView(): IEmptyView
 
     abstract fun setupItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>)
 
