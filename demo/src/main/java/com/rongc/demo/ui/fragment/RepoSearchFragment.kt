@@ -18,7 +18,7 @@ import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 import com.rongc.feature.utils.logd
 import com.rongc.list.ItemDecoration
-import com.rongc.list.ability.IRecyclerList
+import com.rongc.list.ability.IRecyclerHost
 import com.rongc.list.ability.ListAbility
 import com.rongc.list.binding.doOnDefaultAdapter
 import com.rongc.list.viewmodel.EmptyBuilder
@@ -26,7 +26,7 @@ import com.rongc.list.viewmodel.RefreshEmptyViewModel
 import com.rongc.list.widget.IEmptyView
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(),
-    IRecyclerList {
+    IRecyclerHost {
 
     override val recyclerView: RecyclerView
         get() = mBinding.refreshGroup.recyclerView

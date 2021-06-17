@@ -7,7 +7,7 @@ import com.rongc.demo.databinding.DialogDemoFragmentBinding
 import com.rongc.demo.ui.binders.ViewPagerItemBinder
 import com.rongc.demo.viewmodel.DemoDialogViewModel
 import com.rongc.feature.ui.BaseDialogFragment
-import com.rongc.list.ability.IPagerList
+import com.rongc.list.ability.IPagerHost
 import com.rongc.list.ability.PagerAbility
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 
@@ -20,7 +20,7 @@ import com.rongc.list.adapter.BaseRecyclerItemBinder
  * @date 2021/5/30
  */
 class PagerDialogFragment : BaseDialogFragment<DialogDemoFragmentBinding, DemoDialogViewModel>(),
-    IPagerList {
+    IPagerHost {
 
     override val viewPager: ViewPager2 get() = mBinding.viewPager
 

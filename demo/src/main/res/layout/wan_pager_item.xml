@@ -17,21 +17,23 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:url="@{bean.imagePath}"
             app:layout_constraintTop_toTopOf="parent"
+            app:url="@{bean.imagePath}"
             tools:src="@color/purple_200" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginTop="50dp"
-            android:text="@{bean.desc}"
-            android:textSize="17sp"
-            android:paddingStart="15dp"
-            android:gravity="center_vertical"
             android:background="@color/black_30"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:text="@{bean.desc}"
+            android:textColor="@color/white"
+            android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visible="@{bean.desc.length() > 0}"
             tools:text="item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

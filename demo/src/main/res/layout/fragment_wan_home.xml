@@ -22,6 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:loop="@{true}"
+            app:items="@{viewModel.banners.data}"
             app:scroll_interval="@{5000}" />
 
         <com.google.android.material.tabs.TabLayout

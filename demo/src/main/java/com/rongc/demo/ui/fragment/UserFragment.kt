@@ -16,13 +16,13 @@ import com.rongc.feature.ability.impl.showProgressIfLoading
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp
 import com.rongc.list.ItemDecoration
-import com.rongc.list.ability.IRecyclerList
+import com.rongc.list.ability.IRecyclerHost
 import com.rongc.list.ability.ListAbility
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.databinding.BaseRecyclerWithRefreshBinding
 
 class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>(),
-    IRecyclerList {
+    IRecyclerHost {
 
     private val args by navArgs<UserFragmentArgs>()
 
