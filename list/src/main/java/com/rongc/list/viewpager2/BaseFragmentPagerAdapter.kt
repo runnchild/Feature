@@ -1,6 +1,7 @@
 package com.rongc.list.viewpager2
 
 import android.annotation.SuppressLint
+import androidx.collection.LongSparseArray
 import androidx.databinding.ObservableArrayList
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -20,12 +21,12 @@ import com.rongc.list.viewmodel.RefreshEmptyViewModel
  * @author qiurong
  * @date 2021/3/21
  */
-abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: FragmentManager, lifecycle: Lifecycle) :
-    FragmentStateAdapter(fragmentManager, lifecycle) {
+abstract class BaseFragmentPagerAdapter<T>(
+    private val fragmentManager: FragmentManager, lifecycle: Lifecycle
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     constructor(fragmentActivity: FragmentActivity) : this(
-        fragmentActivity.supportFragmentManager,
-        fragmentActivity.lifecycle
+        fragmentActivity.supportFragmentManager, fragmentActivity.lifecycle
     )
 
     constructor(parent: Fragment) : this(parent.childFragmentManager, parent.lifecycle)
@@ -34,27 +35,25 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
 
     private val data = ObservableArrayList<T>()
 
-    override fun getItemCount() = data.size
+    override fun getItemCount() = if (data.size == 0 && hasEmptyView) {
+        1
+    } else {
+        data.size
+    }
+
+    private val hasEmptyView get() = mEmptyData != null
 
     fun getItem(position: Int) = data.getOrNull(position)
 
+    @Suppress("UNCHECKED_CAST")
     override fun createFragment(position: Int): Fragment {
-        if (getItem(position) is RefreshEmptyViewModel) {
-            val fragment = generateEmptyFragment()
-            @Suppress("UNCHECKED_CAST")
-            (fragment as IPagerItem<T>).attachAdapter(this)
-            fragment.lifecycleScope.launchWhenStarted {
-                fragment.convert(position, mEmptyData!!, null)
-            }
-            return fragment
+        val fragment = if (getItem(position) == null && hasEmptyView) {
+            generateEmptyFragment()
+        } else {
+            createItemFragment(getItem(position)!!, position)
         }
-        val fragment = createItemFragment(getItem(position)!!, position)
-        fragment.attachAdapter(this)
-        fragment as Fragment
-        fragment.lifecycleScope.launchWhenStarted {
-            fragment.convert(position, getItem(position)!!, null)
-        }
-        return fragment
+        (fragment as IPagerItem<T>).attachAdapter(this)
+        return fragment as Fragment
     }
 
     open fun generateEmptyFragment() = EmptyListFragment()
@@ -67,7 +66,8 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
         if (!list.isNullOrEmpty()) {
             data.addAll(list)
         }
-        notifyDataSetChanged()
+        val itemCount = list?.size ?: 0
+        notifyItemRangeInserted(0, itemCount)
     }
 
     fun notifyItem(item: T, payload: Any? = null) {
@@ -102,15 +102,17 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
         return data.indexOf(item)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(
-        holder: FragmentViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
+        holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>
     ) {
         super.onBindViewHolder(holder, position, payloads)
-        @Suppress("UNCHECKED_CAST")
-        val item = findFragment(position) as? IPagerItem<T>
-        item?.convert(position, getItem(position)!!, payloads)
+        val fragment = findFragment(position)
+        val item = fragment as? IPagerItem<T>
+        val data = getItem(position) ?: mEmptyData ?: return
+        fragment?.lifecycleScope?.launchWhenResumed {
+            item?.convert(position, data as T, payloads)
+        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -126,7 +128,12 @@ abstract class BaseFragmentPagerAdapter<T>(private val fragmentManager: Fragment
     }
 
     fun findFragment(position: Int): Fragment? {
-        return fragmentManager.findFragmentByTag("f${getItemId(position)}")
+        return fragmentManager.findFragmentByTag("f${getItemId(position)}") ?: let {
+            val field = FragmentStateAdapter::class.java.getDeclaredField("mFragments")
+            field.isAccessible = true
+            val array = field.get(this) as? LongSparseArray<*>
+            array?.get(getItemId(position)) as? Fragment
+        }
     }
 
     fun setEmptyData(emptyData: RefreshEmptyViewModel) {

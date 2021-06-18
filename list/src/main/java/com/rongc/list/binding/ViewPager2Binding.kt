@@ -65,13 +65,7 @@ fun ViewPager2.items(items: List<Any>?) {
     val adapter1 = adapter
     @Suppress("UNCHECKED_CAST")
     if (adapter1 as? BaseFragmentPagerAdapter<Any> != null) {
-        if (items != null && items.isEmpty() && adapter1.emptyData() != null) {
-            val emptyList = items.toMutableList()
-            emptyList.add(adapter1.emptyData()!!)
-            adapter1.setList(emptyList)
-        } else {
-            adapter1.setList(items)
-        }
+        adapter1.setList(items)
     } else {
         @Suppress("UNCHECKED_CAST")
         val adapter = setup(adapter) as? BaseBinderAdapter ?: return

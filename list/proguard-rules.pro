@@ -24,3 +24,6 @@
 -keepclasseswithmembers class com.chad.library.adapter.base.BaseBinderAdapter {
     com.chad.library.adapter.base.BaseBinderAdapter addItemBinder(java.lang.Class,com.chad.library.adapter.base.binder.BaseItemBinder,androidx.recyclerview.widget.DiffUtil$ItemCallback);
 }
+-keep class androidx.viewpager2.adapter.FragmentStateAdapter {
+    ** mFragments;
+}

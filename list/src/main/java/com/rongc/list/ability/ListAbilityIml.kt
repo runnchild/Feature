@@ -30,10 +30,11 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
         listHost.providerAdapter() ?: BinderAdapter()
     }
 
-    private lateinit var emptyView: IEmptyView
+    private lateinit var emptyViewModel: RefreshEmptyViewModel
 
     override fun onCreate(owner: LifecycleOwner) {
-        setEmptyView()
+        emptyViewModel = RefreshEmptyViewModel()
+        setEmptyView(emptyViewModel)
         observeListResource(owner)
 
         val decoration = ItemDecoration.Builder().apply(listHost.decorationBuilder()).build()
@@ -62,17 +63,17 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
                 val emptyBuilder = EmptyBuilder().apply(defaultBuilder)
                     .apply(listHost.setupEmptyView(state))
                 emptyBuilder.btnClick = { vm.refresh() }
-                emptyView.getViewModel()?.builder(emptyBuilder)
+                emptyViewModel.builder(emptyBuilder)
             }
         }
     }
 
-    open fun setEmptyView() {
+    open fun setEmptyView(emptyViewModel: RefreshEmptyViewModel) {
         val providerAdapter = adapter
         if (providerAdapter is BaseQuickAdapter<*, *>) {
-            emptyView = providerEmptyView()
-            emptyView.setViewModel(RefreshEmptyViewModel())
-            providerAdapter.setEmptyView(this.emptyView as View)
+            val emptyView = providerEmptyView()
+            emptyView.setViewModel(emptyViewModel)
+            providerAdapter.setEmptyView(emptyView as View)
             // providerAdapter.headerWithEmptyEnable = true
             // providerAdapter.footerWithEmptyEnable = true
         }

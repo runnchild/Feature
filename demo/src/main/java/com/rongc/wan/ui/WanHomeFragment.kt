@@ -11,6 +11,8 @@ import com.rongc.feature.ui.BaseFragment
 import com.rongc.list.ability.IPagerHost
 import com.rongc.list.ability.PagerAbility
 import com.rongc.list.binding.items
+import com.rongc.list.viewmodel.EmptyBuilder
+import com.rongc.list.viewmodel.RefreshEmptyViewModel
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.viewpager2.IPagerItem
 
@@ -47,6 +49,12 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
                     arguments = bundleOf("cid" to item)
                 }
             }
+        }
+    }
+
+    override fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit {
+        return onlySetupEmptyData(state) {
+            tip = "no data"
         }
     }
 }
