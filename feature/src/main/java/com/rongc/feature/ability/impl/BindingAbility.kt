@@ -35,17 +35,20 @@ class BindingAbility<B : ViewBinding> : IAbility {
     }
 
     private fun binding(owner: IHost<*>, inflater: LayoutInflater, container: ViewGroup?): B {
-        val bindingClass =
-            (owner::class.java.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>
-        val method = bindingClass.getDeclaredMethod(
-            "inflate",
-            LayoutInflater::class.java,
-            ViewGroup::class.java,
-            Boolean::class.java
+        val method = getBindingClass(owner).getDeclaredMethod(
+            "inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java
         )
         method.isAccessible = true
         @Suppress("UNCHECKED_CAST")
         return (method.invoke(null, inflater, container, false) as B)
+    }
+
+    private fun getBindingClass(owner: IHost<*>): Class<*> {
+        var type = owner::class.java.genericSuperclass
+        while (type is Class<*>) {
+            type = type.genericSuperclass
+        }
+        return (type as ParameterizedType).actualTypeArguments[0] as Class<*>
     }
 
     override fun onDestroy(owner: LifecycleOwner) {

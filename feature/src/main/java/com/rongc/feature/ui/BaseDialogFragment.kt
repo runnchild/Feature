@@ -34,7 +34,7 @@ abstract class BaseDialogFragment<B : ViewBinding, M : BaseViewModel> : BottomSh
     override val viewModel: M by lazy { viewModelProvider() }
     override val lifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
 
-    final override fun viewModelCreator(cls: Class<M>): () -> M {
+    override fun viewModelCreator(cls: Class<M>): () -> M {
         return { defaultViewModelProviderFactory.create(cls) }
     }
 
