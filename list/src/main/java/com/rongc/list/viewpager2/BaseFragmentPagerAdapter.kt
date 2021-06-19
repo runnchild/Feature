@@ -1,6 +1,5 @@
 package com.rongc.list.viewpager2
 
-import android.annotation.SuppressLint
 import androidx.collection.LongSparseArray
 import androidx.databinding.ObservableArrayList
 import androidx.fragment.app.Fragment
@@ -60,13 +59,15 @@ abstract class BaseFragmentPagerAdapter<T>(
 
     abstract fun createItemFragment(item: T, position: Int): IPagerItem<T>
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setList(list: Collection<T>?) {
         data.clear()
         if (!list.isNullOrEmpty()) {
             data.addAll(list)
         }
         val itemCount = list?.size ?: 0
+        if (itemCount > 0) {
+            notifyItemChanged(0)
+        }
         notifyItemRangeInserted(0, itemCount)
     }
 
@@ -116,7 +117,7 @@ abstract class BaseFragmentPagerAdapter<T>(
     }
 
     override fun getItemId(position: Int): Long {
-        return if (getItem(position) is RefreshEmptyViewModel) {
+        return if (getItem(position) == null) {
             RecyclerView.NO_ID
         } else {
             super.getItemId(position)
