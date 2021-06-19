@@ -20,21 +20,20 @@ object LiveDataBus {
         return liveData as StickyLiveData<T>
     }
 
-    //通过一堆的反射，获取livedata当中的mversion字段，来控制黏性数据的分发与否，但是我们认为这种反射不够优雅。
     class StickyLiveData<T>(private val eventName: String) : MutableLiveData<T>() {
         internal var mStickyData: T? = null
         internal var mVersion = 0
 
         fun setStickyValue(stickyData: T) {
             mStickyData = stickyData
+            //在主线程去发送数据
             setValue(stickyData)
-            //就是在主线程去发送数据
         }
 
         fun postStickyValue(stickyData: T) {
             mStickyData = stickyData
-            postValue(stickyData)
             //不受线程的限制
+            postValue(stickyData)
         }
 
         override fun setValue(value: T) {
@@ -52,7 +51,7 @@ object LiveDataBus {
         }
 
         fun observerSticky(owner: LifecycleOwner, sticky: Boolean, observer: Observer<in T>) {
-            //允许指定注册的观察则 是否需要关心黏性事件
+            //允许指定注册的观察者 是否需要关心黏性事件
             //sticky =true, 如果之前存在已经发送的数据，那么这个observer会受到之前的黏性事件消息
             owner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
                 //监听 宿主 发生销毁事件，主动把livedata 移除掉。
@@ -69,17 +68,14 @@ object LiveDataBus {
     }
 
     class StickyObserver<T>(
-        val stickyLiveData: StickyLiveData<T>,
-        val sticky: Boolean,
-        val observer: Observer<in T>
+        val stickyLiveData: StickyLiveData<T>, val sticky: Boolean, val observer: Observer<in T>
     ) : Observer<T> {
         //lastVersion 和livedata的version 对齐的原因，就是为控制黏性事件的分发。
         //sticky 不等于true , 只能接收到注册之后发送的消息，如果要接收黏性事件，则sticky需要传递为true
         private var lastVersion = stickyLiveData.mVersion
         override fun onChanged(t: T) {
-
             if (lastVersion >= stickyLiveData.mVersion) {
-                //就说明stickyLiveData  没有更新的数据需要发送。
+                //说明stickyLiveData  没有更新的数据需要发送。
                 if (sticky && stickyLiveData.mStickyData != null) {
                     observer.onChanged(stickyLiveData.mStickyData)
                 }
@@ -89,17 +85,5 @@ object LiveDataBus {
             lastVersion = stickyLiveData.mVersion
             observer.onChanged(t)
         }
-
     }
-}
-
-/**
- * 保证所有事件不丢失，保存非激活状态的事件，并能够在激活状态回调，且没有内存泄漏
- */
-fun <T> MutableLiveData<T>.observeAny(owner: LifecycleOwner, observer: Observer<T>) {
-    AnyEventObserver.bind(this, owner, observer)
-}
-
-fun <T> String.liveBus(): LiveDataBus.StickyLiveData<T> {
-    return LiveDataBus.with(this)
 }

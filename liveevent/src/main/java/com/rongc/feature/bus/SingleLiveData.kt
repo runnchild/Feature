@@ -18,7 +18,6 @@ package com.rongc.feature.bus
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.atomic.AtomicBoolean
@@ -68,14 +67,5 @@ class SingleLiveData<T> : MutableLiveData<T>() {
 
     companion object {
         private const val TAG = "SingleLiveEvent"
-    }
-}
-
-inline fun <T> LiveData<Event<T>>.observeEvent(
-    owner: LifecycleOwner,
-    crossinline onEventUnhandledContent: (T) -> Unit
-) {
-    observe(owner) {
-        it?.getContentIfNotHandled()?.let(onEventUnhandledContent)
     }
 }

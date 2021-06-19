@@ -8,8 +8,8 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableFloat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rongc.feature.bus.SingleLiveData
 import com.rongc.feature.utils.dp
 
 class ToolBarViewModel : ViewModel() {
@@ -47,5 +47,5 @@ class ToolBarViewModel : ViewModel() {
     val backIcon = ObservableField<Drawable>()
     val background = ObservableField<Drawable>()
 
-    val backLiveData = SingleLiveData<Boolean>()
+    val backLiveData = MutableLiveData<Boolean>()
 }
