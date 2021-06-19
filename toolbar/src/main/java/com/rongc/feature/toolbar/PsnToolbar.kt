@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toDrawable
-import com.rongc.feature.databinding.PsnToolbarBinding
+import com.rongc.feature.toolbar.databinding.PsnToolbarBinding
 import com.rongc.feature.utils.idp
 
 /**

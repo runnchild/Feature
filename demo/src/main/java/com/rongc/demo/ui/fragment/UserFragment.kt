@@ -11,7 +11,7 @@ import com.rongc.demo.R
 import com.rongc.demo.ui.binders.UserItemBinder
 import com.rongc.demo.ui.binders.UserRepoItemBinder
 import com.rongc.demo.viewmodel.UserViewModel
-import com.rongc.feature.ability.impl.ToolbarAbility
+import com.rongc.feature.ability.ToolbarAbility
 import com.rongc.feature.ability.impl.showProgressIfLoading
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.feature.utils.idp

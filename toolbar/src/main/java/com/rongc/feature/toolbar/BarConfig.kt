@@ -2,7 +2,6 @@ package com.rongc.feature.toolbar
 
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
-import com.rongc.feature.R
 import com.rongc.feature.utils.drawable
 
 class BarConfig {

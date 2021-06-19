@@ -1,4 +1,4 @@
-package com.rongc.feature.ability.impl
+package com.rongc.feature.ability
 
 import android.app.Activity
 import android.view.View
@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.rongc.feature.R
-import com.rongc.feature.ability.IAbility
 import com.rongc.feature.toolbar.BarConfig
 import com.rongc.feature.toolbar.PsnToolbar
 import com.rongc.feature.toolbar.ToolBarViewModel
