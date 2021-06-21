@@ -8,9 +8,9 @@ import androidx.core.view.forEach
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import com.rongc.feature.R
 import com.rongc.feature.toolbar.BarConfig
 import com.rongc.feature.toolbar.PsnToolbar
+import com.rongc.feature.toolbar.R
 import com.rongc.feature.toolbar.ToolBarViewModel
 import com.rongc.feature.ui.host.IHost
 
@@ -59,8 +59,10 @@ class ToolbarAbility(private val host: IHost<*>, private val config: BarConfig.(
             toolBar = view
             return toolBar
         }
-        if (view.findViewById<ViewStub>(R.id.psn_toolBar) != null) {
-            toolBar = view.findViewById<ViewStub>(R.id.psn_toolBar).inflate() as PsnToolbar
+        val toolbarStub = view.findViewById<ViewStub>(R.id.psn_toolBar)
+        if (toolbarStub != null) {
+            toolbarStub.layoutResource = R.layout.include_psn_toolbar
+            toolBar = toolbarStub.inflate() as PsnToolbar
             return toolBar
         }
         if (view is ViewGroup) {

@@ -11,5 +11,5 @@ dependencies {
     api('com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4') {
         exclude group: 'org.jetbrains.kotlin'
     }
-    compileOnly project(path: ':feature')
+    implementation project(path: ':feature')
 }

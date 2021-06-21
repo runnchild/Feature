@@ -17,8 +17,7 @@
         <ViewStub
             android:id="@id/psn_toolBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout="@layout/include_psn_toolbar" />
+            android:layout_height="wrap_content" />
 
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"

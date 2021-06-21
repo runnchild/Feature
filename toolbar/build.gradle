@@ -1,6 +1,6 @@
 plugins { id 'com.rongc.lib' }
 dependencies {
-    compileOnly project(':feature')
+    implementation project(':feature')
 }
 afterEvaluate {
     generateReleaseBuildConfig.enabled = false
