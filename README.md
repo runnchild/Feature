@@ -1,15 +1,8 @@
 # Feature [![](https://jitpack.io/v/runnchild/Feature.svg)](https://jitpack.io/#runnchild/Feature)
 
-#废弃啦！准备重构
-
 ## 一、简介
 超轻量级，简单上手的框架，集成少量必要的优秀开源库, 旨在加快平时开发效率，减少不必要的bug。
 
-+ 框架使用了jetpack 中的LiveData, Lifecycle, ViewModel, DataBinding。 大大减少编写的代码量，完美处理生命周期，再也不怕内存泄露。
-+ 网络请求：Retrofit+Okhttp+Coroutines。 颠覆传统的网络请求编写体验，顺序从上到下告别蜜汁回调。
-+ RecyclerView Adapter: [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
-+ 下拉刷新：[SmartRefresh](https://github.com/scwang90/SmartRefreshLayout)
-+ 工具库：[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
 
 ## 二、使用
 > 1.依赖
@@ -26,23 +19,7 @@ implementation 'com.github.runnchild:Feature:$latest_version'
 ```
 
 > 2.接入
-1.使用或继承CoreApplication，或者在自己的Application attachBaseContext()中初始化Utils.init(this)。
-2.继承BaseActivity 并指定这个页面的ViewModel
-```
-class MainActivity : BaseActivity<MainViewModel>() {
 
-    override fun getContentViewRes() = R.layout.activity_main
-
-    override fun initView(view: View) {
-        supportFragmentManager.beginTransaction().add(
-            R.id.fragmentLayout,
-            MainFragment(), ""
-        ).commit()
-    }
-}
-
-```
-2. 推荐使用DataBinding, 首先创建xml并使用<layout></layout>包裹， Activity继承BaseBindingActivity并填写DataBinding 和 ViewModel泛型,就行啦。
 ```
 class ViewBindingAdapterActivity : BaseBindingActivity<ActivityViewBindingAdapterBinding, EmptyViewModel>() {
     override fun initView(view: View) {
