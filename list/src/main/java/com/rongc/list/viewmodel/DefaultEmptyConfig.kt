@@ -55,3 +55,36 @@ object DefaultEmptyConfig {
         emptyDataBuilder = builder
     }
 }
+
+/**
+ * 只设置空数据(包括服务器错误)配置
+ * @see {@link com.rongc.feature.viewmodel.DefaultEmptyConfig}
+ */
+fun EmptyBuilder.whenDataIsEmpty(block: EmptyBuilder.() -> Unit): EmptyBuilder {
+    if (state == EmptyState.EMPTY_DATA || state == EmptyState.EMPTY_SERVICE) {
+        block(this)
+    }
+    return this
+}
+
+/**
+ * 只设置网络未连接配置
+ * @see {@link com.rongc.feature.viewmodel.DefaultEmptyConfig}
+ */
+fun EmptyBuilder.whenDisconnect(block: EmptyBuilder.() -> Unit): EmptyBuilder {
+    if (state == EmptyState.EMPTY_NET_DISCONNECT) {
+        block(this)
+    }
+    return this
+}
+
+/**
+ * 只设置网络不可用配置
+ * @see {@link com.rongc.feature.viewmodel.DefaultEmptyConfig}
+ */
+fun EmptyBuilder.whenUnavailable(block: EmptyBuilder.() -> Unit): EmptyBuilder {
+    if (state == EmptyState.EMPTY_NET_UNAVAILABLE) {
+        block(this)
+    }
+    return this
+}

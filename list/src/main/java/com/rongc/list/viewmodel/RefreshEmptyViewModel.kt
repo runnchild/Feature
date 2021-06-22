@@ -9,12 +9,6 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 
 class RefreshEmptyViewModel {
-    enum class State {
-        EMPTY_NET_DISCONNECT,
-        EMPTY_NET_UNAVAILABLE,
-        EMPTY_DATA
-    }
-
     val tip = ObservableField<String>()
     val subTip = ObservableField<String>()
     val btnVisible = ObservableBoolean()
@@ -42,14 +36,21 @@ class RefreshEmptyViewModel {
             refreshClick.set(it.btnClick)
 
             tipBuilder.set(it.tipBuilder)
+            tipBuilder.notifyChange()
+
             subTipBuilder.set(it.subTipBuilder)
+            subTipBuilder.notifyChange()
+
             iconBuilder.set(it.iconBuilder)
+            iconBuilder.notifyChange()
+
             refreshBuilder.set(it.refreshBuilder)
+            refreshBuilder.notifyChange()
         }
     }
 }
 
-class EmptyBuilder {
+class EmptyBuilder(val state: EmptyState = EmptyState.EMPTY_DATA) {
     var tip: String? = null
     var subTip: String? = null
     var btnVisible: Boolean = true
@@ -77,4 +78,11 @@ class EmptyBuilder {
     fun icon(build: ImageView.() -> Unit) {
         iconBuilder = build
     }
+}
+
+enum class EmptyState {
+    EMPTY_NET_DISCONNECT,
+    EMPTY_NET_UNAVAILABLE,
+    EMPTY_SERVICE,
+    EMPTY_DATA,
 }

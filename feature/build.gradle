@@ -3,7 +3,7 @@ import com.rongc.plugin.config.Deps
 plugins { id 'com.rongc.lib' }
 
 ext {
-    coroutines = '1.3.9'
+    coroutines = '1.4.1'
     lifecycle = '2.3.1'
 }
 

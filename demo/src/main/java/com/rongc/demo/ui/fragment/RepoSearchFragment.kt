@@ -22,7 +22,7 @@ import com.rongc.list.ability.IRecyclerHost
 import com.rongc.list.ability.ListAbility
 import com.rongc.list.binding.doOnDefaultAdapter
 import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.whenDataIsEmpty
 import com.rongc.list.widget.IEmptyView
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(),
@@ -87,25 +87,25 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         return super.providerEmptyView(context)
     }
 
-    override fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit {
+    override fun setupEmptyView(builder: EmptyBuilder) {
         // 只设置空数据，其他情况使用默认配置
-        return onlySetupEmptyData(state) {
+        builder.whenDataIsEmpty {
             icon {
                 setImageResource(R.mipmap.ic_launcher)
             }
-//          or  iconDrawable = Color.GREEN.toDrawable()
+            //or iconDrawable = Color.GREEN.toDrawable()
             tip {
-                text = "no data found"
+                text = "no repository found"
             }
-//          or  tip = "no data found"
+            //or  tip = "no data found"
             subTip {
                 text = "try again"
             }
-//          or  subTip = "try again"
+            //or subTip = "try again"
             refreshBtn {
                 text = "retry"
             }
-//          or  btnText = "retry"
+            //or btnText = "retry"
         }
     }
 }

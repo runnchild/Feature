@@ -2,7 +2,7 @@ package com.rongc.list
 
 class PageIndicator {
     companion object {
-        const val PAGE_START = 1
+        var PAGE_START = 1
     }
 
     var pageSize = 20

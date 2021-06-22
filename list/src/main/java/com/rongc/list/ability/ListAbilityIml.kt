@@ -16,10 +16,7 @@ import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatDiffNewData
-import com.rongc.list.viewmodel.BaseListViewModel
-import com.rongc.list.viewmodel.DefaultEmptyConfig
-import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.*
 import com.rongc.list.widget.IEmptyView
 import java.util.*
 
@@ -54,15 +51,25 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
             owner.observeResource(adapter, vm)
 
             vm.setupEmptyView.observe(owner) { state ->
+                val adapter = adapter
+                // 列表已有数据，不设置空页面
+                if (adapter is BaseQuickAdapter<*, *>) {
+                    if (adapter.data.size > 0) {
+                        return@observe
+                    }
+                } else if (adapter.itemCount > 0) {
+                    return@observe
+                }
+
                 val defaultBuilder = when (state) {
-                    RefreshEmptyViewModel.State.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
-                    RefreshEmptyViewModel.State.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
+                    EmptyState.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
+                    EmptyState.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
                     else -> DefaultEmptyConfig.emptyDataBuilder
                 }
-                // 替换默认配置
-                val emptyBuilder = EmptyBuilder().apply(defaultBuilder)
-                    .apply(listHost.setupEmptyView(state))
+                val emptyBuilder = EmptyBuilder(state).apply(defaultBuilder)
                 emptyBuilder.btnClick = { vm.refresh() }
+                // 默认配置基础上更改配置
+                listHost.setupEmptyView(emptyBuilder)
                 emptyViewModel.builder(emptyBuilder)
             }
         }

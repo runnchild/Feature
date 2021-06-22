@@ -18,6 +18,8 @@ import com.rongc.feature.vo.isLoading
 abstract class NetOnlyResource<T> : NetworkBoundResource<T, T>() {
     private var resource: T? = null
 
+    private val dbLiveData get() = liveData<T> { emit(resource!!) }
+
     override fun saveCallResult(item: T) {
         resource = item
     }
@@ -31,8 +33,6 @@ abstract class NetOnlyResource<T> : NetworkBoundResource<T, T>() {
             dbLiveData
         }
     }
-
-    private val dbLiveData get() = liveData<T> { emit(resource!!) }
 }
 
 /**

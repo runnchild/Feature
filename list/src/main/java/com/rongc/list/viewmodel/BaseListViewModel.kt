@@ -64,7 +64,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             field = value
         }
 
-    val setupEmptyView = MutableLiveData<RefreshEmptyViewModel.State>()
+    val setupEmptyView = MutableLiveData<EmptyState>()
 
     private val _request = MutableLiveData<Int>()
 
@@ -76,7 +76,6 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
     val result = _result.map {
 //        var resource = it
-
         when (it.status) {
             Status.SUCCESS -> {
                 if (isRefresh) {
@@ -91,9 +90,13 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             Status.ERROR -> {
                 AppExecutors.diskIO().execute {
                     if (!NetworkUtils.isConnected()) {
-                        setupEmptyView.postValue(RefreshEmptyViewModel.State.EMPTY_NET_DISCONNECT)
+                        setupEmptyView.postValue(EmptyState.EMPTY_NET_DISCONNECT)
                     } else if (!NetworkUtils.isAvailable()) {
-                        setupEmptyView.postValue(RefreshEmptyViewModel.State.EMPTY_NET_UNAVAILABLE)
+                        setupEmptyView.postValue(EmptyState.EMPTY_NET_UNAVAILABLE)
+                    } else {
+                        if (it.data.isNullOrEmpty()) {
+                            setupEmptyView.postValue(EmptyState.EMPTY_SERVICE)
+                        }
                     }
                 }
             }
@@ -102,7 +105,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         }
         if (it.status != Status.LOADING) {
             if (it.data.isNullOrEmpty()) {
-                setupEmptyView.value = RefreshEmptyViewModel.State.EMPTY_DATA
+                setupEmptyView.value = EmptyState.EMPTY_DATA
             }
         }
 
@@ -128,6 +131,12 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 //        list.addAll(source)
 //        return list
 //    }
+
+    //    val items get() = result.value?.data
+    /**
+     * 此时的接口实时状态
+     */
+    val resource get() = result.value
 
     /**
      * 刷新和加载状态
@@ -184,6 +193,4 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     abstract fun loadListData(page: Int): LiveData<Resource<List<T>>>
-
-//    val items get() = result.value?.data
 }

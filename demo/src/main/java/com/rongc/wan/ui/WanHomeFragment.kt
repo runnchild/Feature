@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rongc.demo.databinding.FragmentWanHomeBinding
+import com.rongc.feature.repository.ignoreLoading
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.list.ability.IPagerHost
 import com.rongc.list.ability.PagerAbility
 import com.rongc.list.binding.items
 import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.whenDataIsEmpty
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.viewpager2.IPagerItem
 
@@ -23,7 +24,7 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         registerAbility(PagerAbility(viewModel, this))
 
-        viewModel.result.observe(lifecycleOwner) {
+        viewModel.result.ignoreLoading().observe(lifecycleOwner) {
             it.data?.forEach { project ->
                 val tab = mBinding.tabStrip.newTab()
                 tab.text = project.name
@@ -52,8 +53,8 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
         }
     }
 
-    override fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit {
-        return onlySetupEmptyData(state) {
+    override fun setupEmptyView(builder: EmptyBuilder) {
+        builder.whenDataIsEmpty {
             tip = "no data"
         }
     }

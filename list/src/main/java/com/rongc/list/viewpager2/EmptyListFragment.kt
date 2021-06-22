@@ -17,7 +17,7 @@ import com.rongc.list.widget.IEmptyView
  * @author qiurong
  * @date 2021/3/28
  */
-class EmptyListFragment : Fragment(), IPagerItem<RefreshEmptyViewModel> {
+open class EmptyListFragment : Fragment(), IPagerItem<RefreshEmptyViewModel> {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

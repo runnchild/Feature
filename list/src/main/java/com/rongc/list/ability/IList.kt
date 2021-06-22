@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
-import com.rongc.list.viewmodel.DefaultEmptyConfig
 import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
 import com.rongc.list.widget.EmptyView
 import com.rongc.list.widget.IEmptyView
 
@@ -33,28 +31,13 @@ interface IList {
     /**
      * 配置空页面UI
      */
-    fun setupEmptyView(state: RefreshEmptyViewModel.State): EmptyBuilder.() -> Unit = {
+    fun setupEmptyView(builder: EmptyBuilder) {
     }
 
     /**
      * 如果不使用默认的空页面，重写并返回其他空页面
      */
     fun providerEmptyView(context: Context): IEmptyView = EmptyView(context)
-
-    /**
-     * 只设置空数据配置，无网等其他情况使用默认配置
-     * @see {@link com.rongc.feature.viewmodel.DefaultEmptyConfig}
-     */
-    fun onlySetupEmptyData(
-        state: RefreshEmptyViewModel.State,
-        build: EmptyBuilder.() -> Unit
-    ): EmptyBuilder.() -> Unit {
-        return when (state) {
-            RefreshEmptyViewModel.State.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
-            RefreshEmptyViewModel.State.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
-            else -> build
-        }
-    }
 
     /**
      * 配置列表分割线

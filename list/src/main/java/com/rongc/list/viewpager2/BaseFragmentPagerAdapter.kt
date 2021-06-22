@@ -40,6 +40,8 @@ abstract class BaseFragmentPagerAdapter<T>(
         data.size
     }
 
+    fun getDataCount() = data.size
+
     private val hasEmptyView get() = mEmptyData != null
 
     fun getItem(position: Int) = data.getOrNull(position)
@@ -65,7 +67,7 @@ abstract class BaseFragmentPagerAdapter<T>(
             data.addAll(list)
         }
         val itemCount = list?.size ?: 0
-        if (itemCount > 0) {
+        if (itemCount > 0 && hasEmptyView) {
             notifyItemChanged(0)
         }
         notifyItemRangeInserted(0, itemCount)
@@ -110,9 +112,13 @@ abstract class BaseFragmentPagerAdapter<T>(
         super.onBindViewHolder(holder, position, payloads)
         val fragment = findFragment(position)
         val item = fragment as? IPagerItem<T>
-        val data = getItem(position) ?: mEmptyData ?: return
+        val data = getItem(position)
         fragment?.lifecycleScope?.launchWhenResumed {
-            item?.convert(position, data as T, payloads)
+            if (item is EmptyListFragment) {
+                item.convert(position, mEmptyData!!, payloads)
+            } else {
+                item?.convert(position, data!!, payloads)
+            }
         }
     }
 
@@ -125,7 +131,7 @@ abstract class BaseFragmentPagerAdapter<T>(
     }
 
     override fun containsItem(itemId: Long): Boolean {
-        return itemId != RecyclerView.NO_ID
+        return super.containsItem(itemId)
     }
 
     fun findFragment(position: Int): Fragment? {
