@@ -4,7 +4,7 @@
 /.idea
 .composite-enable
 .DS_Store
-/build
+*/build
 /captures
 .externalNativeBuild
 .cxx

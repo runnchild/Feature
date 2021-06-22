@@ -30,8 +30,6 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
     private lateinit var emptyViewModel: RefreshEmptyViewModel
 
     override fun onCreate(owner: LifecycleOwner) {
-        emptyViewModel = RefreshEmptyViewModel()
-        setEmptyView(emptyViewModel)
         observeListResource(owner)
 
         val decoration = ItemDecoration.Builder().apply(listHost.decorationBuilder()).build()
@@ -61,6 +59,10 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
                     return@observe
                 }
 
+                if (!::emptyViewModel.isInitialized) {
+                    emptyViewModel = RefreshEmptyViewModel()
+                    setEmptyView(emptyViewModel)
+                }
                 val defaultBuilder = when (state) {
                     EmptyState.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
                     EmptyState.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
