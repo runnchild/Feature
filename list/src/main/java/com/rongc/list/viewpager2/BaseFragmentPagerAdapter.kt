@@ -1,5 +1,6 @@
 package com.rongc.list.viewpager2
 
+import android.annotation.SuppressLint
 import androidx.collection.LongSparseArray
 import androidx.databinding.ObservableArrayList
 import androidx.fragment.app.Fragment
@@ -10,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.EmptyViewConfig
 
 /**
  * <p>
@@ -30,7 +31,7 @@ abstract class BaseFragmentPagerAdapter<T>(
 
     constructor(parent: Fragment) : this(parent.childFragmentManager, parent.lifecycle)
 
-    private var mEmptyData: RefreshEmptyViewModel? = null
+    private var mEmptyData: EmptyViewConfig? = null
 
     private val data = ObservableArrayList<T>()
 
@@ -61,6 +62,7 @@ abstract class BaseFragmentPagerAdapter<T>(
 
     abstract fun createItemFragment(item: T, position: Int): IPagerItem<T>
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setList(list: Collection<T>?) {
         data.clear()
         if (!list.isNullOrEmpty()) {
@@ -70,7 +72,7 @@ abstract class BaseFragmentPagerAdapter<T>(
         if (itemCount > 0 && hasEmptyView) {
             notifyItemChanged(0)
         }
-        notifyItemRangeInserted(0, itemCount)
+        notifyDataSetChanged()
     }
 
     fun notifyItem(item: T, payload: Any? = null) {
@@ -143,7 +145,7 @@ abstract class BaseFragmentPagerAdapter<T>(
         }
     }
 
-    fun setEmptyData(emptyData: RefreshEmptyViewModel) {
+    fun setEmptyData(emptyData: EmptyViewConfig) {
         this.mEmptyData = emptyData
     }
 

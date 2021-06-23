@@ -3,15 +3,17 @@ package com.rongc.list.ability
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.NetworkUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.rongc.feature.AppExecutors
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
+import com.rongc.feature.vo.isLoading
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
@@ -20,14 +22,15 @@ import com.rongc.list.viewmodel.*
 import com.rongc.list.widget.IEmptyView
 import java.util.*
 
-abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost: IList) :
-    IAbility {
+abstract class ListAbilityIml(val viewModel: BaseViewModel, val listHost: IList) : IAbility {
 
     val adapter: RecyclerView.Adapter<*> by lazy {
         listHost.providerAdapter() ?: BinderAdapter()
     }
 
-    private lateinit var emptyViewModel: RefreshEmptyViewModel
+    lateinit var emptyConfig: EmptyViewConfig
+
+    val haveSetEmpty get() = ::emptyConfig.isInitialized
 
     override fun onCreate(owner: LifecycleOwner) {
         observeListResource(owner)
@@ -59,36 +62,29 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
                     return@observe
                 }
 
-                if (!::emptyViewModel.isInitialized) {
-                    emptyViewModel = RefreshEmptyViewModel()
-                    setEmptyView(emptyViewModel)
+                if (!haveSetEmpty) {
+                    setEmptyView(EmptyViewConfig())
                 }
-                val defaultBuilder = when (state) {
-                    EmptyState.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
-                    EmptyState.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
-                    else -> DefaultEmptyConfig.emptyDataBuilder
+                buildEmpty(state, emptyConfig) {
+                    vm.refresh()
                 }
-                val emptyBuilder = EmptyBuilder(state).apply(defaultBuilder)
-                emptyBuilder.btnClick = { vm.refresh() }
-                // 默认配置基础上更改配置
-                listHost.setupEmptyView(emptyBuilder)
-                emptyViewModel.builder(emptyBuilder)
             }
         }
     }
 
-    open fun setEmptyView(emptyViewModel: RefreshEmptyViewModel) {
+    open fun setEmptyView(emptyConfig: EmptyViewConfig) {
         val providerAdapter = adapter
         if (providerAdapter is BaseQuickAdapter<*, *>) {
-            val emptyView = providerEmptyView()
-            emptyView.setViewModel(emptyViewModel)
+            val emptyView = providerEmptyView() ?: return
+            this.emptyConfig = emptyConfig
+            emptyView.setViewModel(emptyConfig)
             providerAdapter.setEmptyView(emptyView as View)
             // providerAdapter.headerWithEmptyEnable = true
             // providerAdapter.footerWithEmptyEnable = true
         }
     }
 
-    abstract fun providerEmptyView(): IEmptyView
+    abstract fun providerEmptyView(): IEmptyView?
 
     abstract fun setupItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>)
 
@@ -104,16 +100,14 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, private val listHost
 fun <T> LifecycleOwner.observeResource(
     adapter: RecyclerView.Adapter<*>, viewModel: BaseListViewModel<T>
 ) {
+    val baseAdapter = adapter as? BaseQuickAdapter<T, BaseViewHolder> ?: return
     viewModel.result.observe(this) { resource ->
         if (resource.status != Status.LOADING || resource.data != null) {
-            if (adapter is BaseQuickAdapter<*, *>) {
-                adapter as BaseQuickAdapter<T, BaseViewHolder>
-                if (viewModel.isRefresh) {
-                    adapter.setCompatDiffNewData(resource.data)
-                } else {
-                    resource.data?.let {
-                        adapter.addData(it)
-                    }
+            if (viewModel.isRefresh) {
+                baseAdapter.setCompatDiffNewData(resource.data)
+            } else {
+                resource.data?.let {
+                    baseAdapter.addData(it)
                 }
             }
         }
@@ -121,20 +115,67 @@ fun <T> LifecycleOwner.observeResource(
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>>>) {
+fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>?>>) {
     findAbility { it is ListAbility }?.let {
         it as ListAbility
+        val adapter = it.adapter as? BaseQuickAdapter<T, BaseViewHolder> ?: return
         result.observe(lifecycleOwner) { resource ->
             if (resource.status != Status.LOADING || resource.data != null) {
-                val adapter = it.adapter
-                if (adapter is BaseQuickAdapter<*, *>) {
-                    adapter as BaseQuickAdapter<T, BaseViewHolder>
-                    adapter.setDiffNewData(resource.data?.toMutableList())
-                } else if (adapter is ListAdapter<*, *>) {
-                    adapter as ListAdapter<T, *>
-                    adapter.submitList(resource.data)
+                adapter.setCompatDiffNewData(resource.data)
+            }
+
+            if (resource.isLoading) {
+                return@observe
+            }
+
+            if (!it.haveSetEmpty) {
+                it.setEmptyView(EmptyViewConfig())
+            }
+            if (it.haveSetEmpty) {
+                resource.emptyState { state ->
+                    it.buildEmpty(state, it.emptyConfig)
                 }
             }
+        }
+    }
+}
+
+private fun ListAbilityIml.buildEmpty(
+    state: EmptyState, emptyConfig: EmptyViewConfig, defClick: () -> Unit = {}
+) {
+    val defaultBuilder = when (state) {
+        EmptyState.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder
+        EmptyState.EMPTY_NET_UNAVAILABLE -> DefaultEmptyConfig.netUnavailableBuilder
+        else -> DefaultEmptyConfig.emptyDataBuilder
+    }
+    val emptyBuilder = EmptyBuilder(state).apply(defaultBuilder)
+    emptyBuilder.btnClick = defClick
+    // 默认配置基础上更改配置
+    listHost.setupEmptyView(emptyBuilder)
+    emptyConfig.builder(emptyBuilder)
+}
+
+fun <T> Resource<List<T>?>.emptyState(block: (EmptyState) -> Unit) {
+    when (status) {
+        Status.SUCCESS -> {
+            if (data.isNullOrEmpty()) {
+                block(EmptyState.EMPTY_DATA)
+            }
+        }
+        Status.ERROR -> {
+            AppExecutors.diskIO().execute {
+                if (!NetworkUtils.isConnected()) {
+                    block(EmptyState.EMPTY_NET_DISCONNECT)
+                } else if (!NetworkUtils.isAvailable()) {
+                    block(EmptyState.EMPTY_NET_UNAVAILABLE)
+                } else {
+                    if (data.isNullOrEmpty()) {
+                        block(EmptyState.EMPTY_SERVICE)
+                    }
+                }
+            }
+        }
+        Status.LOADING -> {
         }
     }
 }

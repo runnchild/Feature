@@ -7,7 +7,7 @@ import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.EmptyViewConfig
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.widget.IEmptyView
 import java.util.*
@@ -32,15 +32,15 @@ class PagerAbility(viewModel: BaseViewModel, private val pagerHost: IPagerHost) 
         call?.invoke(adapter)
     }
 
-    override fun setEmptyView(emptyViewModel: RefreshEmptyViewModel) {
-        super.setEmptyView(emptyViewModel)
+    override fun setEmptyView(emptyConfig: EmptyViewConfig) {
+        super.setEmptyView(emptyConfig)
         val pagerAdapter = adapter
         if (pagerAdapter is BaseFragmentPagerAdapter<*>) {
-            pagerAdapter.setEmptyData(emptyViewModel)
+            pagerAdapter.setEmptyData(emptyConfig)
         }
     }
 
-    override fun providerEmptyView(): IEmptyView {
+    override fun providerEmptyView(): IEmptyView? {
         return pagerHost.providerEmptyView(pagerHost.viewPager.context)
     }
 

@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import com.blankj.utilcode.util.NetworkUtils
-import com.rongc.feature.AppExecutors
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
+import com.rongc.feature.vo.isSuccess
 import com.rongc.list.PageIndicator
+import com.rongc.list.ability.emptyState
 import com.rongc.list.binding.LoadStatus
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
@@ -75,62 +75,21 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     val isRefresh get() = _request.value == PageIndicator.PAGE_START
 
     val result = _result.map {
-//        var resource = it
-        when (it.status) {
-            Status.SUCCESS -> {
-                if (isRefresh) {
-                    pageIndicator.revert()
-                } else {
-                    if (!it.data.isNullOrEmpty()) {
-                        pageIndicator.next()
-                    }
-//                    resource = Resource.success(convertMoreData(it.data))
+        if (it.isSuccess) {
+            if (isRefresh) {
+                pageIndicator.revert()
+            } else {
+                if (!it.data.isNullOrEmpty()) {
+                    pageIndicator.next()
                 }
-            }
-            Status.ERROR -> {
-                AppExecutors.diskIO().execute {
-                    if (!NetworkUtils.isConnected()) {
-                        setupEmptyView.postValue(EmptyState.EMPTY_NET_DISCONNECT)
-                    } else if (!NetworkUtils.isAvailable()) {
-                        setupEmptyView.postValue(EmptyState.EMPTY_NET_UNAVAILABLE)
-                    } else {
-                        if (it.data.isNullOrEmpty()) {
-                            setupEmptyView.postValue(EmptyState.EMPTY_SERVICE)
-                        }
-                    }
-                }
-            }
-            Status.LOADING -> {
-            }
-        }
-        if (it.status != Status.LOADING) {
-            if (it.data.isNullOrEmpty()) {
-                setupEmptyView.value = EmptyState.EMPTY_DATA
             }
         }
 
-//        resource.run {
-//            if (it.status != Status.LOADING && data !is ObservableArrayList<*>) {
-//                val list = ObservableArrayList<T>()
-//                list.addAll(data?: emptyList())
-//                Resource(status, list, error)
-//            } else {
-//                this
-//            }
-//        }
+        it.emptyState { state ->
+            setupEmptyView.postValue(state)
+        }
         it
     }
-
-//    private fun convertMoreData(source: List<T>?): List<T> {
-//        val data = result.value?.data ?: arrayListOf()
-//        if (source.isNullOrEmpty()) {
-//            return data
-//        }
-//        val list = ObservableArrayList<T>()
-//        list.addAll(0, data)
-//        list.addAll(source)
-//        return list
-//    }
 
     //    val items get() = result.value?.data
     /**

@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.rongc.list.databinding.EmptyViewBinding
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.EmptyViewConfig
 
 @BindingAdapter("textBuilder", "defaultClick", requireAll = false)
 fun TextView.textBuilder(builder: (TextView.() -> Unit)? = null, defaultClick: (() -> Unit)?) {
@@ -36,9 +36,9 @@ class EmptyView @JvmOverloads constructor(
     private var binding: EmptyViewBinding =
         EmptyViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    override fun setViewModel(viewModel: RefreshEmptyViewModel) {
-        binding.viewModel = viewModel
+    override fun setViewModel(config: EmptyViewConfig) {
+        binding.viewModel = config
     }
 
-    override fun getViewModel(): RefreshEmptyViewModel? = binding.viewModel
+    override fun getViewModel(): EmptyViewConfig? = binding.viewModel
 }

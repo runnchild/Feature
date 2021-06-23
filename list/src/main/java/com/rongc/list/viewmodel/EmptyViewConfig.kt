@@ -8,7 +8,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 
-class RefreshEmptyViewModel {
+class EmptyViewConfig {
     val tip = ObservableField<String>()
     val subTip = ObservableField<String>()
     val btnVisible = ObservableBoolean()

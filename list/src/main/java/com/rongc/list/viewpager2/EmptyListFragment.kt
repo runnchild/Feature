@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.EmptyViewConfig
 import com.rongc.list.widget.EmptyView
 import com.rongc.list.widget.IEmptyView
 
@@ -17,7 +17,7 @@ import com.rongc.list.widget.IEmptyView
  * @author qiurong
  * @date 2021/3/28
  */
-open class EmptyListFragment : Fragment(), IPagerItem<RefreshEmptyViewModel> {
+open class EmptyListFragment : Fragment(), IPagerItem<EmptyViewConfig> {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -27,7 +27,7 @@ open class EmptyListFragment : Fragment(), IPagerItem<RefreshEmptyViewModel> {
         }
     }
 
-    override fun convert(position: Int, item: RefreshEmptyViewModel, payloads: MutableList<Any>?) {
+    override fun convert(position: Int, item: EmptyViewConfig, payloads: MutableList<Any>?) {
         (view as IEmptyView).setViewModel(item)
     }
 }

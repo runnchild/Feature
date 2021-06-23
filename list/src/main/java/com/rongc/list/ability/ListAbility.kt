@@ -24,7 +24,7 @@ class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerH
         call?.invoke(adapter)
     }
 
-    override fun providerEmptyView(): IEmptyView {
+    override fun providerEmptyView(): IEmptyView? {
         return recyclerHost.providerEmptyView(recyclerHost.recyclerView.context)
     }
 

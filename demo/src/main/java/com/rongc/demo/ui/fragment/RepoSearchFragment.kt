@@ -82,7 +82,7 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         }
     }
 
-    override fun providerEmptyView(context: Context): IEmptyView {
+    override fun providerEmptyView(context: Context): IEmptyView? {
         // default is EmptyView
         return super.providerEmptyView(context)
     }

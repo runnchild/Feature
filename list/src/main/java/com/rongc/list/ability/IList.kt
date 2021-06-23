@@ -36,8 +36,9 @@ interface IList {
 
     /**
      * 如果不使用默认的空页面，重写并返回其他空页面
+     * 如果不需要空页面返回null;
      */
-    fun providerEmptyView(context: Context): IEmptyView = EmptyView(context)
+    fun providerEmptyView(context: Context): IEmptyView? = EmptyView(context)
 
     /**
      * 配置列表分割线

@@ -1,10 +1,10 @@
 package com.rongc.list.widget
 
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.EmptyViewConfig
 
 interface IEmptyView {
 
-    fun setViewModel(viewModel: RefreshEmptyViewModel)
+    fun setViewModel(config: EmptyViewConfig)
 
-    fun getViewModel(): RefreshEmptyViewModel?
+    fun getViewModel(): EmptyViewConfig?
 }

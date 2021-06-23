@@ -13,7 +13,7 @@ import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatList
-import com.rongc.list.viewmodel.RefreshEmptyViewModel
+import com.rongc.list.viewmodel.EmptyViewConfig
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.widget.EmptyView
 import com.rongc.list.widget.IEmptyView
@@ -200,10 +200,10 @@ private fun ViewPager2.scroll(interval: Long, loop: Boolean) {
 fun ViewPager2.setupEmptyView(
     emptyView: IEmptyView? = EmptyView(context),
     enable: Boolean = true
-): RefreshEmptyViewModel? {
+): EmptyViewConfig? {
     if (enable) {
         fun getEmptyView(): IEmptyView {
-            val emptyViewModel = emptyView?.getViewModel() ?: RefreshEmptyViewModel()
+            val emptyViewModel = emptyView?.getViewModel() ?: EmptyViewConfig()
             return (emptyView ?: EmptyView(context)).run {
                 setViewModel(emptyViewModel)
                 this
