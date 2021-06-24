@@ -19,6 +19,7 @@ import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatDiffNewData
 import com.rongc.list.viewmodel.*
+import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.widget.IEmptyView
 import java.util.*
 
@@ -94,7 +95,7 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, val listHost: IList)
 /**
  * 订阅列表数据结果返回监听，当结果返回时刷新列表
  * 订阅前应先注册{@link ListAbility}，如果ViewModel继承的是BaseListViewModel,则在注册后会自动订阅。
- * 否则需手动调用
+ * 否则需手动调用 {@link #observeResourceManually(LiveData)}
  */
 @Suppress("UNCHECKED_CAST")
 fun <T> LifecycleOwner.observeResource(
@@ -114,14 +115,23 @@ fun <T> LifecycleOwner.observeResource(
     }
 }
 
+/**
+ * 注册了ListAbility的页面，ViewModel非继承BaseListViewModel，但也需要监听数据变化并在空数据时设置对应空页面，
+ * 相比继承BaseListViewModel的ViewModel额外需要手动调用此方法。
+ * @param result 数据源LiveData
+ */
 @Suppress("UNCHECKED_CAST")
-fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>?>>) {
+fun <T> IHost<*>.observeResourceManually(result: LiveData<Resource<List<T>?>>, emptyRetry: ()->Unit = {}) {
     findAbility { it is ListAbility }?.let {
         it as ListAbility
-        val adapter = it.adapter as? BaseQuickAdapter<T, BaseViewHolder> ?: return
         result.observe(lifecycleOwner) { resource ->
             if (resource.status != Status.LOADING || resource.data != null) {
-                adapter.setCompatDiffNewData(resource.data)
+                val adapter = it.adapter
+                if (adapter is BaseFragmentPagerAdapter<*>) {
+                    (adapter as BaseFragmentPagerAdapter<T>).setList(resource.data)
+                } else {
+                    (it.adapter as? BaseQuickAdapter<T, BaseViewHolder>)?.setCompatDiffNewData(resource.data)
+                }
             }
 
             if (resource.isLoading) {
@@ -133,7 +143,7 @@ fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>?>>) {
             }
             if (it.haveSetEmpty) {
                 resource.emptyState { state ->
-                    it.buildEmpty(state, it.emptyConfig)
+                    it.buildEmpty(state, it.emptyConfig, emptyRetry)
                 }
             }
         }
@@ -141,7 +151,7 @@ fun <T> IHost<*>.observeResource(result: LiveData<Resource<List<T>?>>) {
 }
 
 private fun ListAbilityIml.buildEmpty(
-    state: EmptyState, emptyConfig: EmptyViewConfig, defClick: () -> Unit = {}
+    state: EmptyState, emptyConfig: EmptyViewConfig, defClick: () -> Unit
 ) {
     val defaultBuilder = when (state) {
         EmptyState.EMPTY_NET_DISCONNECT -> DefaultEmptyConfig.noNetBuilder

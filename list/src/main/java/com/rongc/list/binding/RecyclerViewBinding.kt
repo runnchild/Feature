@@ -4,15 +4,11 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.rongc.feature.vo.Resource
-import com.rongc.feature.vo.Status
 import com.rongc.list.ItemDecoration
 import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatList
-import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.widget.EmptyView
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -75,20 +71,6 @@ fun RecyclerView.items(items: List<Any>?) {
     @Suppress("UNCHECKED_CAST")
     val adapter = adapter as? BaseQuickAdapter<Any, *> ?: return
     adapter.setCompatList(items)
-}
-
-fun RecyclerView.resource(resource: Resource<List<Any>?>, builder: EmptyBuilder) {
-    val items = resource.data
-    items(items)
-    if (resource.status != Status.LOADING) {
-
-        @Suppress("UNCHECKED_CAST")
-        val adapter = adapter as? BaseQuickAdapter<Any, *> ?: return
-        if (items.isNullOrEmpty() && adapter.hasEmptyView()) {
-            val emptyView = adapter.emptyLayout?.getChildAt(0) as? EmptyView
-            emptyView?.getViewModel()?.builder(builder)
-        }
-    }
 }
 
 @BindingAdapter("itemDecoration")
