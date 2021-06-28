@@ -11,9 +11,7 @@ import com.rongc.feature.AppExecutors
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ui.host.IHost
 import com.rongc.feature.viewmodel.BaseViewModel
-import com.rongc.feature.vo.Resource
-import com.rongc.feature.vo.Status
-import com.rongc.feature.vo.isLoading
+import com.rongc.feature.vo.*
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
@@ -104,11 +102,14 @@ fun <T> LifecycleOwner.observeResource(
     val baseAdapter = adapter as? BaseQuickAdapter<T, BaseViewHolder> ?: return
     viewModel.result.observe(this) { resource ->
         if (resource.status != Status.LOADING || resource.data != null) {
-            if (viewModel.isRefresh) {
-                baseAdapter.setCompatDiffNewData(resource.data)
-            } else {
-                resource.data?.let {
-                    baseAdapter.addData(it)
+            // 错误状态不更新列表
+            if (!resource.isError) {
+                if (viewModel.isRefresh) {
+                    baseAdapter.setCompatDiffNewData(resource.data)
+                } else {
+                    resource.data?.let {
+                        baseAdapter.addData(it)
+                    }
                 }
             }
         }
@@ -119,6 +120,7 @@ fun <T> LifecycleOwner.observeResource(
  * 注册了ListAbility的页面，ViewModel非继承BaseListViewModel，但也需要监听数据变化并在空数据时设置对应空页面，
  * 相比继承BaseListViewModel的ViewModel额外需要手动调用此方法。
  * @param result 数据源LiveData
+ * @param emptyRetry 按钮默认点击监听
  */
 @Suppress("UNCHECKED_CAST")
 fun <T> IHost<*>.observeResourceManually(result: LiveData<Resource<List<T>?>>, emptyRetry: ()->Unit = {}) {
@@ -126,11 +128,16 @@ fun <T> IHost<*>.observeResourceManually(result: LiveData<Resource<List<T>?>>, e
         it as ListAbility
         result.observe(lifecycleOwner) { resource ->
             if (resource.status != Status.LOADING || resource.data != null) {
-                val adapter = it.adapter
-                if (adapter is BaseFragmentPagerAdapter<*>) {
-                    (adapter as BaseFragmentPagerAdapter<T>).setList(resource.data)
-                } else {
-                    (it.adapter as? BaseQuickAdapter<T, BaseViewHolder>)?.setCompatDiffNewData(resource.data)
+                // 错误状态不更新列表
+                if (!resource.isError) {
+                    val adapter = it.adapter
+                    if (adapter is BaseFragmentPagerAdapter<*>) {
+                        (adapter as BaseFragmentPagerAdapter<T>).setList(resource.data)
+                    } else {
+                        (it.adapter as? BaseQuickAdapter<T, BaseViewHolder>)?.setCompatDiffNewData(
+                            resource.data
+                        )
+                    }
                 }
             }
 
