@@ -17,17 +17,17 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:src="@{viewModel.icon}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:imageBuilder="@{viewModel.iconBuilder}"
+            tools:layout_height="140dp"
+            tools:layout_width="140dp"
             tools:src="@color/black_30" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@{viewModel.tip}"
             android:textSize="17sp"
             app:textBuilder="@{viewModel.tipBuilder}"
             tools:text="网络未连接" />
@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@{viewModel.subTip}"
             android:textColor="#b2b2b2"
             android:textSize="13sp"
             app:textBuilder="@{viewModel.subTipBuilder}"
@@ -51,7 +50,6 @@
             android:gravity="center"
             android:minWidth="112dp"
             android:minHeight="35dp"
-            android:text="@{viewModel.btnText}"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:defaultClick="@{viewModel.refreshClick}"

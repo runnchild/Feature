@@ -9,12 +9,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 
 class EmptyViewConfig {
-    val tip = ObservableField<String>()
-    val subTip = ObservableField<String>()
     val btnVisible = ObservableBoolean()
-    val btnText = ObservableField("刷新")
-    val icon = ObservableField<Drawable>()
-
     var refreshBuilder = ObservableField<TextView.() -> Unit>()
     var tipBuilder = ObservableField<TextView.() -> Unit>()
     var subTipBuilder = ObservableField<TextView.() -> Unit>()
@@ -28,11 +23,7 @@ class EmptyViewConfig {
 
     fun builder(builder: EmptyBuilder) {
         builder.let {
-            tip.set(it.tip)
-            subTip.set(it.subTip)
             btnVisible.set(it.btnVisible)
-            btnText.set(it.btnText)
-            icon.set(it.iconDrawable)
             refreshClick.set(it.btnClick)
 
             tipBuilder.set(it.tipBuilder)
@@ -52,11 +43,37 @@ class EmptyViewConfig {
 
 class EmptyBuilder(val state: EmptyState = EmptyState.EMPTY_DATA) {
     var tip: String? = null
+        set(value) {
+            tip {
+                text = value
+            }
+            field = value
+        }
     var subTip: String? = null
+        set(value) {
+            subTip {
+                text = value
+            }
+            field = value
+        }
+
     var btnVisible: Boolean = true
+
     var btnText: String? = "刷新"
+        set(value) {
+            refreshBtn {
+                text = value
+            }
+            field = value
+        }
     var btnClick: () -> Unit = {}
     var iconDrawable: Drawable? = Color.GRAY.toDrawable()
+        set(value) {
+            icon {
+                setImageDrawable(value)
+            }
+            field = value
+        }
 
     var refreshBuilder: (TextView.() -> Unit)? = null
     var tipBuilder: (TextView.() -> Unit)? = null
