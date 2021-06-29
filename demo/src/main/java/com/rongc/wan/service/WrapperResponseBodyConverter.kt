@@ -1,7 +1,7 @@
 package com.rongc.wan.service
 
 import com.google.gson.Gson
-import com.rongc.wan.WanResponse
+import com.rongc.wan.BaseResponse
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -17,11 +17,11 @@ class WrapperResponseBodyConverter<T> internal constructor(private val mType: Ty
         val data = JSONTokener(result).nextValue()
         if (data is JSONObject) {
             return gson.fromJson<T>(
-                if ((mType as? ParameterizedType)?.rawType == WanResponse::class.java) {
-                    // 如果需要完整数据格式，Api方法的返回值类型为LiveData<ApiResponse<WanResponse<T>>>
+                if ((mType as? ParameterizedType)?.rawType == BaseResponse::class.java) {
+                    // 如果需要完整数据格式，Api方法的返回值类型应为LiveData<ApiResponse<WanResponse<T>>>
                     result
                 } else {
-                    // 否则不关注错误码，只接收data，错误码不为0（成功）时抛出
+                    // 否则不关注错误码，只接收data，接口不成功（错误码不为0）时抛出异常
                     val code = data.optInt("errorCode", -1)
                     if (code != 0) {
                         throw ServicesException(code, data.optString("errorMsg"))
