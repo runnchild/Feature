@@ -23,8 +23,8 @@ class PsnToolbar @JvmOverloads constructor(
 
     val binding = PsnToolbarBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setViewModel(viewModel: ToolBarViewModel) {
-        binding.viewModel = viewModel
+    fun setViewModel(config: ToolBarConfig) {
+        binding.viewModel = config
     }
 
     fun setTitleColor(color: Int) {

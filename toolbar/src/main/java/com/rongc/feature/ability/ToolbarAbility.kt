@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.rongc.feature.toolbar.BarConfig
 import com.rongc.feature.toolbar.PsnToolbar
 import com.rongc.feature.toolbar.R
-import com.rongc.feature.toolbar.ToolBarViewModel
+import com.rongc.feature.toolbar.ToolBarConfig
 import com.rongc.feature.ui.host.IHost
 
 /**
@@ -38,8 +38,8 @@ class ToolbarAbility(private val host: IHost<*>, private val config: BarConfig.(
         if (!::toolBar.isInitialized) {
             throw IllegalStateException("PsnToolbar not found")
         }
-        val toolBarViewModel = ToolBarViewModel()
-        toolBarViewModel.backLiveData.observe(owner) {
+        val toolBarConfig = ToolBarConfig()
+        toolBarConfig.backLiveData.observe(owner) {
             if (host is DialogFragment) {
                 host.dismiss()
                 return@observe
@@ -50,8 +50,11 @@ class ToolbarAbility(private val host: IHost<*>, private val config: BarConfig.(
                 host as Activity
             }.onBackPressed()
         }
-        toolBarViewModel.setConfig(BarConfig().apply(config))
-        toolBar.setViewModel(toolBarViewModel)
+        val label = (host as? Activity)?.title
+        val barConfig = BarConfig()
+        barConfig.title = label
+        toolBarConfig.setConfig(barConfig.apply(config))
+        toolBar.setViewModel(toolBarConfig)
     }
 
     private fun findToolBar(view: View): PsnToolbar? {

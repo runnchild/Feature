@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.feature.toolbar.ToolBarViewModel" />
+            type="com.rongc.feature.toolbar.ToolBarConfig" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

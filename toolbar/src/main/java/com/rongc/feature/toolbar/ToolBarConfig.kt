@@ -9,10 +9,9 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableFloat
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.rongc.feature.utils.dp
 
-class ToolBarViewModel : ViewModel() {
+class ToolBarConfig {
 
     val backClick = {
         backLiveData.value = true
