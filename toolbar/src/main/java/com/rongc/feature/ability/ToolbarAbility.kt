@@ -22,7 +22,7 @@ import com.rongc.feature.ui.host.IHost
  * @author qiurong
  * @date 2021/5/28
  */
-class ToolbarAbility(private val host: IHost<*>, private val config: BarConfig.() -> Unit = {}) :
+class ToolbarAbility(private val host: IHost, private val config: BarConfig.() -> Unit = {}) :
     IAbility {
 
     private lateinit var toolBar: PsnToolbar

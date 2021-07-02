@@ -34,7 +34,7 @@ import kotlin.reflect.KProperty
  *
  * Accessing this variable while the fragment's view or activity is destroyed will throw NPE.
  */
-class AutoClearedValue<T : Any>(host: IHost<*>) : ReadWriteProperty<IHost<*>, T> {
+class AutoClearedValue<T : Any>(host: IHost) : ReadWriteProperty<IHost, T> {
     private var _value: T? = null
 
     init {
@@ -70,13 +70,13 @@ class AutoClearedValue<T : Any>(host: IHost<*>) : ReadWriteProperty<IHost<*>, T>
         })
     }
 
-    override fun getValue(thisRef: IHost<*>, property: KProperty<*>): T {
+    override fun getValue(thisRef: IHost, property: KProperty<*>): T {
         return _value ?: throw IllegalStateException(
             "should never call auto-cleared-value get when it might not be available"
         )
     }
 
-    override fun setValue(thisRef: IHost<*>, property: KProperty<*>, value: T) {
+    override fun setValue(thisRef: IHost, property: KProperty<*>, value: T) {
         _value = value
     }
 }
@@ -84,4 +84,4 @@ class AutoClearedValue<T : Any>(host: IHost<*>) : ReadWriteProperty<IHost<*>, T>
 /**
  * Creates an [AutoClearedValue] associated with this Host.
  */
-fun <T : Any> IHost<*>.autoCleared() = AutoClearedValue<T>(this)
+fun <T : Any> IHost.autoCleared() = AutoClearedValue<T>(this)

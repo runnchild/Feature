@@ -11,11 +11,13 @@ import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ability.impl.BindingAbility
 import com.rongc.feature.ui.host.FragmentHost
 import com.rongc.feature.ui.host.Host
-import com.rongc.feature.ui.host.IHost
+import com.rongc.feature.ui.host.IAbilityList
+import com.rongc.feature.ui.host.IViewModelProvider
 import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
-abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IHost<M> {
+abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(),
+    IViewModelProvider<M>, IAbilityList {
 
     private var bindingAbility by autoCleared<BindingAbility<B>>()
 
@@ -32,29 +34,20 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(), IH
     final override val abilities: ArrayList<IAbility> = ArrayList()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        bindingAbility = BindingAbility()
+        bindingAbility = BindingAbility(viewModel)
         registerAbility(bindingAbility)
         bindingAbility.onCreateImmediately(this, inflater, container)
-        return mBinding.root
+        return bindingAbility.mBinding?.root
     }
 
     final override fun viewModelProvider(): M {
         return super.viewModelProvider()
     }
 
-    final override fun registerAbility(ability: IAbility) {
-        super.registerAbility(ability)
-        viewLifecycleOwner.lifecycle.addObserver(ability)
-    }
-
-    override fun viewModelCreator(cls: Class<M>): () -> M {
-        return {
-            defaultViewModelProviderFactory.create(cls)
-        }
+    override fun viewModelCreator(cls: Class<M>):  M {
+        return defaultViewModelProviderFactory.create(cls)
     }
 
     override fun onDestroyView() {

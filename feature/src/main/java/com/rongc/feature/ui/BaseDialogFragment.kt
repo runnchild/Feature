@@ -12,7 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ability.impl.BindingAbility
 import com.rongc.feature.ui.host.DialogFragmentHost
-import com.rongc.feature.ui.host.IHost
+import com.rongc.feature.ui.host.IAbilityList
+import com.rongc.feature.ui.host.IViewModelProvider
 import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
@@ -24,24 +25,25 @@ import com.rongc.feature.viewmodel.BaseViewModel
  * @author qiurong
  * @date 2021/5/30
  */
-abstract class BaseDialogFragment<B : ViewBinding, M : BaseViewModel> : BottomSheetDialogFragment(), IHost<M> {
+abstract class BaseDialogFragment<B : ViewBinding, M : BaseViewModel> : BottomSheetDialogFragment(),
+    IViewModelProvider<M>, IAbilityList {
 
     private var bindingAbility by autoCleared<BindingAbility<B>>()
     protected val mBinding: B get() = bindingAbility.mBinding!!
 
     override val abilities = ArrayList<IAbility>()
-    override val host = DialogFragmentHost()
+    override val host = DialogFragmentHost
     override val viewModel: M by lazy { viewModelProvider() }
     override val lifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
 
-    override fun viewModelCreator(cls: Class<M>): () -> M {
-        return { defaultViewModelProviderFactory.create(cls) }
+    override fun viewModelCreator(cls: Class<M>): M {
+        return defaultViewModelProviderFactory.create(cls)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        bindingAbility = BindingAbility()
+        bindingAbility = BindingAbility(viewModel)
         registerAbility(bindingAbility)
         bindingAbility.onCreateImmediately(this, inflater, container)
 
@@ -51,11 +53,6 @@ abstract class BaseDialogFragment<B : ViewBinding, M : BaseViewModel> : BottomSh
 
     final override fun viewModelProvider(): M {
         return super.viewModelProvider()
-    }
-
-    final override fun registerAbility(ability: IAbility) {
-        super.registerAbility(ability)
-        viewLifecycleOwner.lifecycle.addObserver(ability)
     }
 
     override fun onDestroyView() {

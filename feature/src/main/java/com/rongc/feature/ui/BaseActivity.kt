@@ -9,11 +9,13 @@ import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ability.impl.BindingAbility
 import com.rongc.feature.ui.host.ActivityHost
 import com.rongc.feature.ui.host.Host
-import com.rongc.feature.ui.host.IHost
+import com.rongc.feature.ui.host.IAbilityList
+import com.rongc.feature.ui.host.IViewModelProvider
 import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
-abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActivity(), IHost<M> {
+abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActivity(),
+    IViewModelProvider<M>, IAbilityList {
 
     private var bindingAbility by autoCleared<BindingAbility<B>>()
 
@@ -31,26 +33,19 @@ abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActiv
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindingAbility = BindingAbility()
+        bindingAbility = BindingAbility(viewModel)
         registerAbility(bindingAbility)
         bindingAbility.onCreateImmediately(this, LayoutInflater.from(this))
 
         setContentView(mBinding.root)
     }
 
-    final override fun registerAbility(ability: IAbility) {
-        super.registerAbility(ability)
-        lifecycle.addObserver(ability)
-    }
-
     final override fun viewModelProvider(): M {
         return super.viewModelProvider()
     }
 
-    override fun viewModelCreator(cls: Class<M>): () -> M {
-        return {
-            defaultViewModelProviderFactory.create(cls)
-        }
+    override fun viewModelCreator(cls: Class<M>): M {
+        return defaultViewModelProviderFactory.create(cls)
     }
 
     override fun onDestroy() {

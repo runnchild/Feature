@@ -123,7 +123,7 @@ fun <T> LifecycleOwner.observeResource(
  * @param emptyRetry 按钮默认点击监听
  */
 @Suppress("UNCHECKED_CAST")
-fun <T> IHost<*>.observeResourceManually(result: LiveData<Resource<List<T>?>>, emptyRetry: ()->Unit = {}) {
+fun <T> IAbilityList.observeResourceManually(result: LiveData<Resource<List<T>?>>, emptyRetry: ()->Unit = {}) {
     findAbility { it is ListAbility }?.let {
         it as ListAbility
         result.observe(lifecycleOwner) { resource ->
