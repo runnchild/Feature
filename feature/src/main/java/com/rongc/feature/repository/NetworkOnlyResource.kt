@@ -1,11 +1,16 @@
 package com.rongc.feature.repository
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.liveData
 import com.rongc.feature.api.ApiResponse
 import com.rongc.feature.api.ApiSuccessResponse
 import com.rongc.feature.utils.AbsentLiveData
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.isLoading
+import com.rongc.feature.vo.isSuccess
 
 /**
  * <p>
@@ -57,6 +62,9 @@ fun <T> LiveData<ApiResponse<T>>.networkOnly(
     }.asLiveData()
 }
 
+/**
+ * 忽略加载中状态，只接收结果通知
+ */
 fun <T> LiveData<Resource<T>>.ignoreLoading(): LiveData<Resource<T>> {
     val liveData = MediatorLiveData<Resource<T>>()
     liveData.addSource(this) {
@@ -65,4 +73,27 @@ fun <T> LiveData<Resource<T>>.ignoreLoading(): LiveData<Resource<T>> {
         }
     }
     return liveData
+}
+
+fun <T> LiveData<Resource<T>>.ignoreLoading(
+    owner: LifecycleOwner, observer: Observer<Resource<T>>
+) {
+    observe(owner) {
+        if (!it.isLoading) {
+            observer.onChanged(it)
+        }
+    }
+}
+
+/**
+ * 只在成功时接收通知
+ */
+fun <T> LiveData<Resource<T>>.whenSuccess(
+    owner: LifecycleOwner, observer: Observer<Resource<T>>
+) {
+    observe(owner) {
+        if (it.isSuccess) {
+            observer.onChanged(it)
+        }
+    }
 }
