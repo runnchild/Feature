@@ -53,10 +53,8 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
     /**
      * 以自己的方式创建ViewModel
      */
-    override fun viewModelCreator(cls: Class<RepoSearchViewModel>): () -> RepoSearchViewModel {
-        return {
-            RepoSearchViewModel(RepoServiceProvider.repoRepository)
-        }
+    override fun viewModelCreator(cls: Class<RepoSearchViewModel>): RepoSearchViewModel {
+        return RepoSearchViewModel(RepoServiceProvider.repoRepository)
     }
 
     override fun providerAdapter(): RecyclerView.Adapter<*> {

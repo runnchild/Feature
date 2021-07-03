@@ -7,4 +7,8 @@ import com.rongc.feature.ability.impl.AbsProgressAbility
 class ProgressAbility(context: Context): AbsProgressAbility(context) {
     override val dialog: AlertDialog
         get() = super.dialog
+
+    init {
+        delay = 400
+    }
 }

@@ -11,7 +11,7 @@ import com.rongc.list.widget.IEmptyView
 /**
  * <p>
  * describe:
- *
+ * 若要功能正常使用，项目中用到的Adapter需继承自BaseQuickAdapter/BaseBinderAdapter
  * </p>
  * @author qiurong
  * @date 2021/3/26
@@ -20,6 +20,7 @@ interface IList {
 
     /**
      * 默认使用BaseBinderAdapter，如果需要提供新Adapter, 重写此方法返回需要设置的Adapter
+     * note：返回的Adapter若不是继承BaseBinderAdapter则通过#registerItemBinders实现Item绑定不会生效
      */
     fun providerAdapter(): RecyclerView.Adapter<*>? = null
 
