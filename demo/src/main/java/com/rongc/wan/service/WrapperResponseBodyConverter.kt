@@ -18,10 +18,10 @@ class WrapperResponseBodyConverter<T> internal constructor(private val mType: Ty
         if (data is JSONObject) {
             return gson.fromJson<T>(
                 if ((mType as? ParameterizedType)?.rawType == BaseResponse::class.java) {
-                    // 如果需要完整数据格式，Api方法的返回值类型应为LiveData<ApiResponse<WanResponse<T>>>
+                    // 如果需要完整数据，Api方法的返回值类型的泛型应为BaseResponse<T>
                     result
                 } else {
-                    // 否则不关注错误码，只接收data，接口不成功（错误码不为0）时抛出异常
+                    // 否则不关注错误码，只接收data，接口请求不成功（错误码不为0）时抛出异常
                     val code = data.optInt("errorCode", -1)
                     if (code != 0) {
                         throw ServicesException(code, data.optString("errorMsg"))
@@ -30,6 +30,6 @@ class WrapperResponseBodyConverter<T> internal constructor(private val mType: Ty
                 }, mType
             )
         }
-        throw ServicesException(400, "response error, response value = $result")
+        throw ServicesException(500, "response error, response value = $result")
     }
 }

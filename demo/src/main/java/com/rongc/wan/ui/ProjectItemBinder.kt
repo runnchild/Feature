@@ -18,6 +18,6 @@ class ProjectItemBinder : BaseItemBindingBinder<ItemProjectListBinding, ProjectL
     override fun convert(
         binding: ItemProjectListBinding, holder: BaseViewHolder, data: ProjectList
     ) {
-
+        // ui绑定都在xml中做好，这里不需要其他实现
     }
 }

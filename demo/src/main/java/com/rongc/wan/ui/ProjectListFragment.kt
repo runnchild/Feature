@@ -17,10 +17,12 @@ class ProjectListFragment : BaseFragment<BaseRecyclerWithRefreshBinding, Project
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.cid.value = arguments?.getString("cid")
+        // 注册ListAbility实现列表相关功能
         registerAbility(ListAbility(viewModel, this))
     }
 
     override fun registerItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>) {
+        // 添加列表Item样式Binder
         binders.add(ProjectItemBinder())
     }
 }

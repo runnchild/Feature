@@ -16,6 +16,7 @@ class ProjectListViewModel : BaseListViewModel<ProjectList>() {
 
     override fun loadListData(page: Int): LiveData<Resource<List<ProjectList>>> {
         return repository.getProjectList(page, cid.value!!).map {
+            // 由于真正的列表数据包含在内层，所以这里需要转换下
             Resource(it.status, it.data?.datas, it.error)
         }
     }

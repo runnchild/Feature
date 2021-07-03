@@ -5,6 +5,7 @@
 
     <data>
 
+        <!-- 如定义了名称为‘bean’的属性，Binder会自动为它赋值 -->
         <variable
             name="bean"
             type="com.rongc.wan.ProjectList" />
