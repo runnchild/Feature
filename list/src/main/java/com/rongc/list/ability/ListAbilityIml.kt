@@ -3,13 +3,14 @@ package com.rongc.list.ability
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.NetworkUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.AppExecutors
 import com.rongc.feature.ability.IAbility
-import com.rongc.feature.ui.host.IHost
+import com.rongc.feature.ui.host.IAbilityList
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.*
 import com.rongc.list.ItemDecoration
@@ -19,6 +20,8 @@ import com.rongc.list.setCompatDiffNewData
 import com.rongc.list.viewmodel.*
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.widget.IEmptyView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 abstract class ListAbilityIml(val viewModel: BaseViewModel, val listHost: IList) : IAbility {
@@ -75,12 +78,12 @@ abstract class ListAbilityIml(val viewModel: BaseViewModel, val listHost: IList)
         val providerAdapter = adapter
         if (providerAdapter is BaseQuickAdapter<*, *>) {
             val emptyView = providerEmptyView() ?: return
-            this.emptyConfig = emptyConfig
-            emptyView.setViewModel(emptyConfig)
+            emptyView.setConfig(emptyConfig)
             providerAdapter.setEmptyView(emptyView as View)
             // providerAdapter.headerWithEmptyEnable = true
             // providerAdapter.footerWithEmptyEnable = true
         }
+        this.emptyConfig = emptyConfig
     }
 
     abstract fun providerEmptyView(): IEmptyView?
@@ -167,9 +170,13 @@ private fun ListAbilityIml.buildEmpty(
     }
     val emptyBuilder = EmptyBuilder(state).apply(defaultBuilder)
     emptyBuilder.btnClick = defClick
-    // 默认配置基础上更改配置
-    listHost.setupEmptyView(emptyBuilder)
     emptyConfig.builder(emptyBuilder)
+    viewModel.viewModelScope.launch {
+        delay(10)
+        // 默认配置基础上更改配置
+        listHost.setupEmptyView(emptyBuilder)
+        emptyConfig.builder(emptyBuilder)
+    }
 }
 
 fun <T> Resource<List<T>?>.emptyState(block: (EmptyState) -> Unit) {

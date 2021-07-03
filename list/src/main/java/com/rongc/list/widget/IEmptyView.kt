@@ -4,7 +4,7 @@ import com.rongc.list.viewmodel.EmptyViewConfig
 
 interface IEmptyView {
 
-    fun setViewModel(config: EmptyViewConfig)
+    fun setConfig(config: EmptyViewConfig)
 
     fun getViewModel(): EmptyViewConfig?
 }

@@ -28,6 +28,6 @@ open class EmptyListFragment : Fragment(), IPagerItem<EmptyViewConfig> {
     }
 
     override fun convert(position: Int, item: EmptyViewConfig, payloads: MutableList<Any>?) {
-        (view as IEmptyView).setViewModel(item)
+        (view as IEmptyView).setConfig(item)
     }
 }

@@ -205,7 +205,7 @@ fun ViewPager2.setupEmptyView(
         fun getEmptyView(): IEmptyView {
             val emptyViewModel = emptyView?.getViewModel() ?: EmptyViewConfig()
             return (emptyView ?: EmptyView(context)).run {
-                setViewModel(emptyViewModel)
+                setConfig(emptyViewModel)
                 this
             }
         }

@@ -36,7 +36,7 @@ class EmptyView @JvmOverloads constructor(
     private var binding: EmptyViewBinding =
         EmptyViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    override fun setViewModel(config: EmptyViewConfig) {
+    override fun setConfig(config: EmptyViewConfig) {
         binding.viewModel = config
     }
 
