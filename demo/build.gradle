@@ -11,6 +11,7 @@ dependencies {
     implementation project(':feature')
     implementation project(':list')
     implementation project(':toolbar')
+    implementation project(':liveevent')
 
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion") {
         exclude group: 'androidx.fragment'
