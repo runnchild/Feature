@@ -1,5 +1,0 @@
-plugins { id 'com.rongc.app' }
-dependencies {
-    implementation project(':lib')
-    implementation 'com.github.xiaofeidev:shadow:1.0.0'
-}
