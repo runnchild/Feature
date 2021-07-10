@@ -26,7 +26,7 @@ inline fun <T> LiveData<Event<T>>.observeOnce(
 /**
  * 保证所有事件不丢失，保存非激活状态时的事件，并能够在激活后依次回调，且没有内存泄漏
  */
-fun <T> LiveData<T>.observeAny(owner: LifecycleOwner, observer: Observer<T>) {
+fun <T> LiveData<T>.observeAll(owner: LifecycleOwner, observer: Observer<T>) {
     AnyEventObserver.bind(this, owner, observer)
 }
 
