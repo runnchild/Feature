@@ -31,7 +31,7 @@ class RepoSearchViewModel(private val repository: RepoRepository) : BaseListView
 
     override fun loadListData(page: Int): LiveData<Resource<List<Repo>>> {
         val it = this._query.value
-        return  if (it.isNullOrEmpty()) {
+        return if (it.isNullOrEmpty()) {
             AbsentLiveData.create()
         } else {
             repository.searchRepo(it, page)

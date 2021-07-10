@@ -22,5 +22,5 @@ object RepoServiceProvider {
         return repoDb.repoDao()
     }
 
-    val repoRepository = RepoRepository()
+    val repoRepository = RepoRepository(apiService, repoDb)
 }
