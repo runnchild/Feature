@@ -7,7 +7,7 @@ import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
-import com.rongc.list.widget.IEmptyView
+import com.runnchild.emptyview.IEmptyView
 import java.util.*
 
 class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerHost) :

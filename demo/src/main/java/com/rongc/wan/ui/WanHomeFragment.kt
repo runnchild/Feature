@@ -11,10 +11,9 @@ import com.rongc.feature.repository.whenSuccess
 import com.rongc.feature.ui.BaseFragment
 import com.rongc.list.ability.IPagerHost
 import com.rongc.list.ability.PagerAbility
-import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.viewmodel.whenDataIsEmpty
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
 import com.rongc.list.viewpager2.IPagerItem
+import com.runnchild.emptyview.whenDataIsEmpty
 
 class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>(), IPagerHost {
 
@@ -62,7 +61,7 @@ class WanHomeFragment : BaseFragment<FragmentWanHomeBinding, WanHomeViewModel>()
     /**
      * BaseFragmentPagerAdapter照样支持空页面
      */
-    override fun setupEmptyView(builder: EmptyBuilder) {
+    override fun setupEmptyView(builder: com.runnchild.emptyview.EmptyBuilder) {
         builder.whenDataIsEmpty {
             tip = "no data"
         }

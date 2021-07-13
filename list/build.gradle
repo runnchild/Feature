@@ -12,4 +12,5 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin'
     }
     implementation project(path: ':feature')
+    api project(path: ':emptyview')
 }

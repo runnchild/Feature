@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
-import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.widget.EmptyView
-import com.rongc.list.widget.IEmptyView
+import com.runnchild.emptyview.EmptyBuilder
+import com.runnchild.emptyview.EmptyView
+import com.runnchild.emptyview.IEmptyView
 
 /**
  * <p>

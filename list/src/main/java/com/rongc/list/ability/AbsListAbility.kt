@@ -19,7 +19,7 @@ import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatDiffNewData
 import com.rongc.list.viewmodel.*
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
-import com.rongc.list.widget.IEmptyView
+import com.runnchild.emptyview.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*

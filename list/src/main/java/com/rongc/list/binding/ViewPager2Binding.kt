@@ -13,10 +13,10 @@ import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatList
-import com.rongc.list.viewmodel.EmptyViewConfig
 import com.rongc.list.viewpager2.BaseFragmentPagerAdapter
-import com.rongc.list.widget.EmptyView
-import com.rongc.list.widget.IEmptyView
+import com.runnchild.emptyview.EmptyView
+import com.runnchild.emptyview.EmptyViewConfig
+import com.runnchild.emptyview.IEmptyView
 import kotlinx.coroutines.*
 
 /**

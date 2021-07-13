@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
-import com.rongc.list.viewmodel.EmptyViewConfig
+import com.runnchild.emptyview.EmptyViewConfig
 
 /**
  * <p>

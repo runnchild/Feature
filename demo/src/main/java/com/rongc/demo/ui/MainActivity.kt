@@ -9,7 +9,7 @@ import com.rongc.feature.ui.BaseActivity
 import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.utils.dp
 import com.rongc.feature.utils.setRoundBg
-import com.rongc.list.viewmodel.DefaultEmptyConfig
+import com.runnchild.emptyview.DefaultEmptyConfig
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout

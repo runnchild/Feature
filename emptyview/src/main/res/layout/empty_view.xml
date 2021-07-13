@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.rongc.list.viewmodel.EmptyViewConfig" />
+            type="com.runnchild.emptyview.EmptyViewConfig" />
     </data>
 
     <LinearLayout
@@ -22,7 +22,7 @@
             app:imageBuilder="@{viewModel.iconBuilder}"
             tools:layout_height="140dp"
             tools:layout_width="140dp"
-            tools:src="@color/black_30" />
+            tools:src="@color/cardview_shadow_start_color" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
             android:gravity="center"
             android:minWidth="112dp"
             android:minHeight="35dp"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="16sp"
             app:defaultClick="@{viewModel.refreshClick}"
             app:textBuilder="@{viewModel.refreshBuilder}"

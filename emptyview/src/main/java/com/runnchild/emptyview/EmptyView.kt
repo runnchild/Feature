@@ -1,14 +1,15 @@
-package com.rongc.list.widget
+package com.runnchild.emptyview
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import com.rongc.list.databinding.EmptyViewBinding
-import com.rongc.list.viewmodel.EmptyViewConfig
+import com.runnchild.emptyview.databinding.EmptyViewBinding
 
 @BindingAdapter("textBuilder", "defaultClick", requireAll = false)
 fun TextView.textBuilder(builder: (TextView.() -> Unit)? = null, defaultClick: (() -> Unit)?) {
@@ -27,6 +28,11 @@ fun ImageView.imageBuilder(builder: (ImageView.() -> Unit)? = null) {
     builder?.let {
         apply(builder)
     }
+}
+
+@BindingAdapter("visible")
+fun View.visible(visible: Boolean) {
+    isVisible = visible
 }
 
 class EmptyView @JvmOverloads constructor(

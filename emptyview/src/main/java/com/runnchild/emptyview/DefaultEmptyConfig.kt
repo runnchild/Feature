@@ -1,4 +1,4 @@
-package com.rongc.list.viewmodel
+package com.runnchild.emptyview
 
 import android.graphics.Color
 import androidx.core.graphics.drawable.toDrawable

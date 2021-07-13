@@ -21,9 +21,7 @@ import com.rongc.list.ItemDecoration
 import com.rongc.list.ability.IRecyclerHost
 import com.rongc.list.ability.ListAbility
 import com.rongc.list.binding.doOnDefaultAdapter
-import com.rongc.list.viewmodel.EmptyBuilder
-import com.rongc.list.viewmodel.whenDataIsEmpty
-import com.rongc.list.widget.IEmptyView
+import com.runnchild.emptyview.whenDataIsEmpty
 
 class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel>(),
     IRecyclerHost {
@@ -80,12 +78,12 @@ class RepoSearchFragment : BaseFragment<FragmentListBinding, RepoSearchViewModel
         }
     }
 
-    override fun providerEmptyView(context: Context): IEmptyView? {
+    override fun providerEmptyView(context: Context): com.runnchild.emptyview.IEmptyView? {
         // default is EmptyView
         return super.providerEmptyView(context)
     }
 
-    override fun setupEmptyView(builder: EmptyBuilder) {
+    override fun setupEmptyView(builder: com.runnchild.emptyview.EmptyBuilder) {
         // 只设置空数据，其他情况使用默认配置
         builder.whenDataIsEmpty {
             icon {

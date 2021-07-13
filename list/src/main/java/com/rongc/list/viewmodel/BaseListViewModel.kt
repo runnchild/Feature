@@ -64,7 +64,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             field = value
         }
 
-    val setupEmptyView = MutableLiveData<EmptyState>()
+    val setupEmptyView = MutableLiveData<com.runnchild.emptyview.EmptyState>()
 
     private val _request = MutableLiveData<Int>()
 

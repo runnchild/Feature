@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.rongc.list.viewmodel.EmptyViewConfig
-import com.rongc.list.widget.EmptyView
-import com.rongc.list.widget.IEmptyView
+import com.runnchild.emptyview.EmptyView
+import com.runnchild.emptyview.EmptyViewConfig
+import com.runnchild.emptyview.IEmptyView
 
 /**
  * <p>

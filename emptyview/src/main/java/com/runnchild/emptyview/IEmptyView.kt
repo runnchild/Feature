@@ -1,6 +1,4 @@
-package com.rongc.list.widget
-
-import com.rongc.list.viewmodel.EmptyViewConfig
+package com.runnchild.emptyview
 
 interface IEmptyView {
 
