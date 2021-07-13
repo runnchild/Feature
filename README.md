@@ -68,6 +68,8 @@ dependencies {
     
     // RecyclerView/ViewPager2扩展能力，可选
     implementation "com.github.runnchild.Feature:list:$latest_version" 
+    // 页面空内容占位页面，list库已包含
+    implementation "com.github.runnchild.Feature:emptyview:$latest_version" 
     
     // 简约Toolbar扩展能力，可选
     implementation "com.github.runnchild.Feature:toolbar:$latest_version"
