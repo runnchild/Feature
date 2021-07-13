@@ -21,7 +21,7 @@ import java.util.*
  * @date 2021/6/7
  */
 class PagerAbility(viewModel: BaseViewModel, private val pagerHost: IPagerHost) :
-    ListAbilityIml(viewModel, pagerHost) {
+    AbsListAbility(viewModel, pagerHost) {
 
     init {
         val viewPager = pagerHost.viewPager

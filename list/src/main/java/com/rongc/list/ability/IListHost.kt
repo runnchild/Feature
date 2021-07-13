@@ -16,10 +16,11 @@ import com.rongc.list.widget.IEmptyView
  * @author qiurong
  * @date 2021/3/26
  */
-interface IList {
+interface IListHost {
 
     /**
-     * 默认使用BaseBinderAdapter，如果需要提供新Adapter, 重写此方法返回需要设置的Adapter
+     * 如果需要提供新Adapter, 重写此方法返回需要设置的Adapter
+     * 否则不需要重写此方法,默认使用BaseBinderAdapter
      * note：返回的Adapter若不是继承BaseBinderAdapter则通过#registerItemBinders实现Item绑定不会生效
      */
     fun providerAdapter(): RecyclerView.Adapter<*>? = null

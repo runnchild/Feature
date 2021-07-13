@@ -11,7 +11,7 @@ import com.rongc.list.widget.IEmptyView
 import java.util.*
 
 class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerHost) :
-    ListAbilityIml(viewModel, recyclerHost) {
+    AbsListAbility(viewModel, recyclerHost) {
 
     init {
         val recyclerView = recyclerHost.recyclerView

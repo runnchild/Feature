@@ -24,7 +24,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
-abstract class ListAbilityIml(val viewModel: BaseViewModel, val listHost: IList) : IAbility {
+abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListHost) : IAbility {
 
     val adapter: RecyclerView.Adapter<*> by lazy {
         listHost.providerAdapter() ?: BinderAdapter()
@@ -160,7 +160,7 @@ fun <T> IAbilityList.observeResourceManually(result: LiveData<Resource<List<T>?>
     }
 }
 
-private fun ListAbilityIml.buildEmpty(
+private fun AbsListAbility.buildEmpty(
     state: EmptyState, emptyConfig: EmptyViewConfig, defClick: () -> Unit
 ) {
     val defaultBuilder = when (state) {
