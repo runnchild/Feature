@@ -2,7 +2,7 @@
 
 ## 一、简介
 
-这是我见过的可能最简洁，最轻量的MVVM框架。拒绝复杂的、冗余的、过度的Base设计，不为封装而封装，让开发回归他应有的样子。
+一个非常简洁、轻量的MVVM框架。拒绝复杂的、冗余的、过度的Base设计，不为封装而封装，让开发回归他应有的样子。
 
 特色：
 
@@ -17,35 +17,35 @@
   - (ProgressAbility)让页面显示加载进度弹窗的能力（如在耗时操作时显示，结束后关闭的加载弹窗）。
   - (ToolbarAbility)让页面拥有简约的Toolbar的能力。
   - 其他可由开发者根据业务需求自行扩展。
-+ 5.DataBinding/ViewBinding。人生苦短，用它！少写一半代码。
-+ 6.事件总线。LiveEventBus。
++ 5.DataBinding/ViewBinding；人生苦短，用它！少写一半代码。
++ 6.事件总线；LiveEventBus。
 
 ## 二、目录
 
 **1. Feature**
 
-+ [Base](https://github.com/runnchild/Feature/wiki/Base)
-+ [Ability](https://github.com/runnchild/Feature/wiki/Ability)
-+ [Http](https://github.com/runnchild/Feature/wiki/Http)
-+ [Repository](https://github.com/runnchild/Feature/wiki/Repository)
-+ [Status](https://github.com/runnchild/Feature/wiki/Status)
++ [Base](https://github.com/runnchild/Feature/wiki/Base)：页面基本使用
++ [Ability](https://github.com/runnchild/Feature/wiki/Ability)：横向扩展能力
++ [Http](https://github.com/runnchild/Feature/wiki/Http)：网络配置
++ [Repository](https://github.com/runnchild/Feature/wiki/Repository)：数据存取方案
++ [Status](https://github.com/runnchild/Feature/wiki/Status)：公开的网络状态
 
 **2. List**
 
-+ [List/PagerAbility](https://github.com/runnchild/Feature/wiki/ListAbility-PagerAbility)
-+ [EmptyView](https://github.com/runnchild/Feature/wiki/EmptyView)
++ [List/PagerAbility](https://github.com/runnchild/Feature/wiki/ListAbility-PagerAbility)：列表扩展能力
++ [EmptyView](https://github.com/runnchild/Feature/wiki/EmptyView)：无内容占位页面
 
 **3. Toolbar**
 
-+ [PsnToolbar](https://github.com/runnchild/Feature/wiki/PsnToolbar)
++ [PsnToolbarAbility](https://github.com/runnchild/Feature/wiki/PsnToolbar)：简约Toolbar扩展能力
 
 **4. LiveEvent**
 
-+ [liveBus](https://github.com/runnchild/Feature/wiki/LiveEvent)
++ [liveBus](https://github.com/runnchild/Feature/wiki/LiveEvent)：事件总线
 
 **5. 其他**
 
-+ [Binding](https://github.com/runnchild/Feature/wiki/Binding)
++ [Extentsion](https://github.com/runnchild/Feature/wiki/Binding)：基础扩展方法
 
 ## 三、引用
 
@@ -62,6 +62,7 @@ buildscript {
 
 ```
 dependencies {
+    def latest_version = "3.0.0"
     // core
     implementation "com.github.runnchild.Feature:feature:$latest_version"
     
@@ -79,7 +80,10 @@ dependencies {
 }
 ```
 
-## 四、鸣谢
+## 四、文章
+
+
+## 五、鸣谢
 
 1.[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 
