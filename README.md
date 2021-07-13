@@ -62,7 +62,7 @@ buildscript {
 
 ```
 dependencies {
-    def latest_version = "3.0.0"
+    def latest_version = "3.0.1"
     // core
     implementation "com.github.runnchild.Feature:feature:$latest_version"
     
