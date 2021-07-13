@@ -30,3 +30,12 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+tasks.register("publishAll") {
+    dependsOn ":adaptercompat:publishDebugPublicationToMavenLocal"
+    dependsOn ":emptyview:publishDebugPublicationToMavenLocal"
+    dependsOn ":feature:publishDebugPublicationToMavenLocal"
+    dependsOn ":list:publishDebugPublicationToMavenLocal"
+    dependsOn ":liveevent:publishDebugPublicationToMavenLocal"
+    dependsOn ":toolbar:publishDebugPublicationToMavenLocal"
+}
