@@ -36,24 +36,24 @@ data class Resource<out T>(val status: Status, val data: T?, val error: Throwabl
     }
 }
 
-val Resource<*>.isSuccess get() = status == Status.SUCCESS
-val Resource<*>.isError get() = status == Status.ERROR
-val Resource<*>.isLoading get() = status == Status.LOADING
+val Resource<*>?.isSuccess get() = this?.status == Status.SUCCESS
+val Resource<*>?.isError get() = this?.status == Status.ERROR
+val Resource<*>?.isLoading get() = this?.status == Status.LOADING
 
-fun <T> Resource<T>.whenSuccess(block: (T) -> Unit) {
-    if (isSuccess) {
+fun <T> Resource<T>?.whenSuccess(block: (T) -> Unit) {
+    if (this != null && isSuccess) {
         block(data!!)
     }
 }
 
-fun <T> Resource<T>.whenError(block: (Throwable) -> Unit) {
-    if (isError) {
+fun <T> Resource<T>?.whenError(block: (Throwable) -> Unit) {
+    if (this != null && isError) {
         block(error ?: Exception())
     }
 }
 
-fun <T> Resource<T>.whenLoading(block: (T?) -> Unit) {
-    if (isLoading) {
+fun <T> Resource<T>?.whenLoading(block: (T?) -> Unit) {
+    if (this != null && isLoading) {
         block(data)
     }
 }

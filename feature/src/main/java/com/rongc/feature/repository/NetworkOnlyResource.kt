@@ -92,7 +92,7 @@ fun <T> LiveData<Resource<T>>.whenSuccess(
     owner: LifecycleOwner, observer: Observer<Resource<T>>
 ) {
     observe(owner) {
-        if (it.isSuccess) {
+        if (it?.isSuccess == true) {
             observer.onChanged(it)
         }
     }
