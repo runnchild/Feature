@@ -14,7 +14,6 @@ import com.rongc.feature.ability.impl.BindingAbility
 import com.rongc.feature.ui.host.DialogFragmentHost
 import com.rongc.feature.ui.host.IAbilityList
 import com.rongc.feature.ui.host.IViewModelProvider
-import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
 /**
@@ -28,7 +27,7 @@ import com.rongc.feature.viewmodel.BaseViewModel
 abstract class BaseDialogFragment<B : ViewBinding, M : BaseViewModel> : BottomSheetDialogFragment(),
     IViewModelProvider<M>, IAbilityList {
 
-    private var bindingAbility by autoCleared<BindingAbility<B>>()
+    private lateinit var bindingAbility :BindingAbility<B>
     protected val mBinding: B get() = bindingAbility.mBinding!!
 
     override val abilities = ArrayList<IAbility>()

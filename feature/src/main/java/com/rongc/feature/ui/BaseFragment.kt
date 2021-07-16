@@ -13,13 +13,12 @@ import com.rongc.feature.ui.host.FragmentHost
 import com.rongc.feature.ui.host.Host
 import com.rongc.feature.ui.host.IAbilityList
 import com.rongc.feature.ui.host.IViewModelProvider
-import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
 abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(),
     IViewModelProvider<M>, IAbilityList {
 
-    private var bindingAbility by autoCleared<BindingAbility<B>>()
+    private lateinit var bindingAbility :BindingAbility<B>
 
     protected val mBinding: B get() = bindingAbility.mBinding!!
 

@@ -11,13 +11,12 @@ import com.rongc.feature.ui.host.ActivityHost
 import com.rongc.feature.ui.host.Host
 import com.rongc.feature.ui.host.IAbilityList
 import com.rongc.feature.ui.host.IViewModelProvider
-import com.rongc.feature.utils.autoCleared
 import com.rongc.feature.viewmodel.BaseViewModel
 
 abstract class BaseActivity<B : ViewBinding, M : BaseViewModel> : AppCompatActivity(),
     IViewModelProvider<M>, IAbilityList {
 
-    private var bindingAbility by autoCleared<BindingAbility<B>>()
+    private lateinit var bindingAbility :BindingAbility<B>
 
     override val abilities: ArrayList<IAbility> = ArrayList()
 
