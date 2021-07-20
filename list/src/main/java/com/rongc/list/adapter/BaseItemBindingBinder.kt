@@ -51,7 +51,7 @@ abstract class BaseItemBindingBinder<B : ViewBinding, T> : BaseRecyclerItemBinde
      */
     abstract fun convert(binding: B, holder: BaseViewHolder, data: T)
 
-    private fun binding(inflater: LayoutInflater, container: ViewGroup?): B {
+    open fun binding(inflater: LayoutInflater, container: ViewGroup?): B {
         val bindingClass =
             (this::class.java.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>
         val method = bindingClass.getDeclaredMethod(
