@@ -218,6 +218,17 @@ fun View.orInvisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.INVISIBLE
 }
 
+fun View.setPaddingSide(
+    start: Int = paddingStart, top: Int = paddingTop
+    , end: Int = paddingEnd, bottom: Int = paddingBottom
+) {
+    setPadding(start, top, end, bottom)
+}
+
+fun View.setPadding(padding: Int) {
+    setPadding(padding, padding, padding, padding)
+}
+
 fun TextView.drawableSide(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) {
     setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom)
 }
