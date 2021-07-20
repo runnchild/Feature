@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.rongc.feature.ability.IAbility
+import com.rongc.feature.ability.impl.AbsProgressAbility
 import com.rongc.feature.ability.impl.BindingAbility
+import com.rongc.feature.ability.impl.ViewTreeProgressAbilityOwner.set
 import com.rongc.feature.ui.host.FragmentHost
 import com.rongc.feature.ui.host.Host
 import com.rongc.feature.ui.host.IAbilityList
@@ -47,6 +49,13 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(),
 
     override fun viewModelCreator(cls: Class<M>):  M {
         return defaultViewModelProviderFactory.create(cls)
+    }
+
+    override fun registerAbility(ability: IAbility) {
+        super.registerAbility(ability)
+        if (ability is AbsProgressAbility) {
+            ability.set(requireView())
+        }
     }
 
     override fun onDestroyView() {

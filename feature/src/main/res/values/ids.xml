@@ -7,4 +7,6 @@
     <item name="tag_job" type="id" />
     <item name="toolbar_parent" type="id" />
     <item name="psn_toolBar" type="id" />
+
+    <item name="view_tree_progress_ability_owner" type="id" />
 </resources>
