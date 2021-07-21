@@ -1,10 +1,7 @@
 package com.rongc.list.viewmodel
 
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
@@ -73,6 +70,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     val isRefresh get() = _request.value == PageIndicator.PAGE_START
+    var notifyOnly = false
 
     val result = _result.map {
         if (it.isSuccess) {
@@ -91,7 +89,15 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         it
     }
 
-    //    val items get() = result.value?.data
+    val items get() = result.value?.data.toMutableList()
+
+    val dataOnly = result.map {
+        it.emptyState { state ->
+            setupEmptyView.postValue(state)
+        }
+        it
+    }
+
     /**
      * 此时的接口实时状态
      */
@@ -152,4 +158,48 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     abstract fun loadListData(page: Int): LiveData<Resource<List<T>>>
+
+    fun remove(item: T) {
+        items.remove(item)
+        notifyData()
+    }
+
+    fun removeAt(pos: Int) {
+        items.removeAt(pos)
+        notifyData()
+    }
+
+    fun addData(data: T, index: Int = items.size) {
+        items.add(index, data)
+        notifyData()
+    }
+
+    fun removeLastOrNull() {
+        items.removeLastOrNull()?.let {
+            notifyData()
+        }
+    }
+
+    fun setData(index: Int, data: T) {
+        items[index] = data
+        notifyData()
+    }
+
+    private fun notifyData() {
+        notifyOnly = true
+        (dataOnly as MediatorLiveData).value = Resource.success(items)
+        notifyOnly = false
+    }
+
+    private fun List<T>?.toMutableList(): ArrayList<T> {
+        return if (this is MutableList) {
+            this as ArrayList
+        } else {
+            if (this == null) {
+                arrayListOf()
+            } else {
+                ArrayList(this)
+            }
+        }
+    }
 }
