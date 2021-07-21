@@ -30,9 +30,7 @@ abstract class AbsProgressAbility(context: Context) : IAbility {
         dialogJob?.cancel()
         dialogJob = GlobalScope.launch(Dispatchers.Main) {
             // 延迟400ms，如果期间页面响应并关闭了弹窗，则不会弹出
-            withContext(Dispatchers.IO) {
-                delay(delay)
-            }
+            delay(delay)
             if (!dialog.isShowing) {
                 dialog.show()
             }
