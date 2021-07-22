@@ -60,7 +60,7 @@ class BarConfig {
     /**
      * toolbar背景色
      */
-    var toolBarBackground = -1
+    var toolBarBackground = 0
         set(value) {
             toolBarLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value

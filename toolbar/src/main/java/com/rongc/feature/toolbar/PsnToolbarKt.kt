@@ -30,9 +30,9 @@ fun View.backgroundAndLightMode(it: Drawable?) {
 }
 
 @BindingAdapter("menus")
-fun ViewGroup.setMenus(items: ArrayList<TextView.() -> Unit>) {
+fun ViewGroup.setMenus(items: ArrayList<TextView.() -> Unit>?) {
     removeAllViews()
-    items.forEach {
+    items?.forEach {
         addItemMenu(it)
     }
 }
