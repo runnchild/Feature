@@ -117,6 +117,10 @@ fun <T> LifecycleOwner.observeResource(
             }
         }
     }
+
+    viewModel.notifyData.observe(this) {
+        baseAdapter.setCompatDiffNewData(it)
+    }
 }
 
 /**

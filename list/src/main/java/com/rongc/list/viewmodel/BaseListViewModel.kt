@@ -1,7 +1,11 @@
 package com.rongc.list.viewmodel
 
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import com.rongc.feature.SingleLiveData
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.Status
@@ -70,7 +74,6 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     val isRefresh get() = _request.value == PageIndicator.PAGE_START
-    var notifyOnly = false
 
     val result = _result.map {
         if (it.isSuccess) {
@@ -91,12 +94,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
     val items get() = result.value?.data.toMutableList()
 
-    val dataOnly = result.map {
-        it.emptyState { state ->
-            setupEmptyView.postValue(state)
-        }
-        it
-    }
+    internal val notifyData = SingleLiveData<List<T>>()
 
     /**
      * 此时的接口实时状态
@@ -186,9 +184,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     private fun notifyData() {
-        notifyOnly = true
-        (dataOnly as MediatorLiveData).value = Resource.success(items)
-        notifyOnly = false
+        notifyData.value = ArrayList(items)
     }
 
     private fun List<T>?.toMutableList(): ArrayList<T> {

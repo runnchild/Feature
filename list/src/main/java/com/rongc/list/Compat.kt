@@ -24,13 +24,13 @@ private fun <T> BaseQuickAdapter<T, *>.invokeForLower(
     }
 }
 
-private fun <T> List<T>.toMutableList(): ArrayList<T> {
-    return if (this is ArrayList<*>) {
-        this as ArrayList<T>
-    } else {
-        ArrayList(this)
-    }
-}
+//private fun <T> List<T>.toMutableList(): ArrayList<T> {
+//    return if (this is ArrayList<*>) {
+//        this as ArrayList<T>
+//    } else {
+//        ArrayList(this)
+//    }
+//}
 
 fun <T> BaseQuickAdapter<T, *>.setCompatList(items: List<T>?) {
     try {
