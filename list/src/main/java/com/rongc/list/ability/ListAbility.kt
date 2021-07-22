@@ -1,5 +1,6 @@
 package com.rongc.list.ability
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.list.ItemDecoration
@@ -34,5 +35,9 @@ class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerH
 
     override fun setupItemDecoration(decoration: ItemDecoration) {
         recyclerHost.recyclerView.itemDecoration(decoration)
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        recyclerHost.recyclerView.adapter = null
     }
 }

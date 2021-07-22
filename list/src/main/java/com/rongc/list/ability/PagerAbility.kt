@@ -1,5 +1,6 @@
 package com.rongc.list.ability
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.list.ItemDecoration
@@ -50,5 +51,9 @@ class PagerAbility(viewModel: BaseViewModel, private val pagerHost: IPagerHost) 
 
     override fun setupItemDecoration(decoration: ItemDecoration) {
         pagerHost.viewPager.itemDecoration(decoration)
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        pagerHost.viewPager.adapter = null
     }
 }
