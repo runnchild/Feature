@@ -62,7 +62,7 @@ class BarConfig {
      */
     var toolBarBackground = 0
         set(value) {
-            toolBarLightMode = ColorUtils.calculateLuminance(value) > 0.5f
+            isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value
         }
 
@@ -84,7 +84,7 @@ class BarConfig {
     /**
      * 底部导航栏颜色
      */
-    var navColor = -1
+    var navColor = UNDEFINE
         set(value) {
             navLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value

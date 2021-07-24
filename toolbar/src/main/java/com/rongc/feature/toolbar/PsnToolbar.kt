@@ -27,6 +27,8 @@ class PsnToolbar @JvmOverloads constructor(
         binding.viewModel = config
     }
 
+    fun getViewModel() = binding.viewModel
+
     fun setTitleColor(color: Int) {
         binding.tvTitle.setTextColor(color)
     }
