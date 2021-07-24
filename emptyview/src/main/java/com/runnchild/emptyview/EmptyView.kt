@@ -15,6 +15,7 @@ import com.runnchild.emptyview.databinding.EmptyViewBinding
 fun TextView.textBuilder(builder: (TextView.() -> Unit)? = null, defaultClick: (() -> Unit)?) {
     builder?.let {
         apply(builder)
+        isVisible = !text.isNullOrEmpty()
         if (!hasOnClickListeners() && defaultClick != null) {
             setOnClickListener {
                 defaultClick.invoke()
@@ -31,7 +32,7 @@ fun ImageView.imageBuilder(builder: (ImageView.() -> Unit)? = null) {
 }
 
 @BindingAdapter("visible")
-fun View.visible(visible: Boolean) {
+internal fun View.visible(visible: Boolean) {
     isVisible = visible
 }
 
