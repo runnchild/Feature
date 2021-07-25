@@ -62,7 +62,7 @@ buildscript {
 
 ```
 dependencies {
-    def latest_version = "3.0.1"
+    def latest_version = "3.0.2"
     // core
     implementation "com.github.runnchild.Feature:feature:$latest_version"
     
@@ -84,9 +84,10 @@ dependencies {
 
 ## 四、文章
 
-1. [《列表页面的高效实现》](https://juejin.cn/post/6984333505022918687)
-2. [《如何优化多层继承的高耦合问题》](https://juejin.cn/post/6984332060982771725)
-3. [《简单实现不同状态的空页面》]()编写中。。。
+1. [《如何优化多层继承的高耦合问题》](https://juejin.cn/post/6984332060982771725)
+2. [《列表页面的高效实现》](https://juejin.cn/post/6984333505022918687)
+3. [《简单实现不同状态的空页面》](https://juejin.cn/post/6988780467919159332)
+4. 更多待续。。。
 
 ## 五、鸣谢
 
