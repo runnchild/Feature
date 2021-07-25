@@ -203,9 +203,9 @@ fun ViewPager2.setupEmptyView(
 ): EmptyViewConfig? {
     if (enable) {
         fun getEmptyView(): IEmptyView {
-            val emptyViewModel = emptyView?.getViewModel() ?: EmptyViewConfig()
+            val emptyViewModel = emptyView?.config ?: EmptyViewConfig()
             return (emptyView ?: EmptyView(context)).run {
-                setConfig(emptyViewModel)
+                config = emptyViewModel
                 this
             }
         }
@@ -220,12 +220,12 @@ fun ViewPager2.setupEmptyView(
                     }
                     it.setEmptyView(iEmpty as View)
                     iEmpty.removeFromParent()
-                    iEmpty.getViewModel()
+                    iEmpty.config
                 }
                 is BaseFragmentPagerAdapter<*> -> {
                     val emptyView1 = getEmptyView()
-                    it.setEmptyData(emptyView1.getViewModel()!!)
-                    emptyView1.getViewModel()
+                    it.setEmptyData(emptyView1.config!!)
+                    emptyView1.config
                 }
                 else -> null
             }

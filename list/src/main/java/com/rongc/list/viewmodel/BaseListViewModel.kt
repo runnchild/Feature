@@ -13,6 +13,7 @@ import com.rongc.feature.vo.isSuccess
 import com.rongc.list.PageIndicator
 import com.rongc.list.ability.emptyState
 import com.rongc.list.binding.LoadStatus
+import com.runnchild.emptyview.EmptyState
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 
@@ -65,7 +66,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             field = value
         }
 
-    val setupEmptyView = MutableLiveData<com.runnchild.emptyview.EmptyState>()
+    val setupEmptyView = MutableLiveData<EmptyState>()
 
     private val _request = MutableLiveData<Int>()
 

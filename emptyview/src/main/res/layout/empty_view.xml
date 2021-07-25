@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="config"
             type="com.runnchild.emptyview.EmptyViewConfig" />
     </data>
 
@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:imageBuilder="@{viewModel.iconBuilder}"
+            app:imageBuilder="@{config.iconBuilder}"
             tools:layout_height="140dp"
             tools:layout_width="140dp"
             tools:src="@color/cardview_shadow_start_color" />
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="17sp"
-            app:textBuilder="@{viewModel.tipBuilder}"
+            app:textBuilder="@{config.tipBuilder}"
             tools:text="网络未连接" />
 
         <TextView
@@ -38,7 +38,7 @@
             android:layout_marginTop="5dp"
             android:textColor="#b2b2b2"
             android:textSize="13sp"
-            app:textBuilder="@{viewModel.subTipBuilder}"
+            app:textBuilder="@{config.subTipBuilder}"
             tools:text="请检查你的网络设置后刷新" />
 
         <TextView
@@ -52,9 +52,9 @@
             android:minHeight="35dp"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            app:defaultClick="@{viewModel.refreshClick}"
-            app:textBuilder="@{viewModel.refreshBuilder}"
-            app:visible="@{viewModel.btnVisible}"
+            app:defaultClick="@{config.refreshClick}"
+            app:textBuilder="@{config.refreshBuilder}"
+            app:visible="@{config.btnVisible}"
             tools:text="刷新" />
     </LinearLayout>
 </layout>

@@ -40,12 +40,11 @@ class EmptyView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), IEmptyView {
 
-    private var binding: EmptyViewBinding =
-        EmptyViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private var binding = EmptyViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    override fun setConfig(config: EmptyViewConfig) {
-        binding.viewModel = config
-    }
-
-    override fun getViewModel(): EmptyViewConfig? = binding.viewModel
+    override var config: EmptyViewConfig?
+        get() = binding.config
+        set(value) {
+            binding.config = value
+        }
 }
