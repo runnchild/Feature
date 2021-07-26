@@ -4,29 +4,30 @@ import android.graphics.Color
 import androidx.core.graphics.drawable.toDrawable
 
 object DefaultEmptyConfig {
-    var noNetBuilder: EmptyBuilder.() -> Unit = {
-        tip = "网络未连接"
-        subTip = "请检查你的网络设置后刷新"
-        btnVisible = true
-        btnText = "刷新"
-        iconDrawable = Color.RED.toDrawable()
-    }
 
-    var netUnavailableBuilder: EmptyBuilder.() -> Unit = {
-        tip = "网络异常"
-        subTip = "请检查你的网络设置后刷新"
-        btnVisible = true
-        btnText = "刷新"
-        iconDrawable = Color.BLUE.toDrawable()
-    }
-
-    var emptyDataBuilder: EmptyBuilder.() -> Unit = {
-        tip = "no data found"
-        subTip = "try again"
-        btnVisible = true
-        btnText = "retry"
-        iconDrawable = Color.GREEN.toDrawable()
-    }
+    private val configMap = hashMapOf<EmptyState, EmptyBuilder.() -> Unit>(
+        EmptyState.EMPTY_NET_DISCONNECT to {
+            tip = "网络未连接"
+            subTip = "请检查你的网络设置后刷新"
+            btnVisible = true
+            btnText = "刷新"
+            iconDrawable = Color.RED.toDrawable()
+        },
+        EmptyState.EMPTY_NET_UNAVAILABLE to {
+            tip = "网络异常"
+            subTip = "请检查你的网络设置后刷新"
+            btnVisible = true
+            btnText = "刷新"
+            iconDrawable = Color.BLUE.toDrawable()
+        },
+        EmptyState.EMPTY_DATA to {
+            tip = "no data found"
+            subTip = "try again"
+            btnVisible = true
+            btnText = "retry"
+            iconDrawable = Color.GREEN.toDrawable()
+        }
+    )
 
     /**
      * 配置断网时的空页面样式，断网并列表为空时默认使用此配置，
@@ -34,7 +35,7 @@ object DefaultEmptyConfig {
      * 根据state == {@link RefreshEmptyViewModel##EMPTY_NET_DISCONNECT}返回EmptyBuilder
      */
     fun configNetDisconnectBuilder(builder: EmptyBuilder.() -> Unit) {
-        noNetBuilder = builder
+        configMap[EmptyState.EMPTY_NET_DISCONNECT] = builder
     }
 
     /**
@@ -43,7 +44,7 @@ object DefaultEmptyConfig {
      * 根据state == {@link RefreshEmptyViewModel#EMPTY_NET_UNAVAILABLE}返回EmptyBuilder
      */
     fun configNetUnavailableBuilder(builder: EmptyBuilder.() -> Unit) {
-        netUnavailableBuilder = builder
+        configMap[EmptyState.EMPTY_NET_UNAVAILABLE] = builder
     }
 
     /**
@@ -52,8 +53,10 @@ object DefaultEmptyConfig {
      * 根据state == {@link RefreshEmptyViewModel#EMPTY_DATA}返回EmptyBuilder
      */
     fun configEmptyDataBuilder(builder: EmptyBuilder.() -> Unit) {
-        emptyDataBuilder = builder
+        configMap[EmptyState.EMPTY_DATA] = builder
     }
+
+    fun get(state: EmptyState) = configMap[state]!!
 }
 
 /**
