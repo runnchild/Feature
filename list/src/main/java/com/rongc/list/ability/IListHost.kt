@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.list.ItemDecoration
 import com.rongc.list.adapter.BaseRecyclerItemBinder
-import com.runnchild.emptyview.EmptyBuilder
-import com.runnchild.emptyview.EmptyView
-import com.runnchild.emptyview.IEmptyView
+import com.runnchild.emptyview.*
 
 /**
  * <p>
@@ -54,4 +52,6 @@ interface IListHost {
      */
     fun registerItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>) {
     }
+
+    fun getDefaultEmptyConfig(state: EmptyState) = DefaultEmptyConfig.get(state)
 }
