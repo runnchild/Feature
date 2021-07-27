@@ -34,9 +34,7 @@ fun View.onClick(call: ((View) -> Unit)?, disableDebounce: Boolean = false) {
     if (!disableDebounce) {
         ClickUtils.applySingleDebouncing(this, call)
     } else {
-        setOnClickListener {
-            call(it)
-        }
+        setOnClickListener(call)
     }
 }
 
