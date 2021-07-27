@@ -50,7 +50,7 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
         }
         val vm = viewModel as? BaseListViewModel<*>
         vm?.let {
-            buildEmpty(vm.setupEmptyView.value!!, emptyConfig) {
+            buildEmpty(vm.setupEmptyView.value?:EmptyState.EMPTY_DATA, emptyConfig) {
                 vm.refresh()
             }
         }
@@ -142,6 +142,10 @@ fun <T> LifecycleOwner.observeResource(
                     resource.data?.let {
                         baseAdapter.addData(it)
                     }
+                }
+            } else {
+                if (adapter.data.isNullOrEmpty()) {
+                    baseAdapter.setCompatDiffNewData(resource.data)
                 }
             }
         }
