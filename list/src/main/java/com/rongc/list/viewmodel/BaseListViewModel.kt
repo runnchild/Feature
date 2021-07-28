@@ -144,7 +144,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         loadData(PageIndicator.PAGE_START)
     }
 
-    private fun loadMore() {
+    fun loadMore() {
         loadData(pageIndicator.page + 1)
     }
 
