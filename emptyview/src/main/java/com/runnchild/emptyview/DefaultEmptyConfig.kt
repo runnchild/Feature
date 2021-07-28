@@ -26,6 +26,13 @@ object DefaultEmptyConfig {
             btnVisible = true
             btnText = "retry"
             iconDrawable = Color.GREEN.toDrawable()
+        },
+        EmptyState.EMPTY_SERVICE to {
+            tip = "no data found"
+            subTip = "try again"
+            btnVisible = true
+            btnText = "retry"
+            iconDrawable = Color.GREEN.toDrawable()
         }
     )
 
