@@ -50,7 +50,7 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
         }
         val vm = viewModel as? BaseListViewModel<*>
         vm?.let {
-            buildEmpty(vm.setupEmptyView.value?:EmptyState.EMPTY_DATA, emptyConfig) {
+            buildEmpty(vm.setupEmptyView.value ?: EmptyState.EMPTY_DATA, emptyConfig) {
                 vm.refresh()
             }
         }
@@ -77,7 +77,15 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
             vm._autoRefresh = listHost.autoRefresh()
             owner.observeResource(adapter, vm)
 
-//            vm.setupEmptyView.observe(owner) { state ->
+            vm.setupEmptyView.observe(owner) { state ->
+                if (emptyConfig.state != state) {
+                    if (!haveSetEmpty) {
+                        setEmptyView(EmptyViewConfig())
+                    }
+                    buildEmpty(state, emptyConfig) {
+                        vm.refresh()
+                    }
+                }
 //                val adapter = adapter
 //                // 列表已有数据，不设置空页面
 //                if (adapter is BaseQuickAdapter<*, *>) {
@@ -94,7 +102,7 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
 //                buildEmpty(state, emptyConfig) {
 //                    vm.refresh()
 //                }
-//            }
+            }
         }
     }
 

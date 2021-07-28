@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.runnchild.emptyview.databinding.EmptyViewBinding
 
@@ -13,6 +14,9 @@ import com.runnchild.emptyview.databinding.EmptyViewBinding
 internal fun TextView.textBuilder(visible: Boolean?, builder: (TextView.() -> Unit)? = null, defaultClick: (() -> Unit)?) {
     builder?.let {
         apply(builder)
+        if (visible != null) {
+            isVisible = visible
+        }
         if (!hasOnClickListeners() && defaultClick != null) {
             setOnClickListener {
                 defaultClick.invoke()
