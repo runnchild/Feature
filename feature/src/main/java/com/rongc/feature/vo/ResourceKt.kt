@@ -10,7 +10,7 @@ fun <T> LiveData<Resource<T>>.doOnNext(block: (Resource<T>)->Unit): LiveData<Res
     }
 }
 
-fun <T> LiveData<Resource<T>>.doOnSuccess(block: (Resource<T>)->Unit): LiveData<Resource<T>> {
+fun <T> LiveData<Resource<T>>.doOnSuccess(block: (Resource<T>) -> Unit): LiveData<Resource<T>> {
     return map {
         if (it.isSuccess) {
             block(it)
@@ -19,11 +19,21 @@ fun <T> LiveData<Resource<T>>.doOnSuccess(block: (Resource<T>)->Unit): LiveData<
     }
 }
 
-fun <T> LiveData<Resource<T>>.doOnError(block: (Resource<T>)->Unit): LiveData<Resource<T>> {
+fun <T> LiveData<Resource<T>>.doOnError(block: (Resource<T>) -> Unit): LiveData<Resource<T>> {
     return map {
         if (it.isError) {
             block(it)
         }
         it
+    }
+}
+
+fun <T> LiveData<Resource<T>>.doOnStart(block: (Resource<T>) -> Resource<T>): LiveData<Resource<T>> {
+    return map {
+        if (it.isLoading) {
+            block(it)
+        } else {
+            it
+        }
     }
 }
