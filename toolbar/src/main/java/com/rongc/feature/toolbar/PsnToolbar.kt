@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import com.rongc.feature.toolbar.databinding.PsnToolbarBinding
 import com.rongc.feature.utils.idp
@@ -21,32 +22,53 @@ class PsnToolbar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    val binding = PsnToolbarBinding.inflate(LayoutInflater.from(context), this, true)
+    lateinit var binding: PsnToolbarBinding
 
-    fun setViewModel(config: ToolBarConfig) {
-        binding.viewModel = config
+    init {
+        if (isInEditMode) {
+            LayoutInflater.from(context).inflate(R.layout.psn_toolbar, this, true)
+        } else {
+            binding = PsnToolbarBinding.inflate(LayoutInflater.from(context), this, true)
+        }
     }
 
-    fun getViewModel() = binding.viewModel
+    internal var model: ToolBarModel? = null
+        get() = binding.model
+        set(value) {
+            field = value
+            binding.model = value
+        }
 
     fun setTitleColor(color: Int) {
         binding.tvTitle.setTextColor(color)
     }
 
     fun setTitle(title: CharSequence?) {
-        binding.viewModel?.title?.set(title)
+        binding.model?.title?.set(title)
+    }
+
+    fun title(block: TextView.() -> Unit) {
+        binding.tvTitle.apply(block)
+    }
+
+    fun menu(index: Int = 0, block: TextView.() -> Unit) {
+        (binding.menuParent.getChildAt(index) as TextView).apply(block)
+    }
+
+    fun navigation(block: ImageView.() -> Unit) {
+        binding.ivBack.apply(block)
     }
 
     fun setBackImageDrawable(drawable: Drawable?) {
-        binding.viewModel?.backIcon?.set(drawable)
+        binding.model?.backIcon?.set(drawable)
     }
 
     fun setBackVisible(visible: Boolean) {
-        binding.viewModel?.backVisible?.set(visible)
+        binding.model?.backVisible?.set(visible)
     }
 
     override fun setBackgroundColor(color: Int) {
-        binding.viewModel?.background?.set(color.toDrawable())
+        binding.model?.background?.set(color.toDrawable())
     }
 
     fun setLightMode(isLight: Boolean) {

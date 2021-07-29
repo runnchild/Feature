@@ -11,7 +11,7 @@ import androidx.databinding.ObservableFloat
 import androidx.lifecycle.MutableLiveData
 import com.rongc.feature.utils.dp
 
-class ToolBarConfig {
+class ToolBarModel {
 
     val backClick = {
         backLiveData.value = true

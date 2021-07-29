@@ -39,8 +39,8 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         if (!::toolBar.isInitialized) {
             throw IllegalStateException("PsnToolbar not found")
         }
-        val toolBarConfig = ToolBarConfig()
-        toolBarConfig.backLiveData.observe(owner) {
+        val barModel = ToolBarModel()
+        barModel.backLiveData.observe(owner) {
             if (host is DialogFragment) {
                 host.dismiss()
                 return@observe
@@ -55,7 +55,7 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         barConfig = BarConfig()
         barConfig.title = label
         barConfig.apply(config)
-        toolBar.setViewModel(toolBarConfig)
+        toolBar.model = barModel
     }
 
     private fun findToolBar(view: View): PsnToolbar? {
@@ -81,7 +81,7 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        toolBar.getViewModel()?.setConfig(barConfig)
+        toolBar.model?.setConfig(barConfig)
         setupStatusBar()
     }
 
