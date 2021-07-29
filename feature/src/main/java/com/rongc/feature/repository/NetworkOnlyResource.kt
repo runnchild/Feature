@@ -10,7 +10,6 @@ import com.rongc.feature.api.ApiSuccessResponse
 import com.rongc.feature.utils.AbsentLiveData
 import com.rongc.feature.vo.Resource
 import com.rongc.feature.vo.isLoading
-import com.rongc.feature.vo.isSuccess
 
 /**
  * <p>
@@ -80,19 +79,6 @@ fun <T> LiveData<Resource<T>>.ignoreLoading(
 ) {
     observe(owner) {
         if (!it.isLoading) {
-            observer.onChanged(it)
-        }
-    }
-}
-
-/**
- * 只在成功时接收通知
- */
-fun <T> LiveData<Resource<T>>.whenSuccess(
-    owner: LifecycleOwner, observer: Observer<Resource<T>>
-) {
-    observe(owner) {
-        if (it?.isSuccess == true) {
             observer.onChanged(it)
         }
     }

@@ -40,19 +40,19 @@ val Resource<*>?.isSuccess get() = this?.status == Status.SUCCESS
 val Resource<*>?.isError get() = this?.status == Status.ERROR
 val Resource<*>?.isLoading get() = this?.status == Status.LOADING
 
-fun <T> Resource<T>?.whenSuccess(block: (T) -> Unit) {
+fun <T> Resource<T>?.doOnSuccess(block: (T) -> Unit) {
     if (this != null && isSuccess) {
         block(data!!)
     }
 }
 
-fun <T> Resource<T>?.whenError(block: (Throwable) -> Unit) {
+fun <T> Resource<T>?.doOnError(block: (Throwable) -> Unit) {
     if (this != null && isError) {
         block(error ?: Exception())
     }
 }
 
-fun <T> Resource<T>?.whenLoading(block: (T?) -> Unit) {
+fun <T> Resource<T>?.doOnLoading(block: (T?) -> Unit) {
     if (this != null && isLoading) {
         block(data)
     }

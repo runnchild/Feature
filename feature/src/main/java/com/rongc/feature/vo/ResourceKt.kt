@@ -1,6 +1,8 @@
 package com.rongc.feature.vo
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.map
 
 fun <T> LiveData<Resource<T>>.doOnNext(block: (Resource<T>)->Unit): LiveData<Resource<T>> {
@@ -34,6 +36,19 @@ fun <T> LiveData<Resource<T>>.doOnStart(block: (Resource<T>) -> Resource<T>): Li
             block(it)
         } else {
             it
+        }
+    }
+}
+
+/**
+ * 只在成功时接收通知
+ */
+fun <T> LiveData<Resource<T>>.observeOnSuccess(
+    owner: LifecycleOwner, observer: Observer<Resource<T>>
+) {
+    observe(owner) {
+        if (it?.isSuccess == true) {
+            observer.onChanged(it)
         }
     }
 }
