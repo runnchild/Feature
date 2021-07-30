@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.NetworkUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.diff.ListChangeListener
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.AppExecutors
 import com.rongc.feature.ability.IAbility
@@ -35,27 +34,6 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
 
     val haveSetEmpty get() = ::emptyConfig.isInitialized
 
-    private val listener = ListChangeListener<Any> { _, curList ->
-        // 列表已有数据，不设置空页面
-        if (curList.size > 0) {
-            return@ListChangeListener
-        }
-//        val adapter = adapter
-//        if (adapter.itemCount > 0) {
-//            return@ListChangeListener
-//        }
-
-        if (!haveSetEmpty) {
-            setEmptyView(EmptyViewConfig())
-        }
-        val vm = viewModel as? BaseListViewModel<*>
-        vm?.let {
-            buildEmpty(vm.setupEmptyView.value ?: EmptyState.EMPTY_DATA, emptyConfig) {
-                vm.refresh()
-            }
-        }
-    }
-
     override fun onCreate(owner: LifecycleOwner) {
         observeListResource(owner)
 
@@ -65,8 +43,6 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
         val itemBinders = arrayListOf<BaseRecyclerItemBinder<out Any>>()
         listHost.registerItemBinders(itemBinders)
         setupItemBinders(itemBinders)
-
-        (adapter as? BaseQuickAdapter<Any, *>)?.getDiffer()?.addListListener(listener)
     }
 
     private fun observeListResource(owner: LifecycleOwner) {
@@ -78,30 +54,17 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
             owner.observeResource(adapter, vm)
 
             vm.setupEmptyView.observe(owner) { state ->
-                if (emptyConfig.state != state) {
-                    if (!haveSetEmpty) {
-                        setEmptyView(EmptyViewConfig())
-                    }
-                    buildEmpty(state, emptyConfig) {
-                        vm.refresh()
+                if (!haveSetEmpty) {
+                    setEmptyView(EmptyViewConfig())
+                }
+                // 页面需要EmptyView才设置
+                if (haveSetEmpty) {
+                    if (emptyConfig.state != state) {
+                        buildEmpty(state, emptyConfig) {
+                            vm.refresh()
+                        }
                     }
                 }
-//                val adapter = adapter
-//                // 列表已有数据，不设置空页面
-//                if (adapter is BaseQuickAdapter<*, *>) {
-//                    if (adapter.data.size > 0) {
-//                        return@observe
-//                    }
-//                } else if (adapter.itemCount > 0) {
-//                    return@observe
-//                }
-//
-//                if (!haveSetEmpty) {
-//                    setEmptyView(EmptyViewConfig())
-//                }
-//                buildEmpty(state, emptyConfig) {
-//                    vm.refresh()
-//                }
             }
         }
     }
@@ -123,11 +86,6 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
     abstract fun setupItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>)
 
     abstract fun setupItemDecoration(decoration: ItemDecoration)
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        (adapter as? BaseQuickAdapter<Any, *>)?.getDiffer()?.removeListListener(listener)
-    }
 }
 
 /**
