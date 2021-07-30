@@ -6,7 +6,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 
 class EmptyViewConfig {
-    var state= EmptyState.EMPTY_DATA
+    var state:EmptyState? = null
 
     val btnVisible = ObservableBoolean()
     var refreshBuilder = ObservableField<TextView.() -> Unit>()
