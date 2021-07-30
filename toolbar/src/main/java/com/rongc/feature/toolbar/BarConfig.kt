@@ -42,6 +42,8 @@ class BarConfig {
         }
 
     val menuItems = arrayListOf<TextView.() -> Unit>()
+    var titleBlock: (TextView.() -> Unit)? = null
+    var navigationBlock: (TextView.() -> Unit)? = null
 
     internal var isStatusTransparent = false
     internal var isLightMode = false
@@ -95,5 +97,13 @@ class BarConfig {
      */
     fun menu(item: TextView.() -> Unit) {
         menuItems.add(item)
+    }
+
+    fun title(block: TextView.() -> Unit) {
+        titleBlock = block
+    }
+
+    fun navigation(block: TextView.() -> Unit) {
+        navigationBlock = block
     }
 }

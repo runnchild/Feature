@@ -37,6 +37,7 @@ class PsnToolbar @JvmOverloads constructor(
         set(value) {
             field = value
             binding.model = value
+            field?.titleBlock?.let { title(it) }
         }
 
     fun setTitleColor(color: Int) {

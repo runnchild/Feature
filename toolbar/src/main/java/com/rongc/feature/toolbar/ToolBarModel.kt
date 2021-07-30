@@ -18,6 +18,8 @@ class ToolBarModel {
     }
 
     val menuItems = ObservableArrayList<TextView.() -> Unit>()
+    var titleBlock: (TextView.() -> Unit)? = null
+    var navigationBlock: (TextView.() -> Unit)? = null
 
     fun setConfig(barConfig: BarConfig) {
         if (barConfig.toolBarDividerColor != BarConfig.UNDEFINE) {
@@ -34,6 +36,8 @@ class ToolBarModel {
         toolbarVisible.set(barConfig.toolbarVisible)
         titleVisible.set(barConfig.titleVisible)
         title.set(barConfig.title)
+        titleBlock = barConfig.titleBlock
+        navigationBlock = barConfig.navigationBlock
     }
 
     val toolbarVisible = ObservableBoolean(true)
