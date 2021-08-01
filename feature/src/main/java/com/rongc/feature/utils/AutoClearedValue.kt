@@ -18,9 +18,12 @@
 
 package com.rongc.feature.utils
 
+import androidx.activity.ComponentActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.rongc.feature.ui.host.ActivityHost
+import com.rongc.feature.ui.host.IHost
 import java.util.Collection
 import java.util.Map
 import kotlin.properties.ReadWriteProperty
@@ -31,30 +34,30 @@ import kotlin.reflect.KProperty
  *
  * Accessing this variable while the fragment's view or activity is destroyed will throw NPE.
  */
-class AutoClearedValue<T>(host: Lifecycle) : ReadWriteProperty<Any?, T> {
+class AutoClearedValue<T : Any>(host: IHost) : ReadWriteProperty<Any?, T> {
     private var _value: T? = null
 
     init {
-//        val lifecycle = if (host is ActivityHost) {
-//            (host as ComponentActivity).lifecycle
-//        } else {
-//            (host as Fragment).lifecycle
-//        }
-        host.addObserver(object : DefaultLifecycleObserver {
+        val lifecycle = if (host.host is ActivityHost) {
+            (host as ComponentActivity).lifecycle
+        } else {
+            (host as Fragment).lifecycle
+        }
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 clearCollection(_value)
                 _value = null
             }
 
             override fun onCreate(owner: LifecycleOwner) {
-//                (host as? Fragment)?.viewLifecycleOwnerLiveData?.observe(host) { viewLifecycleOwner ->
-//                    viewLifecycleOwner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
-//                        override fun onDestroy(owner: LifecycleOwner) {
-//                            clearCollection(_value)
-//                            _value = null
-//                        }
-//                    })
-//                }
+                (host as? Fragment)?.viewLifecycleOwnerLiveData?.observe(host) { viewLifecycleOwner ->
+                    viewLifecycleOwner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
+                        override fun onDestroy(owner: LifecycleOwner) {
+                            clearCollection(_value)
+                            _value = null
+                        }
+                    })
+                }
             }
 
             private fun clearCollection(value: T?) {
@@ -81,4 +84,4 @@ class AutoClearedValue<T>(host: Lifecycle) : ReadWriteProperty<Any?, T> {
 /**
  * Creates an [AutoClearedValue] associated with this Host.
  */
-fun <T : Any> Lifecycle.autoCleared() = AutoClearedValue<T>(this)
+fun <T : Any> IHost.autoCleared() = AutoClearedValue<T>(this)
