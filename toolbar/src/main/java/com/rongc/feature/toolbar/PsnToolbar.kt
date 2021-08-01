@@ -20,7 +20,7 @@ import com.rongc.feature.utils.idp
  */
 class PsnToolbar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr), IToolBar {
 
     lateinit var binding: PsnToolbarBinding
 
@@ -32,12 +32,11 @@ class PsnToolbar @JvmOverloads constructor(
         }
     }
 
-    internal var model: ToolBarModel? = null
+    override var model: ToolBarModel? = null
         get() = binding.model
         set(value) {
             field = value
             binding.model = value
-            field?.titleBlock?.let { title(it) }
         }
 
     fun setTitleColor(color: Int) {
