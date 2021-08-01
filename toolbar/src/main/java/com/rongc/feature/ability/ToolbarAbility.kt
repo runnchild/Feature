@@ -11,7 +11,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.BarUtils
-import com.rongc.feature.toolbar.*
+import com.rongc.feature.toolbar.BarConfig
+import com.rongc.feature.toolbar.IToolBar
+import com.rongc.feature.toolbar.R
+import com.rongc.feature.toolbar.ToolBarModel
 import com.rongc.feature.ui.host.IHost
 
 /**
@@ -25,31 +28,32 @@ import com.rongc.feature.ui.host.IHost
 open class ToolbarAbility(private val host: IHost, private val config: BarConfig.() -> Unit = {}) :
     IAbility {
 
-    protected lateinit var toolBar: PsnToolbar
+    protected lateinit var toolBar: IToolBar
     protected lateinit var barConfig: BarConfig
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        if (host is Fragment) {
-            findToolBar(host.requireView())
-        } else if (host is Activity) {
-            findToolBar(host.window.decorView)
+        val contentView = when (host) {
+            is Fragment -> host.requireView()
+            is DialogFragment -> host.requireView()
+            is Activity -> host.window.decorView
+            else -> throw IllegalStateException()
         }
+
+        val toolbarStub = contentView.findViewById<ViewStub>(R.id.psn_toolBar)
+        if (toolbarStub != null) {
+            toolbarStub.layoutResource = replaceToolbarStub()
+            toolbarStub.inflate() as IToolBar
+        } else {
+            findToolBar(contentView)
+        }?.let { toolBar = it }
 
         if (!::toolBar.isInitialized) {
             throw IllegalStateException("PsnToolbar not found")
         }
         val barModel = ToolBarModel()
         barModel.backLiveData.observe(owner) {
-            if (host is DialogFragment) {
-                host.dismiss()
-                return@observe
-            }
-            if (host is Fragment) {
-                host.requireActivity()
-            } else {
-                host as Activity
-            }.onBackPressed()
+            onBackPressed(host)
         }
         val label = (host as? Activity)?.title
         barConfig = BarConfig()
@@ -58,23 +62,27 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         toolBar.model = barModel
     }
 
-    private fun findToolBar(view: View): PsnToolbar? {
-        if (view is PsnToolbar) {
-            toolBar = view
-            return toolBar
+    open fun replaceToolbarStub() = R.layout.include_psn_toolbar
+
+    open fun onBackPressed(host: IHost) {
+        when (host) {
+            is DialogFragment -> {
+                host.dismiss()
+            }
+            is Fragment -> {
+                host.requireActivity()
+            }
+            is Activity -> host.onBackPressed()
         }
-        val toolbarStub = view.findViewById<ViewStub>(R.id.psn_toolBar)
-        if (toolbarStub != null) {
-            toolbarStub.layoutResource = R.layout.include_psn_toolbar
-            toolBar = toolbarStub.inflate() as PsnToolbar
-            return toolBar
+    }
+
+    private fun findToolBar(view: View): IToolBar? {
+        if (view is IToolBar) {
+            return view
         }
         if (view is ViewGroup) {
             view.forEach {
-                val findView = findToolBar(it)
-                if (findView is PsnToolbar) {
-                    return findView
-                }
+                findToolBar(it)
             }
         }
         return null
