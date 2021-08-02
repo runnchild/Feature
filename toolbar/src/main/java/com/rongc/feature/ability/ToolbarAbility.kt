@@ -82,7 +82,9 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         }
         if (view is ViewGroup) {
             view.forEach {
-                findToolBar(it)
+                findToolBar(it)?.let { bar ->
+                    return bar
+                }
             }
         }
         return null
