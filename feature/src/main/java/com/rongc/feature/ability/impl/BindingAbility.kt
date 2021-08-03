@@ -6,6 +6,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import com.rongc.feature.AppExecutors
 import com.rongc.feature.BR
 import com.rongc.feature.ability.IAbility
 import com.rongc.feature.ui.host.IHost
@@ -56,10 +57,12 @@ class BindingAbility<B : ViewBinding>(val viewModel: ViewModel) : IAbility {
      * 页面销毁或者Fragment#onDestroyView执行时解除绑定
      */
     override fun onDestroy(owner: LifecycleOwner) {
-        val binding = mBinding
-        if (binding is ViewDataBinding) {
-            binding.unbind()
+        AppExecutors.mainThread().execute {
+            val binding = mBinding
+            if (binding is ViewDataBinding) {
+                binding.unbind()
+            }
+            mBinding = null
         }
-        mBinding = null
     }
 }
