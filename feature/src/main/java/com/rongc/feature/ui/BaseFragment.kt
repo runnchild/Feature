@@ -43,9 +43,9 @@ abstract class BaseFragment<B : ViewBinding, M : BaseViewModel> : Fragment(),
         return bindingAbility.mBinding?.root
     }
 
-    final override fun viewModelProvider(): M {
-        return super.viewModelProvider()
-    }
+//    final override fun viewModelProvider(): M {
+//        return super.viewModelProvider()
+//    }
 
     override fun viewModelCreator(cls: Class<M>):  M {
         return defaultViewModelProviderFactory.create(cls)

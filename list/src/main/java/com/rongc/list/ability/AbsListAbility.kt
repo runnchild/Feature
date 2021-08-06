@@ -75,8 +75,11 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
             val emptyView = providerEmptyView() ?: return
             emptyView.config = emptyConfig
             providerAdapter.setEmptyView(emptyView as View)
-            // providerAdapter.headerWithEmptyEnable = true
-            // providerAdapter.footerWithEmptyEnable = true
+            try {
+                providerAdapter.headerWithEmptyEnable = true
+                providerAdapter.footerWithEmptyEnable = true
+            } catch (ignore: Exception) {
+            }
         }
         this.emptyConfig = emptyConfig
     }
