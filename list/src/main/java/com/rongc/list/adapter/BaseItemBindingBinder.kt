@@ -49,7 +49,7 @@ abstract class BaseItemBindingBinder<B : ViewBinding, T> : BaseRecyclerItemBinde
      * @param holder BaseViewHolder
      * @param data item 内容
      */
-    abstract fun convert(binding: B, holder: BaseViewHolder, data: T)
+    open fun convert(binding: B, holder: BaseViewHolder, data: T) {}
 
     open fun binding(inflater: LayoutInflater, container: ViewGroup?): B {
         val bindingClass =
