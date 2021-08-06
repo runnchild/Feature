@@ -24,6 +24,15 @@ class PsnToolbar @JvmOverloads constructor(
 
     lateinit var binding: PsnToolbarBinding
 
+    override var model: ToolBarModel? = null
+        get() = binding.model
+        set(value) {
+            field = value
+            binding.model = value
+            field?.navigationBlock?.invoke(binding.ivBack)
+            field?.titleBlock?.invoke(binding.tvTitle)
+        }
+
     init {
         if (isInEditMode) {
             LayoutInflater.from(context).inflate(R.layout.psn_toolbar, this, true)
@@ -31,13 +40,6 @@ class PsnToolbar @JvmOverloads constructor(
             binding = PsnToolbarBinding.inflate(LayoutInflater.from(context), this, true)
         }
     }
-
-    override var model: ToolBarModel? = null
-        get() = binding.model
-        set(value) {
-            field = value
-            binding.model = value
-        }
 
     fun setTitleColor(color: Int) {
         binding.tvTitle.setTextColor(color)

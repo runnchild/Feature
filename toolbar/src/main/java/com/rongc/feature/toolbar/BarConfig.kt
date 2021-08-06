@@ -1,5 +1,6 @@
 package com.rongc.feature.toolbar
 
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.rongc.feature.utils.drawable
@@ -43,7 +44,7 @@ class BarConfig {
 
     val menuItems = arrayListOf<TextView.() -> Unit>()
     var titleBlock: (TextView.() -> Unit)? = null
-    var navigationBlock: (TextView.() -> Unit)? = null
+    var navigationBlock: (ImageView.() -> Unit)? = null
 
     internal var isStatusTransparent = false
     internal var isLightMode = false
@@ -103,7 +104,7 @@ class BarConfig {
         titleBlock = block
     }
 
-    fun navigation(block: TextView.() -> Unit) {
+    fun navigation(block: ImageView.() -> Unit) {
         navigationBlock = block
     }
 }

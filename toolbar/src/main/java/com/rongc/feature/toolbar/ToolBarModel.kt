@@ -2,6 +2,7 @@ package com.rongc.feature.toolbar
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.ObservableArrayList
@@ -12,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import com.rongc.feature.utils.dp
 
 class ToolBarModel {
+    val barConfig = MutableLiveData<BarConfig>()
 
     val backClick = {
         backLiveData.value = true
@@ -19,7 +21,7 @@ class ToolBarModel {
 
     val menuItems = ObservableArrayList<TextView.() -> Unit>()
     var titleBlock: (TextView.() -> Unit)? = null
-    var navigationBlock: (TextView.() -> Unit)? = null
+    var navigationBlock: (ImageView.() -> Unit)? = null
 
     fun setConfig(barConfig: BarConfig) {
         if (barConfig.toolBarDividerColor != BarConfig.UNDEFINE) {
