@@ -51,6 +51,7 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         if (!::toolBar.isInitialized) {
             throw IllegalStateException("PsnToolbar not found")
         }
+
         val barModel = ToolBarModel()
         barModel.backLiveData.observe(owner) {
             onBackPressed(host)
@@ -58,8 +59,18 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         val label = (host as? Activity)?.title
         barConfig = BarConfig()
         barConfig.title = label
-        barConfig.apply(config)
+        setupBarConfig(findActivity(), barConfig)
         toolBar.model = barModel
+    }
+
+    open fun setupBarConfig(activity: Activity?, barConfig: BarConfig) {
+        barConfig.apply(config)
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        toolBar.model?.setConfig(barConfig)
+        setupStatusBar()
     }
 
     open fun replaceToolbarStub() = R.layout.include_psn_toolbar
@@ -70,7 +81,7 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
                 host.dismiss()
             }
             is Fragment -> {
-                host.requireActivity()
+                host.requireActivity().onBackPressed()
             }
             is Activity -> host.onBackPressed()
         }
@@ -90,31 +101,33 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         return null
     }
 
-    override fun onResume(owner: LifecycleOwner) {
-        toolBar.model?.setConfig(barConfig)
-        setupStatusBar()
+    private fun findActivity() = when (host) {
+        is Fragment -> {
+            host.requireActivity()
+        }
+        is Activity -> {
+            host
+        }
+        else -> {
+            null
+        }
     }
 
     private fun setupStatusBar() {
-        val activity = when (host) {
-            is Fragment -> {
-                host.requireActivity()
+        val activity = findActivity() ?: return
+
+        when {
+            barConfig.isStatusTransparent -> {
+                BarUtils.transparentStatusBar(activity)
+                BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
             }
-            is Activity -> {
-                host
+            barConfig.statusColor != BarConfig.UNDEFINE -> {
+                BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
+                setStatusBarColor(activity, barConfig.statusColor)
             }
             else -> {
-                return
+                setStatusBarColor(activity, 0)
             }
-        }
-
-        if (barConfig.isStatusTransparent) {
-            BarUtils.transparentStatusBar(activity)
-        } else if (barConfig.statusColor != BarConfig.UNDEFINE) {
-//            BarUtils.setStatusBarColor(activity, barConfig.statusColor)
-            BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
-//            toolBar[0].addPaddingTopEqualStatusBar(true)
-            setStatusBarColor(activity, barConfig.statusColor)
         }
 
         if (barConfig.navColor != BarConfig.UNDEFINE) {
