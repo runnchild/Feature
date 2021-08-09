@@ -36,12 +36,17 @@ class UserFragment : BaseFragment<BaseRecyclerWithRefreshBinding, UserViewModel>
         registerAbility(ProgressAbility(requireContext()))
         registerAbility(ListAbility(viewModel, this))
         registerAbility(ToolbarAbility(this) {
-            title = "UserRepository"
-            menu {
-                text = "more"
-                setOnClickListener {
-                    findNavController().navigate(R.id.demo_dialog)
+            toolbar {
+                title = "UserRepository"
+                menu {
+                    text = "more"
+                    setOnClickListener {
+                        findNavController().navigate(R.id.demo_dialog)
+                    }
                 }
+            }
+            statusBar {
+                statusBarColor = Color.BLUE
             }
         })
 

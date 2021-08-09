@@ -1,14 +1,11 @@
 package com.rongc.feature.toolbar
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.BarUtils
@@ -21,13 +18,13 @@ fun View?.addPaddingTopEqualStatusBar(add: Boolean) {
     }
 }
 
-@BindingAdapter("psn_background")
-fun View.backgroundAndLightMode(it: Drawable?) {
-    val value = (it as? ColorDrawable)?.color ?: 0
-    val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
-    (parent as PsnToolbar).setLightMode(isLightMode)
-    background = it
-}
+//@BindingAdapter("psn_background")
+//fun View.backgroundAndLightMode(it: Drawable?) {
+//    val value = (it as? ColorDrawable)?.color ?: 0
+//    val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
+//    (parent as PsnToolbar).setLightMode(isLightMode)
+//    background = it
+//}
 
 @BindingAdapter("menus")
 fun ViewGroup.setMenus(items: ArrayList<TextView.() -> Unit>?) {

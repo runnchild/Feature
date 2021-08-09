@@ -14,7 +14,6 @@ import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.toolbar.BarConfig
 import com.rongc.feature.toolbar.IToolBar
 import com.rongc.feature.toolbar.R
-import com.rongc.feature.toolbar.ToolBarModel
 import com.rongc.feature.ui.host.IHost
 
 /**
@@ -49,28 +48,32 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         }?.let { toolBar = it }
 
         if (!::toolBar.isInitialized) {
-            throw IllegalStateException("PsnToolbar not found")
+            throw IllegalStateException("IToolbar not found")
         }
 
-        val barModel = ToolBarModel()
+        val barModel = toolBar.viewModel
         barModel.backLiveData.observe(owner) {
             onBackPressed(host)
         }
-        val label = (host as? Activity)?.title
         barConfig = BarConfig()
-        barConfig.title = label
-        setupBarConfig(findActivity(), barConfig)
-        toolBar.model = barModel
-    }
-
-    open fun setupBarConfig(activity: Activity?, barConfig: BarConfig) {
+        barConfig.toolbar {
+            title = (host as? Activity)?.title
+        }
+        doOnNextConfig(findActivity(), barConfig)
         barConfig.apply(config)
+
+        barModel.setBarConfig(barConfig)
+        // 订阅状态栏参数变化通知
+        barModel.statusBarConfig.observe(owner) {
+            setupStatusBar()
+        }
     }
 
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        toolBar.model?.setConfig(barConfig)
-        setupStatusBar()
+    /**
+     * toolbar配置设置前，可在此做些通用的全局配置，例如：字体大小，颜色等。
+     * 具体页面仅需关注不一致的参数。
+     */
+    open fun doOnNextConfig(activity: Activity?, barConfig: BarConfig) {
     }
 
     open fun replaceToolbarStub() = R.layout.include_psn_toolbar
@@ -116,14 +119,15 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
     private fun setupStatusBar() {
         val activity = findActivity() ?: return
 
+        val barConfig = barConfig.statusBarConfig
         when {
             barConfig.isStatusTransparent -> {
                 BarUtils.transparentStatusBar(activity)
                 BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
             }
-            barConfig.statusColor != BarConfig.UNDEFINE -> {
+            barConfig.statusBarColor != BarConfig.UNDEFINE -> {
                 BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
-                setStatusBarColor(activity, barConfig.statusColor)
+                setStatusBarColor(activity, barConfig.statusBarColor)
             }
             else -> {
                 setStatusBarColor(activity, 0)

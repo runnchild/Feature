@@ -9,5 +9,5 @@ package com.rongc.feature.toolbar
  * @date 2021/5/29
  */
 interface IToolBar {
-    var model: ToolBarModel?
+    val viewModel: ToolBarViewModel
 }
