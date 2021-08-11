@@ -16,7 +16,12 @@ class ToolBarViewModel : ViewModel() {
 //    var titleBlock: (TextView.() -> Unit)? = null
 //    var navigationBlock: (ImageView.() -> Unit)? = null
 
-    fun setToolbarConfig(config: ToolbarConfig) {
+    fun setToolbarConfig(configApply: ToolbarConfig.() -> Unit) {
+        val config = (toolbarConfig.value ?: ToolbarConfig()).apply(configApply)
+        setToolbar(config)
+    }
+
+    private fun setToolbar(config: ToolbarConfig) {
         if (config.iconLightModeColor != BarConfig.UNDEFINE) {
             config.navigationIcon.setTint(
                 if (config.isLightMode) {
@@ -37,42 +42,18 @@ class ToolBarViewModel : ViewModel() {
         this.toolbarConfig.value = config
     }
 
-    fun setStatusBarConfig(statusBarConfig: StatusBarConfig) {
-        this.statusBarConfig.value = statusBarConfig
+    fun setStatusBarConfig(config: StatusBarConfig.() -> Unit) {
+        setStatusBar((statusBarConfig.value ?: StatusBarConfig()).apply(config))
+    }
+
+    private fun setStatusBar(config: StatusBarConfig) {
+        statusBarConfig.value = config
     }
 
     fun setBarConfig(barConfig: BarConfig) {
-//        this.barConfig.value = barConfig
-        setStatusBarConfig(barConfig.statusBarConfig)
-        setToolbarConfig(barConfig.toolbarConfig)
-
-//        if (barConfig.bottomLineColor != BarConfig.UNDEFINE) {
-//            dividerColor.set(barConfig.bottomLineColor.toDrawable())
-//        }
-//        menuItems.clear()
-//        menuItems.addAll(barConfig.menuItems)
-//        backVisible.set(barConfig.navigationVisible)
-//
-//        val toolbarBackDrawable = barConfig.navigationIcon
-//        toolbarBackDrawable.setTint(if (!barConfig.isLightMode) Color.WHITE else Color.BLACK)
-//        backIcon.set(toolbarBackDrawable)
-//        background.set(barConfig.background.toDrawable())
-//        toolbarVisible.set(barConfig.toolbarVisible)
-//        titleVisible.set(barConfig.titleVisible)
-//        title.set(barConfig.title)
-//        titleBlock = barConfig.titleBlock
-//        navigationBlock = barConfig.navigationBlock
+        setStatusBar(barConfig.statusBarConfig)
+        setToolbar(barConfig.toolbarConfig)
     }
-
-//    val toolbarVisible = ObservableBoolean(true)
-//    val title = ObservableField<CharSequence>()
-//    val titleVisible = ObservableBoolean(true)
-//
-//    val backVisible = ObservableBoolean(true)
-//    val dividerColor = ObservableField<Drawable>()
-//    val dividerSize = ObservableFloat(0.5f.dp)
-//    val backIcon = ObservableField<Drawable>()
-//    val background = ObservableField<Drawable>()
 
     val backLiveData = MutableLiveData<Boolean>()
 }

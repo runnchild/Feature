@@ -41,7 +41,7 @@ class StatusBarConfig {
      * 状态栏颜色
      */
     @ColorInt
-    var statusBarColor = UNDEFINE
+    var statusBarColor = 0
         set(value) {
             isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
             field = value

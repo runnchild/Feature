@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.view.WindowManager
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.forEach
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -14,6 +13,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.rongc.feature.toolbar.BarConfig
 import com.rongc.feature.toolbar.IToolBar
 import com.rongc.feature.toolbar.R
+import com.rongc.feature.toolbar.StatusBarConfig
 import com.rongc.feature.ui.host.IHost
 
 /**
@@ -27,11 +27,7 @@ import com.rongc.feature.ui.host.IHost
 open class ToolbarAbility(private val host: IHost, private val config: BarConfig.() -> Unit = {}) :
     IAbility {
 
-    protected lateinit var toolBar: IToolBar
-    protected lateinit var barConfig: BarConfig
-
-    override fun onCreate(owner: LifecycleOwner) {
-        super.onCreate(owner)
+    val toolBar: IToolBar by lazy {
         val contentView = when (host) {
             is Fragment -> host.requireView()
             is DialogFragment -> host.requireView()
@@ -45,16 +41,13 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
             toolbarStub.inflate() as IToolBar
         } else {
             findToolBar(contentView)
-        }?.let { toolBar = it }
+        } ?: throw IllegalStateException("IToolbar not found")
+    }
 
-        if (!::toolBar.isInitialized) {
-            throw IllegalStateException("IToolbar not found")
-        }
+    protected lateinit var barConfig: BarConfig
 
-        val barModel = toolBar.viewModel
-        barModel.backLiveData.observe(owner) {
-            onBackPressed(host)
-        }
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
         barConfig = BarConfig()
         barConfig.toolbar {
             title = (host as? Activity)?.title
@@ -62,10 +55,15 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         doOnNextConfig(findActivity(), barConfig)
         barConfig.apply(config)
 
-        barModel.setBarConfig(barConfig)
+        toolBar.setBarConfig(barConfig)
+
+        val barModel = toolBar.viewModel
+        barModel.backLiveData.observe(owner) {
+            onBackPressed(host)
+        }
         // 订阅状态栏参数变化通知
         barModel.statusBarConfig.observe(owner) {
-            setupStatusBar()
+            setupStatusBar(it)
         }
     }
 
@@ -116,22 +114,19 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         }
     }
 
-    private fun setupStatusBar() {
+    private fun setupStatusBar(barConfig: StatusBarConfig) {
         val activity = findActivity() ?: return
 
-        val barConfig = barConfig.statusBarConfig
         when {
             barConfig.isStatusTransparent -> {
                 BarUtils.transparentStatusBar(activity)
-                BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
             }
-            barConfig.statusBarColor != BarConfig.UNDEFINE -> {
-                BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
-                setStatusBarColor(activity, barConfig.statusBarColor)
-            }
-            else -> {
-                setStatusBarColor(activity, 0)
-            }
+//            else -> {
+//                barConfig.statusBarColor = 0
+//            }
+        }
+        if (barConfig.statusBarColor != BarConfig.UNDEFINE) {
+            setStatusBarColor(activity, barConfig.statusBarColor, barConfig.isLightMode)
         }
 
         if (barConfig.navColor != BarConfig.UNDEFINE) {
@@ -141,7 +136,7 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
     }
 }
 
-fun setStatusBarColor(activity: Activity, color: Int) {
+fun setStatusBarColor(activity: Activity, color: Int, isLightMode: Boolean? = null) {
     val window = activity.window
     // clear FLAG_TRANSLUCENT_STATUS flag:
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -150,5 +145,7 @@ fun setStatusBarColor(activity: Activity, color: Int) {
     // finally change the color
     window.statusBarColor = color
 
-    BarUtils.setStatusBarLightMode(activity, ColorUtils.calculateLuminance(color) > 0.5f)
+    if (isLightMode != null) {
+        BarUtils.setStatusBarLightMode(activity, isLightMode)
+    }
 }

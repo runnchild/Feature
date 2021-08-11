@@ -55,8 +55,8 @@ class ToolbarConfig {
     var titleVisible = true
 
     val menuItems = arrayListOf<TextView.() -> Unit>()
-    internal var titleBlock: (TextView.() -> Unit)? = null
-    internal var navigationBlock: (ImageView.() -> Unit)? = null
+    var titleBlock: (TextView.() -> Unit)? = null
+    var navigationBlock: (ImageView.() -> Unit)? = null
 
     /**
      * 是否时明亮模式（背景亮色）
@@ -77,7 +77,7 @@ class ToolbarConfig {
      * toolbar分割线颜色
      */
     @ColorInt
-    var bottomLineColor = BarConfig.UNDEFINE
+    var bottomLineColor = 0
 
     /**
      * toolbar返回按钮显示状态

@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import com.blankj.utilcode.util.BarUtils
+import com.rongc.feature.ability.ToolbarAbility
+import com.rongc.feature.ui.host.IAbilityList
 import com.rongc.feature.utils.idp
 
 @BindingAdapter("addStatusBarHeight")
@@ -17,14 +19,6 @@ fun View?.addPaddingTopEqualStatusBar(add: Boolean) {
         this?.updatePadding(top = BarUtils.getStatusBarHeight())
     }
 }
-
-//@BindingAdapter("psn_background")
-//fun View.backgroundAndLightMode(it: Drawable?) {
-//    val value = (it as? ColorDrawable)?.color ?: 0
-//    val isLightMode = ColorUtils.calculateLuminance(value) > 0.5f
-//    (parent as PsnToolbar).setLightMode(isLightMode)
-//    background = it
-//}
 
 @BindingAdapter("menus")
 fun ViewGroup.setMenus(items: ArrayList<TextView.() -> Unit>?) {
@@ -48,7 +42,22 @@ private fun ViewGroup.addItemMenu(item: TextView.() -> Unit) {
     }.apply(item)
 
     addView(
-        menu, childCount - 1,
-        FrameLayout.LayoutParams(-2, -1)
+        menu, childCount - 1, FrameLayout.LayoutParams(-2, -1)
     )
+}
+
+fun IAbilityList.toolbar(config: ToolbarConfig.() -> Unit) {
+    val toolbarAbility = findAbility { it is ToolbarAbility } as? ToolbarAbility
+    if (toolbarAbility == null) {
+        registerAbility(ToolbarAbility(this))
+    }
+    toolbarAbility?.toolBar?.toolbar(config)
+}
+
+fun IAbilityList.statusBar(config: StatusBarConfig.() -> Unit) {
+    val toolbarAbility = findAbility { it is ToolbarAbility } as? ToolbarAbility
+    if (toolbarAbility == null) {
+
+    }
+    toolbarAbility?.toolBar?.statusBar(config)
 }

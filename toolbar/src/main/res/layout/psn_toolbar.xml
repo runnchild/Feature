@@ -6,32 +6,31 @@
     <data>
 
         <variable
-            name="model"
-            type="com.rongc.feature.toolbar.ToolBarViewModel" />
+            name="config"
+            type="androidx.lifecycle.LiveData&lt;com.rongc.feature.toolbar.ToolbarConfig>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{model.toolbarConfig.background}"
-        app:visible="@{model.toolbarConfig.toolbarVisible}"
+        android:background="@{config.background}"
+        app:visible="@{config.toolbarVisible}"
         tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{model.backClick}"
             android:paddingStart="15dp"
             android:paddingTop="14dp"
             android:paddingEnd="15dp"
             android:paddingBottom="14dp"
             android:scaleType="centerInside"
-            android:src="@{model.toolbarConfig.navigationIcon}"
+            android:src="@{config.navigationIcon}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:orInvisible="@{model.toolbarConfig.navigationVisible}"
+            app:orInvisible="@{config.navigationVisible}"
             tools:src="@mipmap/common_icon_back"
             tools:tint="@color/black" />
 
@@ -47,15 +46,15 @@
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@id/tv_title"
             app:layout_constraintTop_toTopOf="parent"
-            app:menus="@{model.toolbarConfig.menuItems}" />
+            app:menus="@{config.menuItems}" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@{model.toolbarConfig.title}"
-            android:textColor="@{model.toolbarConfig._titleColor}"
+            android:text="@{config.title}"
+            android:textColor="@{config._titleColor}"
             android:gravity="center"
             android:textSize="17sp"
             android:textStyle="bold"
@@ -63,13 +62,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_back"
-            app:orInvisible="@{model.toolbarConfig.titleVisible}"
+            app:orInvisible="@{config.titleVisible}"
             tools:text="标题" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@{model.toolbarConfig.bottomLineColor}"
+            android:background="@{config.bottomLineColor}"
             app:layout_constraintTop_toBottomOf="@id/iv_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
