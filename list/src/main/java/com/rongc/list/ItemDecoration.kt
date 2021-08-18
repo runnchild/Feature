@@ -398,9 +398,9 @@ class ItemDecoration(builder: Builder) : RecyclerView.ItemDecoration() {
         private var verticalLineWidth = 0
 
         /**
-         * 分割线的颜色，默认为白色
+         * 分割线的颜色
          */
-        private var lineColor = R.color.white
+        private var lineColor = 0
 
         /**
          *横向列表首个item距离start的宽度
