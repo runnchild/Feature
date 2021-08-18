@@ -88,6 +88,13 @@ abstract class BaseFragmentPagerAdapter<T>(
         notifyItemInserted(index)
     }
 
+    fun addData(list: List<T>?) {
+        list?:return
+        val index = 0.coerceAtLeast(data.size - 1)
+        data.addAll(list)
+        notifyItemRangeInserted(index, list.size)
+    }
+
     fun removeItem(item: T) {
         val indexOf = indexOf(item)
         if (indexOf in 0 until data.size) {
