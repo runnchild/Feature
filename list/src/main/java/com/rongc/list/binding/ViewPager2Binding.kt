@@ -10,6 +10,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.rongc.feature.utils.removeFromParent
 import com.rongc.list.ItemDecoration
 import com.rongc.list.R
+import com.rongc.list.ability.addDoOnAdapterCallback
+import com.rongc.list.ability.invokeDoOnAdapter
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatList
@@ -29,19 +31,22 @@ fun ViewPager2.itemBinders(binders: List<BaseRecyclerItemBinder<out Any>>) {
     if (binders.isNullOrEmpty()) {
         return
     }
-    binders.forEach { item ->
-        itemBinder(item)
+    doOnAdapter<RecyclerView.Adapter<*>> {
+        binders.forEach { item ->
+            itemBinder(item)
+        }
     }
 }
 
 @BindingAdapter("itemBinder")
 fun ViewPager2.itemBinder(binder: BaseRecyclerItemBinder<out Any>) {
-    val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
-    val adapter = setup(adapter) as BaseBinderAdapter
+    doOnAdapter<RecyclerView.Adapter<*>> {
+        val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
 
-    @Suppress("UNCHECKED_CAST")
-    val bin = binder as BaseRecyclerItemBinder<Any>
-    adapter.addItemBinder(actualClz as Class<*>, bin, bin.callback)
+        @Suppress("UNCHECKED_CAST")
+        val bin = binder as BaseRecyclerItemBinder<Any>
+        (it as BaseBinderAdapter).addItemBinder(actualClz as Class<*>, bin, bin.callback)
+    }
 }
 
 @BindingAdapter("itemBinderName")
@@ -69,7 +74,9 @@ fun ViewPager2.items(items: List<Any>?) {
     } else {
         @Suppress("UNCHECKED_CAST")
         val adapter = setup(adapter) as? BaseBinderAdapter ?: return
-        adapter.setCompatList(items)
+        doOnAdapter<BaseBinderAdapter> {
+            adapter.setCompatList(items)
+        }
     }
 }
 
@@ -116,13 +123,9 @@ fun ViewPager2.setup(adapter: RecyclerView.Adapter<*>? = null): RecyclerView.Ada
         return adapter
     }
     val adapter1 = adapter ?: BinderAdapter(null)
-    this.adapter = adapter1
-
-    if (adapter1 is BaseQuickAdapter<*, *>) {
-        @Suppress("UNCHECKED_CAST")
-        val block = getTag(R.id.tag_adapter_callback) as? (BaseQuickAdapter<*, *>) -> Unit
-        block?.invoke(adapter1)
-        setTag(R.id.tag_adapter_callback, null)
+    if (this.adapter == null) {
+        this.adapter = adapter1
+        invokeDoOnAdapter(this, this.adapter!!)
     }
     return adapter1
 }
@@ -132,7 +135,7 @@ fun <T : RecyclerView.Adapter<*>> ViewPager2.doOnAdapter(block: (T) -> Unit) {
         @Suppress("UNCHECKED_CAST")
         block(adapter as T)
     } else {
-        setTag(R.id.tag_adapter_callback, block)
+        addDoOnAdapterCallback(this, block)
     }
 }
 
@@ -198,8 +201,7 @@ private fun ViewPager2.scroll(interval: Long, loop: Boolean) {
 
 @BindingAdapter("emptyView", "enableEmptyView", requireAll = false)
 fun ViewPager2.setupEmptyView(
-    emptyView: IEmptyView? = EmptyView(context),
-    enable: Boolean = true
+    emptyView: IEmptyView? = EmptyView(context), enable: Boolean = true
 ): EmptyViewConfig? {
     if (enable) {
         fun getEmptyView(): IEmptyView {

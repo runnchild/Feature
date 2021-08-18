@@ -5,9 +5,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.rongc.list.ItemDecoration
-import com.rongc.list.R
+import com.rongc.list.ability.addDoOnAdapterCallback
+import com.rongc.list.ability.invokeDoOnAdapter
 import com.rongc.list.adapter.BaseRecyclerItemBinder
-import com.rongc.list.adapter.BinderAdapter
 import com.rongc.list.setCompatList
 import java.lang.reflect.ParameterizedType
 
@@ -21,8 +21,10 @@ fun RecyclerView.itemBinders(binders: List<BaseRecyclerItemBinder<out Any>>) {
     if (binders.isNullOrEmpty()) {
         return
     }
-    binders.forEach { item ->
-        itemBinder(item)
+    doOnAdapter<RecyclerView.Adapter<*>> {
+        binders.forEach { item ->
+            itemBinder(item)
+        }
     }
 }
 
@@ -31,8 +33,10 @@ fun RecyclerView.itemBinder(binderClz: String) {
     try {
         val instance = Class.forName(binderClz).newInstance()
         if (instance is BaseRecyclerItemBinder<*>) {
-            @Suppress("UNCHECKED_CAST")
-            itemBinder(instance as BaseRecyclerItemBinder<Any>)
+            doOnAdapter<RecyclerView.Adapter<*>> {
+                @Suppress("UNCHECKED_CAST")
+                itemBinder(instance as BaseRecyclerItemBinder<Any>)
+            }
         }
     } catch (e: Exception) {
         e.printStackTrace()
@@ -41,15 +45,13 @@ fun RecyclerView.itemBinder(binderClz: String) {
 
 @BindingAdapter("itemBinder")
 fun RecyclerView.itemBinder(binder: BaseRecyclerItemBinder<out Any>) {
-    val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
-    if (adapter == null) {
-        adapter = BinderAdapter()
-    }
-    val adapter = adapter as BaseBinderAdapter
+    doOnAdapter<BaseBinderAdapter> {
+        val actualClz = findBinderType(binder::class.java)!!.actualTypeArguments.last()
 
-    @Suppress("UNCHECKED_CAST")
-    val bin = binder as BaseRecyclerItemBinder<Any>
-    adapter.addItemBinder(actualClz as Class<*>, bin, bin.callback)
+        @Suppress("UNCHECKED_CAST")
+        val bin = binder as BaseRecyclerItemBinder<Any>
+        it.addItemBinder(actualClz as Class<*>, bin, bin.callback)
+    }
 }
 
 fun findBinderType(clazz: Class<*>?): ParameterizedType? {
@@ -67,6 +69,7 @@ fun findBinderType(clazz: Class<*>?): ParameterizedType? {
 fun RecyclerView.items(items: List<Any>?) {
     if (adapter == null) {
         adapter = BaseBinderAdapter()
+        invokeDoOnAdapter(this, adapter!!)
     }
     @Suppress("UNCHECKED_CAST")
     val adapter = adapter as? BaseQuickAdapter<Any, *> ?: return
@@ -121,7 +124,7 @@ fun <T : RecyclerView.Adapter<*>> RecyclerView.doOnAdapter(block: (T) -> Unit) {
         @Suppress("UNCHECKED_CAST")
         block(adapter as T)
     } else {
-        setTag(R.id.tag_adapter_callback, block)
+        addDoOnAdapterCallback(this, block)
     }
 }
 
