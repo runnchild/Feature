@@ -4,7 +4,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.list.ItemDecoration
-import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
@@ -24,13 +23,13 @@ import java.util.*
 class PagerAbility(viewModel: BaseViewModel, private val pagerHost: IPagerHost) :
     AbsListAbility(viewModel, pagerHost) {
 
-    init {
+    override fun <T> onFetchData(adapter: RecyclerView.Adapter<*>, list: List<T>?) {
+        super.onFetchData(adapter, list)
         val viewPager = pagerHost.viewPager
-        viewPager.adapter = adapter
-
-        @Suppress("UNCHECKED_CAST")
-        val call = viewPager.getTag(R.id.tag_adapter_callback) as? (RecyclerView.Adapter<*>) -> Unit
-        call?.invoke(adapter)
+        if (viewPager.adapter != adapter) {
+            viewPager.adapter = adapter
+            invokeDoOnAdapter(viewPager, adapter)
+        }
     }
 
     override fun setEmptyView(emptyConfig: EmptyViewConfig) {

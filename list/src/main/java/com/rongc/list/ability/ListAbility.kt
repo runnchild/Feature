@@ -4,12 +4,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.list.ItemDecoration
-import com.rongc.list.R
 import com.rongc.list.adapter.BaseRecyclerItemBinder
 import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
 import com.runnchild.emptyview.IEmptyView
-import java.util.*
 
 class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerHost) :
     AbsListAbility(viewModel, recyclerHost) {
@@ -17,12 +15,16 @@ class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerH
     init {
         val recyclerView = recyclerHost.recyclerView
         recyclerView.layoutManager = recyclerHost.providerLayoutManager(recyclerView.context)
-        recyclerView.adapter = adapter
+    }
 
-        @Suppress("UNCHECKED_CAST")
-        val call = recyclerView.getTag(R.id.tag_adapter_callback)
-                as? (RecyclerView.Adapter<*>) -> Unit
-        call?.invoke(adapter)
+    override fun <T> onFetchData(adapter: RecyclerView.Adapter<*>, list: List<T>?) {
+        super.onFetchData(adapter, list)
+        val recyclerView = recyclerHost.recyclerView
+        if (recyclerView.adapter == adapter) {
+            return
+        }
+        recyclerView.adapter = adapter
+        invokeDoOnAdapter(recyclerView, adapter)
     }
 
     override fun providerEmptyView(): IEmptyView? {

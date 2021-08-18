@@ -35,7 +35,7 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
     val haveSetEmpty get() = ::emptyConfig.isInitialized
 
     override fun onCreate(owner: LifecycleOwner) {
-        observeListResource(owner)
+        observeListResource(owner, adapter)
 
         val decoration = ItemDecoration.Builder().apply(listHost.decorationBuilder()).build()
         setupItemDecoration(decoration)
@@ -45,24 +45,22 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
         setupItemBinders(itemBinders)
     }
 
-    private fun observeListResource(owner: LifecycleOwner) {
+    private fun observeListResource(owner: LifecycleOwner, adapter: RecyclerView.Adapter<*>) {
         @Suppress("UNCHECKED_CAST")
         val vm = viewModel as? BaseListViewModel<Any>
         // 如果非BaseListViewModel则需要手动调用observeResource
         if (vm != null) {
             vm._autoRefresh = listHost.autoRefresh()
-            owner.observeResource(adapter, vm)
+            vm.observeResource(owner)
 
             vm.setupEmptyView.observe(owner) { state ->
                 if (!haveSetEmpty) {
                     setEmptyView(EmptyViewConfig())
                 }
                 // 页面需要EmptyView才设置
-                if (haveSetEmpty) {
-                    if (emptyConfig.state != state) {
-                        buildEmpty(state, emptyConfig) {
-                            vm.refresh()
-                        }
+                if (haveSetEmpty && emptyConfig.state != state) {
+                    buildEmpty(state, emptyConfig) {
+                        vm.refresh()
                     }
                 }
             }
@@ -89,39 +87,63 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
     abstract fun setupItemBinders(binders: ArrayList<BaseRecyclerItemBinder<out Any>>)
 
     abstract fun setupItemDecoration(decoration: ItemDecoration)
-}
 
-/**
- * 订阅列表数据结果返回监听，当结果返回时刷新列表
- * 订阅前应先注册{@link ListAbility}，如果ViewModel继承的是BaseListViewModel,则在注册后会自动订阅。
- * 否则需手动调用 {@link #observeResourceManually(LiveData)}
- */
-@Suppress("UNCHECKED_CAST")
-fun <T> LifecycleOwner.observeResource(
-    adapter: RecyclerView.Adapter<*>, viewModel: BaseListViewModel<T>
-) {
-    val baseAdapter = adapter as? BaseQuickAdapter<T, BaseViewHolder> ?: return
-    viewModel.result.observe(this) { resource ->
-        if (resource.status != Status.LOADING || resource.data != null) {
-            // 错误状态不更新列表
-            if (!resource.isError) {
-                if (viewModel.isRefresh) {
-                    baseAdapter.setCompatDiffNewData(resource.data)
-                } else {
-                    resource.data?.let {
-                        baseAdapter.addData(it)
+    /**
+     * 订阅列表数据结果返回监听，当结果返回时刷新列表
+     * 订阅前应先注册{@link ListAbility}，如果ViewModel继承的是BaseListViewModel,则在注册后会自动订阅。
+     * 否则需手动调用 {@link #observeResourceManually(LiveData)}
+     */
+    private fun <T> BaseListViewModel<T>.observeResource(owner: LifecycleOwner) {
+        result.observe(owner) { resource ->
+            if (resource.status != Status.LOADING || resource.data != null) {
+                if (!resource.isError) {
+                    if (isRefresh) {
+                        onFetchData(adapter, resource.data)
+                    } else {
+                        resource.data?.let {
+                            onLoadMoreData(adapter, it)
+                        }
                     }
+                } else {
+                    onErrorData(adapter, resource.data)
                 }
-            } else {
-                if (adapter.data.isNullOrEmpty()) {
-                    baseAdapter.setCompatDiffNewData(resource.data)
-                }
+            }
+        }
+
+        notifyData.observe(owner) {
+            onFetchData(adapter, it)
+        }
+    }
+
+    open fun <T> onErrorData(adapter: RecyclerView.Adapter<*>, data: List<T>?) {
+        // 错误状态如果adapter已有数据则不更新列表
+        if (adapter is BaseQuickAdapter<*, *>) {
+            if (adapter.data.isNullOrEmpty()) {
+                onFetchData(adapter, data)
+            }
+        } else if (adapter is BaseFragmentPagerAdapter<*>) {
+            if (adapter.getDataCount() == 0) {
+                onFetchData(adapter, data)
             }
         }
     }
 
-    viewModel.notifyData.observe(this) {
-        baseAdapter.setCompatDiffNewData(it)
+    @Suppress("UNCHECKED_CAST")
+    open fun <T> onLoadMoreData(adapter: RecyclerView.Adapter<*>, it: List<T>) {
+        if (adapter is BaseQuickAdapter<*, *>) {
+            (adapter as? BaseQuickAdapter<T, BaseViewHolder>)?.addData(it)
+        } else if (adapter is BaseFragmentPagerAdapter<*>) {
+            (adapter as BaseFragmentPagerAdapter<T>).addData(it)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    open fun <T> onFetchData(adapter: RecyclerView.Adapter<*>, list: List<T>?) {
+        if (adapter is BaseQuickAdapter<*, *>) {
+            (adapter as? BaseQuickAdapter<T, BaseViewHolder>)?.setCompatDiffNewData(list)
+        } else if (adapter is BaseFragmentPagerAdapter<*>) {
+            (adapter as BaseFragmentPagerAdapter<T>).setList(list)
+        }
     }
 }
 
