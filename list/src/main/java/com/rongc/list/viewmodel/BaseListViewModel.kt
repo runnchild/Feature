@@ -7,9 +7,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.rongc.feature.SingleLiveData
 import com.rongc.feature.viewmodel.BaseViewModel
-import com.rongc.feature.vo.Resource
-import com.rongc.feature.vo.Status
-import com.rongc.feature.vo.isSuccess
+import com.rongc.feature.vo.*
 import com.rongc.list.PageIndicator
 import com.rongc.list.ability.emptyState
 import com.rongc.list.binding.LoadStatus
@@ -52,26 +50,29 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     val autoRefresh = ObservableBoolean(false)
-    var _autoRefresh: Boolean = false
+
+    internal var _autoRefresh: Boolean = false
         set(value) {
             // 页面设置了自动刷新，并且之前没刷新过时自动刷新
-            if (!field && value) {
-//                if (enableRefresh.get()) {
-//                    autoRefresh.set(true)
-//                } else {
-//                }
-//                autoRefresh.set(true)
+            if (!field && value || refreshAnyway || resource.isError) {
                 refresh()
             }
             field = value
         }
+
+    /**
+     * 无论之前是否发起过请求，每次回到页面都发起请求
+     */
+    var refreshAnyway = false
 
     val setupEmptyView = MutableLiveData<EmptyState>()
 
     private val _request = MutableLiveData<Int>()
 
     private val _result: LiveData<Resource<List<T>>> = _request.switchMap {
-        loadListData(it)
+        loadListData(it).doOnStart {
+            Resource.loading(result.value?.data)
+        }
     }
 
     val isRefresh get() = _request.value == PageIndicator.PAGE_START
