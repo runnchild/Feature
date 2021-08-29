@@ -120,13 +120,14 @@ open class ToolbarAbility(private val host: IHost, private val config: BarConfig
         when {
             barConfig.isStatusTransparent -> {
                 BarUtils.transparentStatusBar(activity)
+                BarUtils.setStatusBarLightMode(activity, barConfig.isLightMode)
             }
 //            else -> {
 //                barConfig.statusBarColor = 0
 //            }
         }
         if (barConfig.statusBarColor != BarConfig.UNDEFINE) {
-            setStatusBarColor(activity, barConfig.statusBarColor, barConfig.isLightMode)
+            BarUtils.setStatusBarColor(activity, barConfig.statusBarColor)
         }
 
         if (barConfig.navColor != BarConfig.UNDEFINE) {

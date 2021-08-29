@@ -51,7 +51,9 @@ class PsnToolbar @JvmOverloads constructor(
     }
 
     fun menu(index: Int = 0, block: TextView.() -> Unit) {
-        (binding.menuParent.getChildAt(index) as TextView).apply(block)
+        post {
+            (binding.menuParent.getChildAt(index) as? TextView)?.apply(block)
+        }
     }
 
     override fun setBackgroundColor(color: Int) {

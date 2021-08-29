@@ -53,9 +53,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="55dp"
+            android:layout_marginEnd="55dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            app:layout_constrainedWidth="true"
+            android:lines="1"
             android:text="@{config.title}"
             android:textColor="@{config._titleColor}"
-            android:gravity="center"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/iv_back"
@@ -63,7 +68,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_back"
             app:orInvisible="@{config.titleVisible}"
-            tools:text="标题" />
+            tools:text="标题标题标题标题标题标题标题标题标题标题标题标题标题" />
 
         <View
             android:layout_width="match_parent"
