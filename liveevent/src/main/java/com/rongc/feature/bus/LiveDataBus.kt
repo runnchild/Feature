@@ -56,11 +56,12 @@ object LiveDataBus {
             owner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
                 //监听 宿主 发生销毁事件，主动把livedata 移除掉。
                 if (event == Lifecycle.Event.ON_DESTROY) {
-                    if (eventMap[eventName]?.hasObservers() == false) {
+                    val stickyLiveData = eventMap[eventName]
+                    if (stickyLiveData?.hasObservers() == false) {
                         eventMap.remove(eventName)
                     }
                     @Suppress("UNCHECKED_CAST")
-                    eventMap[eventName]?.removeObserver(observer as Observer<Any?>)
+                    stickyLiveData?.removeObserver(observer as Observer<Any?>)
                 }
             })
             super.observe(owner, StickyObserver(this, sticky, observer))

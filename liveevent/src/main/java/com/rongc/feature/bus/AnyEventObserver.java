@@ -50,7 +50,7 @@ public class AnyEventObserver<T> implements LifecycleObserver, Observer<T> {
      * @return 是否是激活状态，即 onStart 之后到 onPause 之前
      */
     private boolean isActive() {
-        return mOwner.getLifecycle().getCurrentState()
+        return mOwner != null && mOwner.getLifecycle().getCurrentState()
                 .isAtLeast(Lifecycle.State.STARTED);
     }
 
