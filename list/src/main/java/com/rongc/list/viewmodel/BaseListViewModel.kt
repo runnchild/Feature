@@ -1,11 +1,8 @@
 package com.rongc.list.viewmodel
 
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
-import com.rongc.feature.SingleLiveData
+import androidx.lifecycle.*
+import androidx.recyclerview.widget.ListUpdateCallback
 import com.rongc.feature.viewmodel.BaseViewModel
 import com.rongc.feature.vo.*
 import com.rongc.list.PageIndicator
@@ -14,6 +11,10 @@ import com.rongc.list.binding.LoadStatus
 import com.runnchild.emptyview.EmptyState
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
+
+const val REFRESH_ONCE = 1
+const val REFRESH_ALWAYS = 2
+const val REFRESH_NON = 0
 
 /**
  * 支持下拉刷新ViewModel，维护上拉和加载更多数据请求及ui业务
@@ -54,28 +55,51 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     internal var _autoRefresh: Boolean = false
         set(value) {
             // 页面设置了自动刷新，并且之前没刷新过时自动刷新
-            if (!field && value || refreshAnyway || resource.isError) {
+            if (!field && value || reenterRefreshMode != REFRESH_NON || resource.isError) {
                 refresh()
+                if (reenterRefreshMode == REFRESH_ONCE) {
+                    reenterRefreshMode = REFRESH_NON
+                }
             }
             field = value
         }
 
     /**
-     * 无论之前是否发起过请求，每次回到页面都发起请求
+     * 无论之前是否发起过请求，每次回到页面(onCreate或者onCreateView)都将重新发起新请求
      */
-    var refreshAnyway = false
+    var reenterRefreshMode = REFRESH_NON
+//        set(value) {
+//            if (value == REFRESH_ONCE) {
+//                field = REFRESH_NON
+//            }
+//            field = value
+//        }
 
     val setupEmptyView = MutableLiveData<EmptyState>()
 
     private val _request = MutableLiveData<Int>()
 
     private val _result: LiveData<Resource<List<T>>> = _request.switchMap {
-        loadListData(it).doOnStart {
-            Resource.loading(result.value?.data)
+        loadListData(it).run {
+            if (it == PageIndicator.PAGE_START) {
+                result.value?.data?.let {
+                    doOnStart { loading ->
+                        if (loading.data != null) {
+                            loading
+                        } else {
+                            Resource.loading(result.value?.data)
+                        }
+                    }
+                } ?: this
+            } else {
+                this
+            }
         }
     }
 
     val isRefresh get() = _request.value == PageIndicator.PAGE_START
+
+    val listLiveData = MediatorLiveData<List<T>>()
 
     val result = _result.map {
         if (it.isSuccess) {
@@ -94,9 +118,9 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         it
     }
 
-    val items get() = result.value?.data.toMutableList()
+    val items get() = listLiveData.value as? ArrayList ?: arrayListOf()
 
-    internal val notifyData = SingleLiveData<List<T>>()
+    internal var updateCallback: ListUpdateCallback? = null
 
     /**
      * 此时的接口实时状态
@@ -137,6 +161,25 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
      */
     var enableRefreshWhenEmpty = true
 
+    init {
+        listLiveData.addSource(result) {
+            if (it.isSuccess) {
+                val items = it.data ?: arrayListOf()
+                if (isRefresh) {
+                    pageIndicator.revert()
+                    listLiveData.value = items
+                } else {
+                    if (!it.data.isNullOrEmpty()) {
+                        pageIndicator.next()
+                        val pos = this.items.size
+                        this.items.addAll(items)
+                        updateCallback?.onInserted(pos, items.size)
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * 刷新
      * @param byPull 是否通过下拉的刷新
@@ -160,33 +203,48 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     abstract fun loadListData(page: Int): LiveData<Resource<List<T>>>
 
     fun remove(item: T) {
-        items.remove(item)
-        notifyData()
+        removeAt(items.indexOf(item))
     }
 
     fun removeAt(pos: Int) {
-        items.removeAt(pos)
-        notifyData()
+        if (pos > -1) {
+            items.removeAt(pos)
+            updateCallback?.onRemoved(pos, 1)
+        }
     }
 
     fun addData(data: T, index: Int = items.size) {
         items.add(index, data)
-        notifyData()
+        updateCallback?.onInserted(index, 1)
     }
 
     fun removeLastOrNull() {
         items.removeLastOrNull()?.let {
-            notifyData()
+            updateCallback?.onRemoved(items.size, 1)
         }
     }
 
-    fun setData(index: Int, data: T) {
+    fun setData(index: Int, data: T, payload: Any? = null) {
         items[index] = data
-        notifyData()
+        updateCallback?.onChanged(index, 1, payload)
     }
 
-    private fun notifyData() {
-        notifyData.value = ArrayList(items)
+    fun updateData(data: T): Int {
+        val index = items.indexOf(data)
+        if (index > -1) {
+            setData(index, data)
+        }
+        return index
+    }
+
+    fun notifyData() {
+        listLiveData.value = listLiveData.value
+    }
+
+    fun clear() {
+        val count = items.size
+        items.clear()
+        updateCallback?.onRemoved(0, count)
     }
 
     private fun List<T>?.toMutableList(): ArrayList<T> {

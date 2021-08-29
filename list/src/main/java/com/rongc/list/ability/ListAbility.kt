@@ -9,7 +9,7 @@ import com.rongc.list.binding.itemBinders
 import com.rongc.list.binding.itemDecoration
 import com.runnchild.emptyview.IEmptyView
 
-class ListAbility(viewModel: BaseViewModel, private val recyclerHost: IRecyclerHost) :
+class ListAbility(viewModel: BaseViewModel, val recyclerHost: IRecyclerHost) :
     AbsListAbility(viewModel, recyclerHost) {
 
     init {

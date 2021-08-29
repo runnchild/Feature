@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.NetworkUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.diff.BrvahListUpdateCallback
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.rongc.feature.AppExecutors
 import com.rongc.feature.ability.IAbility
@@ -50,6 +51,10 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
         val vm = viewModel as? BaseListViewModel<Any>
         // 如果非BaseListViewModel则需要手动调用observeResource
         if (vm != null) {
+            if (adapter is BaseQuickAdapter<*, *>) {
+                vm.updateCallback = BrvahListUpdateCallback(adapter)
+            }
+
             vm._autoRefresh = listHost.autoRefresh()
             vm.observeResource(owner)
 
@@ -58,7 +63,7 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
                     setEmptyView(EmptyViewConfig())
                 }
                 // 页面需要EmptyView才设置
-                if (haveSetEmpty && emptyConfig.state != state) {
+                if (haveSetEmpty) {
                     buildEmpty(state, emptyConfig) {
                         vm.refresh()
                     }
@@ -94,23 +99,22 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
      * 否则需手动调用 {@link #observeResourceManually(LiveData)}
      */
     private fun <T> BaseListViewModel<T>.observeResource(owner: LifecycleOwner) {
-        result.observe(owner) { resource ->
-            if (resource.status != Status.LOADING || resource.data != null) {
-                if (!resource.isError) {
-                    if (isRefresh) {
-                        onFetchData(adapter, resource.data)
-                    } else {
-                        resource.data?.let {
-                            onLoadMoreData(adapter, it)
-                        }
-                    }
-                } else {
-                    onErrorData(adapter, resource.data)
-                }
-            }
-        }
-
-        notifyData.observe(owner) {
+//        result.observe(owner) { resource ->
+//            if (resource.status != Status.LOADING || resource.data != null) {
+//                if (!resource.isError) {
+//                    if (isRefresh) {
+//                        onFetchData(adapter, resource.data)
+//                    } else {
+//                        resource.data?.let {
+//                            onLoadMoreData(adapter, it)
+//                        }
+//                    }
+//                } else {
+//                    onErrorData(adapter, resource.data)
+//                }
+//            }
+//        }
+        listLiveData.observe(owner) {
             onFetchData(adapter, it)
         }
     }
@@ -145,6 +149,11 @@ abstract class AbsListAbility(val viewModel: BaseViewModel, val listHost: IListH
             (adapter as BaseFragmentPagerAdapter<T>).setList(list)
         }
     }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        (viewModel as? BaseListViewModel<*>)?.updateCallback = null
+    }
 }
 
 /**
@@ -163,14 +172,7 @@ fun <T> IAbilityList.observeResourceManually(
             if (resource.status != Status.LOADING || resource.data != null) {
                 // 错误状态不更新列表
                 if (!resource.isError) {
-                    val adapter = it.adapter
-                    if (adapter is BaseFragmentPagerAdapter<*>) {
-                        (adapter as BaseFragmentPagerAdapter<T>).setList(resource.data)
-                    } else {
-                        (it.adapter as? BaseQuickAdapter<T, BaseViewHolder>)?.setCompatDiffNewData(
-                            resource.data
-                        )
-                    }
+                    it.onFetchData(it.adapter, resource.data?.toMutableList())
                 }
             }
 
