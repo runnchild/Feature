@@ -61,6 +61,7 @@ object DefaultEmptyConfig {
      */
     fun configEmptyDataBuilder(builder: EmptyBuilder.() -> Unit) {
         configMap[EmptyState.EMPTY_DATA] = builder
+        configMap[EmptyState.EMPTY_SERVICE] = builder
     }
 
     fun get(state: EmptyState) = configMap[state]!!
