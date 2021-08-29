@@ -48,6 +48,7 @@
     ** mBean;
     ** mBinder;
     ** mUi;
+    ** mViewModel;
 }
 
 # 这样以来我们在layout中写的onClick就不会被影响
@@ -63,7 +64,9 @@
 -keep class androidx.databinding.** { *; }
 -keepclasseswithmembers class * extends androidx.databinding.ViewDataBinding {
     <methods>;
+    public static <methods>;
 }
+#-keepclasseswithmembers class com.*.databinding.* { com.*.databinding.* inflate(android.view.LayoutInflater,android.view.ViewGroup); }
 
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
@@ -108,3 +111,4 @@
 }
 -keep class * extends android.app.Activity
 -keep class androidx.viewpager2.widget.ViewPager2 {*;}
+-keep class * extends com.rongc.feature.viewmodel.BaseViewModel
